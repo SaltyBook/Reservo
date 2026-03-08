@@ -1,0 +1,83 @@
+﻿<Window x:Class="Reservo.Views.InvoiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Reservo.ViewModels"
+        xmlns:local="clr-namespace:Reservo.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="InvoiceWindow" Height="480" Width="600">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <DataGrid ItemsSource="{Binding Items}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  PreviewKeyDown="DataGrid_PreviewKeyDown"
+                  Margin="10">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsTotalRow}" Value="True">
+                            <Setter Property="Background" Value="LightGoldenrodYellow"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Anzahl"
+                                    Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="0.6*">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <EventSetter Event="PreviewTextInput" Handler="QuantityTextBox_PreviewTextInput"/>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Beschreibung"
+                                    Binding="{Binding Description}"
+                                    Width="4*">
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableDescription}" Value="True">
+                                    <Setter Property="IsReadOnly" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Faktor"
+                                    Binding="{Binding Factor, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="*">
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Total"
+                                    Binding="{Binding Result, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditableTotal}" Value="True">
+                                    <Setter Property="IsReadOnly" Value="False"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="1" Height="40" Width="200" Content="Rechnung erstellen" Command="{Binding CreateInvoiceCommand}"/>
+    </Grid>
+</Window>
