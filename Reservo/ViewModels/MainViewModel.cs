@@ -1,232 +1,70 @@
 ﻿#region Usings
-using Reservo.Classes;
 using Reservo.Commands;
-using Reservo.Infrastructure;
-using Reservo.Models;
-using Reservo.Services.Dialog;
-using Reservo.Services.Document;
-using Reservo.Services.File;
-using Reservo.Utils;
-using Reservo.Views;
-using Serilog;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Text.Json;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Reservo.Enums;
 #endregion
 
 namespace Reservo.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly IDialogService _dialog;
-        private readonly IFileService _files;
-        private readonly IDocumentService _documents;
+        private BaseViewModel _currentViewModel;
 
-        public ObservableCollection<WorkbookViewModel> Workbooks { get; } = new();
-
-        private WorkbookViewModel? _selectedWorkbook;
-        public WorkbookViewModel? SelectedWorkbook
+        public BaseViewModel CurrentViewModel
         {
-            get => _selectedWorkbook;
+            get => _currentViewModel;
             set
             {
-                if (SetProperty(ref _selectedWorkbook, value))
-                {
-                    RaiseCountProperties();
-                }
+                _currentViewModel = value;
+                OnPropertyChanged();
             }
         }
 
-        public int EntryCount => SelectedWorkbook?.Entries?.Count ?? 0;
-        public int PastEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Departure < DateTime.Today && !e.Canceled) ?? 0;
-        public int CanceledEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Canceled) ?? 0;
-
-        #region Commands
-        public ICommand LoadEntriesCommand { get; }
-        public ICommand SaveEntriesCommand { get; }
-        public ICommand OptionenCommand { get; }
-        #endregion
-
-        public MainViewModel() : this(new DialogService(), new FileService(), new DocumentService()) { }
-
-        public MainViewModel(IDialogService dialog, IFileService files, IDocumentService documents)
+        private MenuItemType _selectedMenuItem;
+        public MenuItemType SelectedMenuItem
         {
-            Log.Information("MainViewModel initialisiert");
-
-            _dialog = dialog;
-            _files = files;
-            _documents = documents;
-            LoadEntriesCommand = new AsyncRelayCommand(LoadAllWorkbooks);
-            SaveEntriesCommand = new RelayCommand(SaveAllWorkbooks);
-            OptionenCommand = new RelayCommand(_ => Optionen());
-        }
-
-        #region Commands
-        private async Task LoadAllWorkbooks()
-        {
-            var dir = Path.Combine(Paths.ManagementPath, "Datenbank");
-
-            Log.Information("Lade Excel-Dateien aus {Dir}", dir);
-
-            var files = Directory.GetFiles(dir, "*.xlsx").OrderByDescending(f => f).ToList();
-
-            Workbooks.Clear();
-
-            foreach (var file in files)
+            get => _selectedMenuItem;
+            set
             {
-                Log.Information("Lade Workbook {File}", file);
-
-                var result = await Task.Run(() => XLSX.LoadXLSX(file));
-
-                var vm = new WorkbookViewModel(file, new FileService(), new DocumentService(), new DialogService())
-                {
-                    Entries = new ObservableCollection<Entry>(result.Entries)
-                };
-
-                foreach (var entry in vm.Entries)
-                    entry.PropertyChanged += Entry_PropertyChanged;
-
-                Workbooks.Add(vm);
+                _selectedMenuItem = value;
+                OnPropertyChanged();
             }
-
-            SelectedWorkbook = Workbooks.FirstOrDefault();
-
-            CheckAllEntryDates();
         }
 
-        private void SaveAllWorkbooks(object? parameter = null)
+        public RelayCommand ShowTenantCommand { get; }
+        public RelayCommand ShowSettingsCommand { get; }
+
+        private readonly TenantViewModel _tenantViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
+
+        public MainViewModel()
         {
-            var dir = Path.Combine(Paths.ManagementPath, "Datenbank");
+            _tenantViewModel = new TenantViewModel();
+            _settingsViewModel = new SettingsViewModel();
 
-            Log.Information("Speichere Excel-Dateien in {Dir}", dir);
+            _currentViewModel = _tenantViewModel;
+            _selectedMenuItem = MenuItemType.Tenant;
 
-            if (Workbooks.Count == 0)
-                return;
-
-            foreach (var workbook in Workbooks)
+            ShowTenantCommand = new RelayCommand(_ =>
             {
-                Log.Information("Speichere Workbook {File}", workbook.FilePath);
+                CurrentViewModel = _tenantViewModel;
+                SelectedMenuItem = MenuItemType.Tenant;
+            });
 
-                XLSX.SaveXLSX(workbook.FilePath, workbook.Entries);
-            }
-        }
-
-        private void Optionen()
-        {
-            var vm = new CredentialsViewModel(new WindowService());
-            var window = new Credentials(vm);
-            window.ShowDialog();
-        }
-        #endregion
-
-        #region Date
-        private void CheckAllEntryDates()
-        {
-            foreach (var workbook in Workbooks)
+            ShowSettingsCommand = new RelayCommand(_ =>
             {
-                var overlaps = DateAnalyse.FindOverlaps(workbook.Entries);
-
-                if (overlaps.Count == 0)
-                    return;
-
-                ShowOverlaps(overlaps, workbook);
-            }
+                CurrentViewModel = _settingsViewModel;
+                SelectedMenuItem = MenuItemType.Settings;
+            });
         }
 
-        private void CheckChangedEntryDate(Entry entry)
+        public void LoadEntries()
         {
-            if (SelectedWorkbook is not null)
-            {
-                var overlaps = DateAnalyse.FindOverlapsForEntry(entry, SelectedWorkbook.Entries);
-
-                if (overlaps.Count == 0)
-                    return;
-
-                ShowOverlaps(overlaps, SelectedWorkbook);
-            }
+            _ = _tenantViewModel.LoadEntries();
         }
 
-        private void ShowOverlaps(List<(Entry, Entry)> overlaps, WorkbookViewModel vm)
+        public void SaveEntries()
         {
-            Log.Warning("Datumsüberschneidungen in Tabelle {DisplayName} gefunden: {Count}", vm.DisplayName, overlaps.Count);
-            foreach (var (a, b) in overlaps)
-            {
-                Log.Warning("Überschneidung: {IdA} ({FromA:d}-{ToA:d}) <-> {IdB} ({FromB:d}-{ToB:d})", a.Id, a.Arrival, a.Departure, b.Id, b.Arrival, b.Departure);
-
-                _dialog.ShowInfo("Überschneidung", $"{a.Id} {a.GroupName} Abreise {a.Departure:d}\n{b.Id} {b.GroupName} Anreise {b.Arrival:d}");
-            }
-        }
-        #endregion
-
-        #region ColumnOrder
-        public void SaveColumnOrder(DataGrid grid)
-        {
-            var order = grid.Columns
-                .Select(c => new ColumnOrderInfo
-                {
-                    Key = c.Header.ToString() ?? "",
-                    DisplayIndex = c.DisplayIndex
-                })
-                .ToList();
-
-            var json = JsonSerializer.Serialize(order);
-            File.WriteAllText(Path.Combine(Paths.ResourcesPath, "columnOrder.json"), json);
-        }
-
-        public void LoadColumnOrder(DataGrid grid)
-        {
-            if (!File.Exists(Path.Combine(Paths.ResourcesPath, "columnOrder.json")))
-                return;
-
-            var json = File.ReadAllText(Path.Combine(Paths.ResourcesPath, "columnOrder.json"));
-            var order = JsonSerializer.Deserialize<List<ColumnOrderInfo>>(json);
-
-            if (order == null) return;
-
-            var sorted = order.OrderBy(o => o.DisplayIndex).ToList();
-
-            int index = 0;
-
-            foreach (var info in sorted)
-            {
-                var column = grid.Columns.FirstOrDefault(c =>
-                    c.Header.ToString() == info.Key);
-
-                if (column != null)
-                {
-                    column.DisplayIndex = index;
-                    index++;
-                }
-            }
-        }
-        #endregion
-
-        private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)
-        {
-            if (sender is not Entry entry)
-                return;
-
-            if (e.PropertyName == nameof(Entry.Departure))
-            {
-                Log.Debug("Abreisedatum geändert (Id {Id})", entry.Id);
-                CheckChangedEntryDate(entry);
-            }
-
-            if (e.PropertyName == nameof(Entry.Canceled))
-            {
-                Log.Information("Eintrag storniert geändert (Id {Id}, Canceled={Value})", entry.Id, entry.Canceled);
-                RaiseCountProperties();
-            }
-        }
-
-        private void RaiseCountProperties()
-        {
-            OnPropertyChanged(nameof(EntryCount));
-            OnPropertyChanged(nameof(PastEntryCount));
-            OnPropertyChanged(nameof(CanceledEntryCount));
+            _tenantViewModel.SaveEntries();
         }
     }
 }
