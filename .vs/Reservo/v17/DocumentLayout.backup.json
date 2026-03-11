@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\enerh\\source\\repos\\Reservo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\viewmodels\\settingsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\viewmodels\\settingsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\views\\settingsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\views\\settingsview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\views\\settingsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\views\\settingsview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\viewmodels\\settingsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\viewmodels\\settingsviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\services\\credentials\\interncredentials.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -23,8 +23,8 @@
       "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\services\\credentials\\credentialsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\views\\tenantview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|solutionrelative:reservo\\views\\tenantview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7BE874F0-8E13-4A52-A94C-034126A9B80F}|Reservo\\Reservo.csproj|c:\\users\\enerh\\source\\repos\\reservo\\reservo\\viewmodels\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -58,15 +58,14 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "SettingsView.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\Views\\SettingsView.xaml.cs",
-              "RelativeDocumentMoniker": "Reservo\\Views\\SettingsView.xaml.cs",
-              "ToolTip": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\Views\\SettingsView.xaml.cs",
-              "RelativeToolTip": "Reservo\\Views\\SettingsView.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-03-11T10:16:11.087Z",
+              "DocumentIndex": 5,
+              "Title": "TenantView.xaml",
+              "DocumentMoniker": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\Views\\TenantView.xaml",
+              "RelativeDocumentMoniker": "Reservo\\Views\\TenantView.xaml",
+              "ToolTip": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\Views\\TenantView.xaml",
+              "RelativeToolTip": "Reservo\\Views\\TenantView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-03-11T13:40:10.38Z",
               "EditorCaption": ""
             },
             {
@@ -77,7 +76,7 @@
               "RelativeDocumentMoniker": "Reservo\\Services\\Credentials\\CredentialsService.cs",
               "ToolTip": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\Services\\Credentials\\CredentialsService.cs",
               "RelativeToolTip": "Reservo\\Services\\Credentials\\CredentialsService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-10T12:25:44.271Z",
               "EditorCaption": ""
@@ -90,27 +89,27 @@
               "RelativeDocumentMoniker": "Reservo\\Services\\Credentials\\InternCredentials.cs",
               "ToolTip": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\Services\\Credentials\\InternCredentials.cs",
               "RelativeToolTip": "Reservo\\Services\\Credentials\\InternCredentials.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-10T12:25:41.762Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "SettingsViewModel.cs",
               "DocumentMoniker": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\ViewModels\\SettingsViewModel.cs",
               "RelativeDocumentMoniker": "Reservo\\ViewModels\\SettingsViewModel.cs",
               "ToolTip": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\ViewModels\\SettingsViewModel.cs",
               "RelativeToolTip": "Reservo\\ViewModels\\SettingsViewModel.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAewBYAAAAdAAAAAAAAAA==",
+              "ViewState": "AgIAAD4AAAAAAAAAAAAEwE0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-03-10T12:05:30.447Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "SettingsView.xaml",
               "DocumentMoniker": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\Views\\SettingsView.xaml",
               "RelativeDocumentMoniker": "Reservo\\Views\\SettingsView.xaml",
@@ -122,14 +121,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Reservo\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\MainWindow.xaml",
-              "RelativeToolTip": "Reservo\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\enerh\\source\\repos\\Reservo\\Reservo\\MainWindow.xaml*",
+              "RelativeToolTip": "Reservo\\MainWindow.xaml*",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-03-10T11:51:30.453Z"
+              "WhenOpened": "2026-03-10T11:51:30.453Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

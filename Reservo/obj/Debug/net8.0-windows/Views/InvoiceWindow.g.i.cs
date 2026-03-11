@@ -54,7 +54,7 @@ namespace Reservo.Views {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/Reservo;V1.0.0.0;component/views/invoicewindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/Reservo;component/views/invoicewindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\Views\InvoiceWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);
