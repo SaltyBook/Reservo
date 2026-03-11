@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Reservo")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ffa607cc94c2b0707993cd1613423cb359874735")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c747c3ad70f67221da101e8376b5db14760ee545")]
 [assembly: System.Reflection.AssemblyProductAttribute("Reservo")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Reservo")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
