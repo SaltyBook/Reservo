@@ -5,6 +5,8 @@ namespace Reservo.Behavior
 {
     public static class DataGridColumnOrderBehavior
     {
+        public static DataGrid LoadedGrid = null;
+
         public static readonly DependencyProperty EnableProperty =
             DependencyProperty.RegisterAttached(
                 "Enable",
@@ -24,6 +26,8 @@ namespace Reservo.Behavior
         {
             if (d is not DataGrid grid)
                 return;
+
+            LoadedGrid = grid;
 
             if ((bool)e.NewValue)
             {

@@ -4,10 +4,13 @@
     <_LastSelectedProfileId>C:\Users\enerh\source\repos\Reservo\Reservo\Properties\PublishProfiles\ClickOnceProfile1.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="Views\Credentials.xaml.cs">
+    <Compile Update="Views\InvoiceWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\InvoiceWindow.xaml.cs">
+    <Compile Update="Views\SettingsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\TenantView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
