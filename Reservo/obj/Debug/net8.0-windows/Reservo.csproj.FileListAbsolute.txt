@@ -57,8 +57,6 @@ C:\Users\enerh\source\repos\Reservo\Reservo\bin\Debug\net8.0-windows\ExcelDataRe
 C:\Users\enerh\source\repos\Reservo\Reservo\bin\Debug\net8.0-windows\Serilog.dll
 C:\Users\enerh\source\repos\Reservo\Reservo\bin\Debug\net8.0-windows\Serilog.Sinks.Debug.dll
 C:\Users\enerh\source\repos\Reservo\Reservo\bin\Debug\net8.0-windows\Serilog.Sinks.File.dll
-C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\Views\Credentials.g.cs
-C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\Views\Credentials.baml
 C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\Reservo.sourcelink.json
 C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\Views\TenantView.g.cs
 C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\Views\TenantView.baml
@@ -67,3 +65,4 @@ C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\Views\Setti
 C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\App.baml
 C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\MainWindow.baml
 C:\Users\enerh\source\repos\Reservo\Reservo\obj\Debug\net8.0-windows\Views\SettingsView.baml
+C:\Users\enerh\source\repos\Reservo\Reservo\bin\Debug\net8.0-windows\Reservo.dll.config
