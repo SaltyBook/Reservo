@@ -1,0 +1,63 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+
+# Visual Studio
+.vs/
+.vscode/
+
+# Rider
+.idea/
+
+# NuGet
+*.nupkg
+packages/
+!packages/build/
+*.snupkg
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test results
+TestResults/
+
+# Publish output
+publish/
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# DotCover
+*.dotCover
+
+# Azure DevOps / local settings
+*.local
+
+# Temporary files
+*.tmp
+*.temp
+
+# Database / local app data if generated locally
+*.mdf
+*.ldf
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated files
+Generated_Code/
+
+# Coverage
+coverage/
+*.coverage
+*.coveragexml
