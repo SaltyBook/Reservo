@@ -1,6 +1,7 @@
 ﻿#region Usings
 using Reservo.Commands;
 using Reservo.Enums;
+using Reservo.Views;
 #endregion
 
 namespace Reservo.ViewModels
@@ -32,6 +33,7 @@ namespace Reservo.ViewModels
 
         public RelayCommand ShowTenantCommand { get; }
         public RelayCommand ShowSettingsCommand { get; }
+        public RelayCommand FeedBackCommand { get; }
 
         private readonly TenantViewModel _tenantViewModel;
         private readonly SettingsViewModel _settingsViewModel;
@@ -55,6 +57,8 @@ namespace Reservo.ViewModels
                 CurrentViewModel = _settingsViewModel;
                 SelectedMenuItem = MenuItemType.Settings;
             });
+
+            FeedBackCommand = new RelayCommand(GiveFeedBack);
         }
 
         public void LoadEntries()
@@ -65,6 +69,12 @@ namespace Reservo.ViewModels
         public void SaveEntries()
         {
             _tenantViewModel.SaveEntries();
+        }
+
+        private void GiveFeedBack(object? obj)
+        {
+            FeedBack feedBack = new FeedBack(new FeedBackViewModel(new WindowService()));
+            feedBack.ShowDialog();
         }
     }
 }

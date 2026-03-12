@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\enerh\source\repos\Reservo\Reservo\App.xaml
-6-437059231
+5-1254969250
 1-2095072155
-621968197336
+62-1219907223
 2181032581126
-MainWindow.xaml;Views\Credentials.xaml;Views\InvoiceWindow.xaml;Views\MainWindow.xaml;Views\SettingsView.xaml;Views\TenantView.xaml;
+MainWindow.xaml;Views\FeedBack.xaml;Views\InvoiceWindow.xaml;Views\SettingsView.xaml;Views\TenantView.xaml;
 
-False
+True
 

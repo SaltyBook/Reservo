@@ -1,0 +1,128 @@
+﻿<UserControl x:Class="Reservo.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Reservo.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="1">
+            <TabItem Header="E-Mail">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Überschrift -->
+                    <TextBlock Text="E-Mail Zugangsdaten"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               Margin="0,0,0,5" />
+
+                    <!-- Username -->
+                    <StackPanel Grid.Row="1"
+                                Margin="0,0,0,10">
+                        <TextBlock Text="Username" />
+                        <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                 Height="20" />
+                    </StackPanel>
+
+                    <!-- Passwort -->
+                    <StackPanel Grid.Row="2"
+                                Margin="0,0,0,10">
+                        <TextBlock Text="Passwort" />
+                        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged"
+                                     PasswordChar="*"
+                                     Height="20" />
+                    </StackPanel>
+
+                    <!-- Speichern -->
+                    <Button Grid.Row="4"
+                            Content="Speichern"
+                            Height="25"
+                            Width="100"
+                            HorizontalAlignment="Center"
+                            Command="{Binding SaveCredentialsCommand}"
+                            CommandParameter="{Binding ElementName=PasswordBox, Path=Password}"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Server">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                        <RowDefinition Height="50" />
+                    </Grid.RowDefinitions>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <!-- Überschrift Server -->
+                        <TextBlock Text="Serverdaten"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,5" />
+                        <CheckBox Grid.Row="1"
+                                  IsChecked="{Binding UseServer, UpdateSourceTrigger=PropertyChanged}">
+                            <TextBlock Text="Server benutzen?" />
+                        </CheckBox>
+                        <StackPanel Grid.Row="2"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="Serverpfad" />
+                            <TextBox Text="{Binding ServerPath, UpdateSourceTrigger=PropertyChanged}"
+                                     Height="20" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <!-- Überschrift Trello -->
+                        <TextBlock Text="Trello Daten"
+                                   FontSize="16"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,0,0,5" />
+                        <!-- APIKey -->
+                        <StackPanel Grid.Row="1"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="APIKey" />
+                            <TextBox Text="{Binding TrelloAPIKey, UpdateSourceTrigger=PropertyChanged}"
+                                     Height="20" />
+                        </StackPanel>
+                        <!-- APIToken -->
+                        <StackPanel Grid.Row="2"
+                                    Margin="0,0,0,10">
+                            <TextBlock Text="APIToken" />
+                            <PasswordBox PasswordChanged="PasswordBox_APITokenChanged"
+                                         PasswordChar="*"
+                                         Height="20" />
+                        </StackPanel>
+                    </Grid>
+                    <!-- Speichern -->
+                    <Button Grid.Row="4"
+                            Content="Speichern"
+                            Height="25"
+                            Width="100"
+                            HorizontalAlignment="Center"
+                            Command="{Binding SaveServerCommand}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>
