@@ -101,15 +101,15 @@
                         <!-- APIKey -->
                         <StackPanel Grid.Row="1"
                                     Margin="0,0,0,10">
-                            <TextBlock Text="APIKey" />
-                            <TextBox Text="{Binding TrelloAPIKey, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBlock Text="ApiKey" />
+                            <TextBox Text="{Binding TrelloApiKey, UpdateSourceTrigger=PropertyChanged}"
                                      Height="20" />
                         </StackPanel>
                         <!-- APIToken -->
                         <StackPanel Grid.Row="2"
                                     Margin="0,0,0,10">
-                            <TextBlock Text="APIToken" />
-                            <PasswordBox PasswordChanged="PasswordBox_APITokenChanged"
+                            <TextBlock Text="ApiToken" />
+                            <PasswordBox PasswordChanged="PasswordBox_ApiTokenChanged"
                                          PasswordChar="*"
                                          Height="20" />
                         </StackPanel>

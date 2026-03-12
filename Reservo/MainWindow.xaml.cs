@@ -22,9 +22,9 @@ namespace Reservo.Views
         // from the MainViewModel to load all entries from the data source (e.g., Excel).
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is MainViewModel vm)
+            if (DataContext is MainViewModel mainViewModel)
             {
-                vm.LoadEntries();
+                mainViewModel.LoadWorkbooks();
             }
         }
 
@@ -32,9 +32,9 @@ namespace Reservo.Views
         // from the MainViewModel to persist all entries to the data source.
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            if (DataContext is MainViewModel vm)
+            if (DataContext is MainViewModel mainViewModel)
             {
-                vm.SaveEntries();
+                mainViewModel.SaveWorkbooks();
                 if (DataGridColumnOrderBehavior.LoadedGrid is not null)
                     ColumnOrderService.Save(DataGridColumnOrderBehavior.LoadedGrid);
             }

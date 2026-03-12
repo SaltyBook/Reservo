@@ -9,34 +9,25 @@ namespace Reservo.ViewModels
     public class MainViewModel : BaseViewModel
     {
         private BaseViewModel _currentViewModel;
-
         public BaseViewModel CurrentViewModel
         {
             get => _currentViewModel;
-            set
-            {
-                _currentViewModel = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _currentViewModel, value);
         }
 
         private MenuItemType _selectedMenuItem;
         public MenuItemType SelectedMenuItem
         {
             get => _selectedMenuItem;
-            set
-            {
-                _selectedMenuItem = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _selectedMenuItem, value);
         }
+
+        private readonly TenantViewModel _tenantViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
 
         public RelayCommand ShowTenantCommand { get; }
         public RelayCommand ShowSettingsCommand { get; }
         public RelayCommand FeedBackCommand { get; }
-
-        private readonly TenantViewModel _tenantViewModel;
-        private readonly SettingsViewModel _settingsViewModel;
 
         public MainViewModel()
         {
@@ -46,35 +37,36 @@ namespace Reservo.ViewModels
             _currentViewModel = _tenantViewModel;
             _selectedMenuItem = MenuItemType.Tenant;
 
-            ShowTenantCommand = new RelayCommand(_ =>
-            {
-                CurrentViewModel = _tenantViewModel;
-                SelectedMenuItem = MenuItemType.Tenant;
-            });
+            ShowTenantCommand = new RelayCommand(_ => ShowView(_tenantViewModel, MenuItemType.Tenant));
+            ShowSettingsCommand = new RelayCommand(_ => ShowView(_settingsViewModel, MenuItemType.Settings));
 
-            ShowSettingsCommand = new RelayCommand(_ =>
-            {
-                CurrentViewModel = _settingsViewModel;
-                SelectedMenuItem = MenuItemType.Settings;
-            });
-
-            FeedBackCommand = new RelayCommand(GiveFeedBack);
+            FeedBackCommand = new RelayCommand(OpenFeedbackDialog);
         }
 
-        public void LoadEntries()
+        // Load Workbooks (.xslx files)
+        public void LoadWorkbooks()
         {
-            _ = _tenantViewModel.LoadEntries();
+            _ = _tenantViewModel.LoadWorkbooks();
         }
 
-        public void SaveEntries()
+        // Save Workbooks (.xslx files)
+        public void SaveWorkbooks()
         {
-            _tenantViewModel.SaveEntries();
+            _tenantViewModel.SaveWorkbooks();
         }
 
-        private void GiveFeedBack(object? obj)
+        //Sets the active view and synchronizes the selected menu item
+        private void ShowView(BaseViewModel viewModel, MenuItemType menuItem)
         {
-            FeedBack feedBack = new FeedBack(new FeedBackViewModel(new WindowService()));
-            feedBack.ShowDialog();
+            CurrentViewModel = viewModel;
+            SelectedMenuItem = menuItem;
+        }
+
+        //Opens Feedback View
+        private void OpenFeedbackDialog(object? obj)
+        {
+            FeedBack feedbackWindow = new FeedBack(new FeedBackViewModel(new WindowService()));
+            feedbackWindow.ShowDialog();
         }
     }
 }

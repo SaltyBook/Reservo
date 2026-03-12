@@ -7,15 +7,9 @@ namespace Reservo.Infrastructure
     {
         public static void Init()
         {
-            var basePath = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "Verwaltung",
-                "Logs"
-            );
+            var basePath = Path.Combine(Paths.ManagementPath, "Logs");
 
-            Directory.CreateDirectory(
-                Path.GetDirectoryName(basePath)!
-            );
+            Directory.CreateDirectory(Path.GetDirectoryName(basePath)!);
 
             var fileName = $"reservo-{DateTime.Now:dd-MM-yyyy}.log";
             var logPath = Path.Combine(basePath, fileName);

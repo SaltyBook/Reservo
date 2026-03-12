@@ -4,30 +4,29 @@ namespace Reservo.Commands
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action<object?> execute;
-        private readonly Predicate<object?>? canExecute;
+        private readonly Action<object?> _execute;
+        private readonly Predicate<object?>? _canExecute;
 
         public RelayCommand(Action<object?> execute, Predicate<object?>? canExecute = null)
         {
-            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            this.canExecute = canExecute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
 
         public bool CanExecute(object? parameter)
         {
-            return canExecute?.Invoke(parameter) ?? true;
+            return _canExecute?.Invoke(parameter) ?? true;
         }
 
         public void Execute(object? parameter)
         {
-            execute(parameter);
+            _execute(parameter);
         }
 
-        public event EventHandler? CanExecuteChanged
+        public event EventHandler? CanExecuteChanged;
+        public void RaiseCanExecuteChanged()
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
-
     }
 }

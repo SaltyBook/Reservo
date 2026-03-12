@@ -7,7 +7,7 @@ namespace Reservo.Trello
 {
     public static class TrelloFeedBack
     {
-        public static async void SentCard(string subject, string message)
+        public static async void SentCardAsync(string subject, string message)
         {
             if (string.IsNullOrWhiteSpace(InternCredentials.TrelloApiKey) || string.IsNullOrWhiteSpace(InternCredentials.TrelloApiToken))
             {

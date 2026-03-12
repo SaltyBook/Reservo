@@ -16,9 +16,9 @@ namespace Reservo.ViewModels
 {
     public class WorkbookViewModel : BaseViewModel
     {
-        private readonly IFileService _files;
-        private readonly IDocumentService _documents;
-        private readonly IDialogService _dialog;
+        private readonly IFileService _fileService;
+        private readonly IDocumentService _documentService;
+        private readonly IDialogService _dialogService;
 
         public string FilePath { get; }
         public string DisplayName { get; }
@@ -59,23 +59,25 @@ namespace Reservo.ViewModels
             DisplayName = Path.GetFileNameWithoutExtension(filePath);
             Year = DisplayName.Substring(DisplayName.LastIndexOf('-') + 1);
 
-            _files = files;
-            _documents = documents;
-            _dialog = dialog;
+            _fileService = files;
+            _documentService = documents;
+            _dialogService = dialog;
 
             AddEntryCommand = new RelayCommand(_ => AddEntry());
-            DeleteEntryCommand = new RelayCommand(_ => DeleteEntry(), _ => SelectedEntry != null);
-            CreateReservationCommand = new RelayCommand(_ => CreateReservation(), _ => SelectedEntry != null);
-            CreateInvoiceCommand = new RelayCommand(_ => CreateInvoice(), _ => SelectedEntry != null);
-            CreateReservationEmailCommand = new RelayCommand(_ => CreateReservationEmail(), CheckEMailCredentials);
-            CreateInvoiceEmailCommand = new RelayCommand(_ => CreateInvoiceEmail(), CheckEMailCredentials);
-            OpenNoteCommand = new RelayCommand(_ => OpenNote());
+            DeleteEntryCommand = new RelayCommand(_ => DeleteEntry(), _ => SelectedEntry is not null);
+            CreateReservationCommand = new RelayCommand(_ => CreateReservation(), _ => SelectedEntry is not null);
+            CreateInvoiceCommand = new RelayCommand(_ => CreateInvoice(), _ => SelectedEntry is not null);
+            CreateReservationEmailCommand = new RelayCommand(_ => CreateReservationEmail(), CanCreateEmail);
+            CreateInvoiceEmailCommand = new RelayCommand(_ => CreateInvoiceEmail(), CanCreateEmail);
+            OpenNoteCommand = new RelayCommand(_ => OpenNote(), _ => SelectedEntry is not null);
 
             if (!CheckFolderExisting())
                 CreateFolder();
         }
 
         #region Commands
+
+        //Adds a new entry with the next available ID and marks it as selected
         public void AddEntry()
         {
             var nextId = Entries.Count == 0 ? 1 : Entries.Max(e => e.Id) + 1;
@@ -88,10 +90,13 @@ namespace Reservo.ViewModels
             SelectedEntry = entry;
         }
 
+        //Deletes the currently selected entry
         public void DeleteEntry()
         {
             if (SelectedEntry == null)
+            {
                 return;
+            }
 
             Log.Information("Eintrag löschen (Id {Id})", SelectedEntry.Id);
 
@@ -99,111 +104,136 @@ namespace Reservo.ViewModels
             SelectedEntry = null;
         }
 
+        //Creates a reservation document if necessary and then opens it
         private void CreateReservation()
         {
             if (SelectedEntry == null)
+            {
                 return;
+            }
 
             Log.Information("Reservierung erstellen (Id {Id})", SelectedEntry.Id);
 
             try
             {
                 var entry = SelectedEntry;
-                var path = entry.GetReservationPath(Year);
+                var documentPath = entry.GetReservationPath(Year);
 
-                if (!_files.Exists(path))
+                if (!_fileService.Exists(documentPath))
                 {
                     Log.Debug("Reservierung existiert nicht, wird erstellt");
-                    _documents.CreateReservation(entry, Year);
+                    _documentService.CreateReservation(entry, Year);
                 }
 
-                _files.OpenFile(path);
+                _fileService.OpenFile(documentPath);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Fehler beim Erstellen der Reservierung (Id {Id})", SelectedEntry.Id);
-                _dialog.ShowError("Fehler", "Reservierung konnte nicht erstellt werden");
+                _dialogService.ShowError("Fehler", "Reservierung konnte nicht erstellt werden");
             }
         }
 
+        //Creates an invoice document if necessary and then opens it
         private void CreateInvoice()
         {
             if (SelectedEntry == null)
+            {
                 return;
+            }
 
             Log.Information("Rechnung erstellen (Id {Id})", SelectedEntry.Id);
 
             try
             {
                 var entry = SelectedEntry;
-                var path = SelectedEntry.GetInvoicePath(Year);
+                var documentPath = SelectedEntry.GetInvoicePath(Year);
 
-                if (!_files.Exists(path))
+                if (!_fileService.Exists(documentPath))
                 {
                     Log.Debug("Rechnung existiert nicht, wird erstellt");
-                    _documents.CreateInvoice(entry, Year);
+                    _documentService.CreateInvoice(entry, Year);
                 }
 
-                _files.OpenFile(path);
+                _fileService.OpenFile(documentPath);
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Fehler beim Erstellen der Rechnung (Id {Id})", SelectedEntry.Id);
-                _dialog.ShowError("Fehler", "Rechnung konnte nicht erstellt werden");
+                _dialogService.ShowError("Fehler", "Rechnung konnte nicht erstellt werden");
             }
         }
 
+        //Creates an email for the reservation, provided that an email address is available and the corresponding document exists
         private void CreateReservationEmail()
         {
             Log.Information("Erstelle EMail mit Reservierung Klick");
 
-            if (SelectedEntry == null) return;
-
+            if (SelectedEntry is null)
+            {
+                return;
+            }
             var entry = SelectedEntry;
 
             if (String.IsNullOrEmpty(entry.EMail))
             {
-                _dialog.ShowInfo("Fehlende E-Mail", "E-Mail konnte nicht gefunden werden!");
+                _dialogService.ShowInfo("Fehlende E-Mail", "E-Mail konnte nicht gefunden werden!");
                 return;
             }
 
-            var docxPath = entry.GetReservationPath(Year);
-            if (_files.Exists(docxPath))
-                _documents.CreateReservationMail(entry, Year);
+            var documentPath = entry.GetReservationPath(Year);
+
+            if (_fileService.Exists(documentPath))
+            {
+                _documentService.CreateReservationMail(entry, Year);
+            }
         }
 
+        //Creates an email for the invoice, provided that an email address is available and the corresponding document exists
         private void CreateInvoiceEmail()
         {
             Log.Information("Erstelle EMail mit Rechnung Klick");
 
-            if (SelectedEntry == null) return;
+            if (SelectedEntry == null)
+            {
+                return;
+            }
 
             var entry = SelectedEntry;
 
             if (String.IsNullOrWhiteSpace(entry.EMail))
             {
-                _dialog.ShowInfo("Fehlende E-Mail", "E-Mail konnte nicht gefunden werden!");
+                _dialogService.ShowInfo("Fehlende E-Mail", "E-Mail konnte nicht gefunden werden!");
                 return;
             }
 
-            var docxPath = entry.GetInvoicePath(Year);
-            if (_files.Exists(docxPath))
-                _documents.CreateInvoiceMail(entry, Year);
+            var documentPath = entry.GetInvoicePath(Year);
+
+            if (_fileService.Exists(documentPath))
+            {
+                _documentService.CreateInvoiceMail(entry, Year);
+            }
         }
 
+        //Opens the note view of the currently selected entry
         private void OpenNote()
         {
-            if (SelectedEntry == null)
+            if (SelectedEntry is null)
+            {
                 return;
+            }
+
             SelectedEntry.IsNoteOpen = true;
         }
         #endregion
 
-        private bool CheckEMailCredentials(object? _)
+        //Checks whether email access data is available
+        private bool CanCreateEmail(object? _)
         {
             return CredentialsService.creds is not null;
         }
 
+        //Checks whether the invoice folder for the current year exists
         private bool CheckFolderExisting()
         {
             if (!Directory.Exists(Path.Combine(Paths.ManagementPath, $"{Year}-Rechnung")))
@@ -213,6 +243,7 @@ namespace Reservo.ViewModels
             return true;
         }
 
+        //Creates the necessary folders for invoicing and reservations for the current year
         private void CreateFolder()
         {
             Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{Year}-Rechnung"));

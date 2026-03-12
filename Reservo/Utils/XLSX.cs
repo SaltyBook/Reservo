@@ -18,8 +18,6 @@ namespace Reservo.Utils
         {
             var result = new LoadEntriesResult();
 
-            //var path = Path.Combine(Paths.ManagementPath, "Datenbank", $"Mieterliste-{DateTime.Now.Year}.xlsx");
-
             Log.Information("Lade Excel-Datei {Path}", path);
 
             try
@@ -42,7 +40,7 @@ namespace Reservo.Utils
 
                     if (!TryParseRow(reader, out var entry))
                     {
-                        //Log.Warning("Zeile {Row} konnte nicht gelesen werden", row);
+                        Log.Warning("Zeile {Row} konnte nicht gelesen werden", row);
                         continue;
                     }
 
@@ -66,12 +64,6 @@ namespace Reservo.Utils
         // into consecutive rows starting from row 2. Finally, saves the workbook.
         public static void SaveXLSX(string path, IEnumerable<Entry> entries)
         {
-            //var path = Path.Combine(
-            //    Paths.ManagementPath,
-            //    "Datenbank",
-            //    $"Mieterliste-{DateTime.Now.Year}.xlsx"
-            //);
-
             Log.Information("Speichern gestartet ({Count} Einträge)", entries.Count());
 
             try

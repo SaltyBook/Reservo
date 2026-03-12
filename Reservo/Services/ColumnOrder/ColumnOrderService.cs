@@ -10,6 +10,7 @@ namespace Reservo
     {
         private static string FilePath => Path.Combine(Paths.ResourcesPath, "columnOrder.json");
 
+        //Loads the column order for the datagrid
         public static List<ColumnOrderInfo>? Load()
         {
             if (!File.Exists(FilePath))
@@ -19,6 +20,7 @@ namespace Reservo
             return JsonSerializer.Deserialize<List<ColumnOrderInfo>>(json);
         }
 
+        //Saves the column order from the current loaded datagrid
         public static void Save(DataGrid grid)
         {
             var order = grid.Columns
@@ -37,6 +39,7 @@ namespace Reservo
             File.WriteAllText(FilePath, json);
         }
 
+        //Applies the column order to the datagrid
         public static void Apply(DataGrid grid, List<ColumnOrderInfo> order)
         {
             var sorted = order.OrderBy(o => o.DisplayIndex).ToList();

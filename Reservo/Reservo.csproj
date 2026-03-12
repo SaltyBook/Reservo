@@ -13,10 +13,6 @@
 
   <ItemGroup>
     <None Remove="document_file_organize_icon.ico" />
-    <None Remove="Resources\imageHouse.jpg" />
-    <None Remove="Resources\imageLogo.png" />
-    <None Remove="Resources\Rechnung-Vorlage.docx" />
-    <None Remove="Resources\Reservierungsbestätigung-Vorlage.docx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,18 +35,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\document_file_organize_icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\imageHouse.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\imageLogo.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Rechnung-Vorlage.docx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Reservierungsbestätigung-Vorlage.docx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

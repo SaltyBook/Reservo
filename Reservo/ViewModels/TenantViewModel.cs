@@ -9,16 +9,14 @@ using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Text.Json;
-using System.Windows.Controls;
 
 namespace Reservo.ViewModels
 {
     class TenantViewModel : BaseViewModel
     {
-        private readonly IDialogService _dialog;
-        private readonly IFileService _files;
-        private readonly IDocumentService _documents;
+        private readonly IDialogService _dialogService;
+        private readonly IFileService _filesService;
+        private readonly IDocumentService _documentsSerive;
 
         public ObservableCollection<WorkbookViewModel> Workbooks { get; } = new();
 
@@ -45,36 +43,37 @@ namespace Reservo.ViewModels
         {
             Log.Information("MainViewModel initialisiert");
 
-            _dialog = dialog;
-            _files = files;
-            _documents = documents;
+            _dialogService = dialog;
+            _filesService = files;
+            _documentsSerive = documents;
         }
 
-        public async Task LoadEntries()
+        //Loads all Excel files from the database directory
+        public async Task LoadWorkbooks()
         {
-            var dir = Path.Combine(Paths.ManagementPath, "Datenbank");
+            Log.Information("Lade Excel-Dateien aus {Dir}", Paths.DatabasePath);
 
-            Log.Information("Lade Excel-Dateien aus {Dir}", dir);
-
-            var files = Directory.GetFiles(dir, "*.xlsx").OrderByDescending(f => f).ToList();
+            var workbookFiles = Directory.GetFiles(Paths.DatabasePath, "*.xlsx").OrderByDescending(file => file).ToList();
 
             Workbooks.Clear();
 
-            foreach (var file in files)
+            foreach (var file in workbookFiles)
             {
                 Log.Information("Lade Workbook {File}", file);
 
                 var result = await Task.Run(() => XLSX.LoadXLSX(file));
 
-                var vm = new WorkbookViewModel(file, new FileService(), new DocumentService(), new DialogService())
+                var workbookViewModel = new WorkbookViewModel(file, _filesService, _documentsSerive, _dialogService)
                 {
                     Entries = new ObservableCollection<Entry>(result.Entries)
                 };
 
-                foreach (var entry in vm.Entries)
+                foreach (var entry in workbookViewModel.Entries)
+                {
                     entry.PropertyChanged += Entry_PropertyChanged;
+                }
 
-                Workbooks.Add(vm);
+                Workbooks.Add(workbookViewModel);
             }
 
             SelectedWorkbook = Workbooks.FirstOrDefault();
@@ -82,24 +81,25 @@ namespace Reservo.ViewModels
             CheckAllEntryDates();
         }
 
-        public void SaveEntries()
+        //Saves all loaded workbooks
+        public void SaveWorkbooks()
         {
-            var dir = Path.Combine(Paths.ManagementPath, "Datenbank");
-
-            Log.Information("Speichere Excel-Dateien in {Dir}", dir);
+            Log.Information("Speichere Excel-Dateien in {Dir}", Paths.DatabasePath);
 
             if (Workbooks.Count == 0)
+            {
                 return;
+            }
 
             foreach (var workbook in Workbooks)
             {
                 Log.Information("Speichere Workbook {File}", workbook.FilePath);
-
                 XLSX.SaveXLSX(workbook.FilePath, workbook.Entries);
             }
         }
 
         #region Date
+        //Checks all loaded workbooks for date overlaps
         private void CheckAllEntryDates()
         {
             foreach (var workbook in Workbooks)
@@ -107,84 +107,52 @@ namespace Reservo.ViewModels
                 var overlaps = DateAnalyse.FindOverlaps(workbook.Entries);
 
                 if (overlaps.Count == 0)
-                    return;
+                {
+                    continue;
+                }
 
                 ShowOverlaps(overlaps, workbook);
             }
         }
 
+        //Checks a modified entry for date overlaps
         private void CheckChangedEntryDate(Entry entry)
         {
-            if (SelectedWorkbook is not null)
+            if (SelectedWorkbook is null)
             {
-                var overlaps = DateAnalyse.FindOverlapsForEntry(entry, SelectedWorkbook.Entries);
-
-                if (overlaps.Count == 0)
-                    return;
-
-                ShowOverlaps(overlaps, SelectedWorkbook);
-            }
-        }
-
-        private void ShowOverlaps(List<(Entry, Entry)> overlaps, WorkbookViewModel vm)
-        {
-            Log.Warning("Datumsüberschneidungen in Tabelle {DisplayName} gefunden: {Count}", vm.DisplayName, overlaps.Count);
-            foreach (var (a, b) in overlaps)
-            {
-                Log.Warning("Überschneidung: {IdA} ({FromA:d}-{ToA:d}) <-> {IdB} ({FromB:d}-{ToB:d})", a.Id, a.Arrival, a.Departure, b.Id, b.Arrival, b.Departure);
-
-                _dialog.ShowInfo("Überschneidung", $"{a.Id} {a.GroupName} Abreise {a.Departure:d}\n{b.Id} {b.GroupName} Anreise {b.Arrival:d}");
-            }
-        }
-        #endregion
-
-        #region ColumnOrder
-        public void SaveColumnOrder(DataGrid grid)
-        {
-            var order = grid.Columns
-                .Select(c => new ColumnOrderInfo
-                {
-                    Key = c.Header.ToString() ?? "",
-                    DisplayIndex = c.DisplayIndex
-                })
-                .ToList();
-
-            var json = JsonSerializer.Serialize(order);
-            File.WriteAllText(Path.Combine(Paths.ResourcesPath, "columnOrder.json"), json);
-        }
-
-        public void LoadColumnOrder(DataGrid grid)
-        {
-            if (!File.Exists(Path.Combine(Paths.ResourcesPath, "columnOrder.json")))
                 return;
+            }
 
-            var json = File.ReadAllText(Path.Combine(Paths.ResourcesPath, "columnOrder.json"));
-            var order = JsonSerializer.Deserialize<List<ColumnOrderInfo>>(json);
+            var overlaps = DateAnalyse.FindOverlapsForEntry(entry, SelectedWorkbook.Entries);
 
-            if (order == null) return;
-
-            var sorted = order.OrderBy(o => o.DisplayIndex).ToList();
-
-            int index = 0;
-
-            foreach (var info in sorted)
+            if (overlaps.Count == 0)
             {
-                var column = grid.Columns.FirstOrDefault(c =>
-                    c.Header.ToString() == info.Key);
+                return;
+            }
 
-                if (column != null)
-                {
-                    column.DisplayIndex = index;
-                    index++;
-                }
+            ShowOverlaps(overlaps, SelectedWorkbook);
+        }
+
+        // Logs any overlaps found and displays them to the user
+        private void ShowOverlaps(List<(Entry, Entry)> overlaps, WorkbookViewModel workbook)
+        {
+            Log.Warning("Datumsüberschneidungen in Tabelle {DisplayName} gefunden: {Count}", workbook.DisplayName, overlaps.Count);
+            foreach (var (firstEntry, secondEntry) in overlaps)
+            {
+                Log.Warning("Überschneidung: {IdA} ({FromA:d}-{ToA:d}) <-> {IdB} ({FromB:d}-{ToB:d})", firstEntry.Id, firstEntry.Arrival, firstEntry.Departure, secondEntry.Id, secondEntry.Arrival, secondEntry.Departure);
+
+                _dialogService.ShowInfo("Überschneidung", $"{firstEntry.Id} {firstEntry.GroupName} Abreise {firstEntry.Departure:d}\n{secondEntry.Id} {secondEntry.GroupName} Anreise {secondEntry.Arrival:d}");
             }
         }
         #endregion
 
+        //Responds to property changes in individual entries
         private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (sender is not Entry entry)
+            {
                 return;
+            }
 
             if (e.PropertyName == nameof(Entry.Departure))
             {
@@ -199,6 +167,7 @@ namespace Reservo.ViewModels
             }
         }
 
+        //Updates all count properties that depend on the selection
         private void RaiseCountProperties()
         {
             OnPropertyChanged(nameof(EntryCount));

@@ -13,8 +13,8 @@ namespace Reservo
                 Directory.CreateDirectory(Paths.ManagementPath);
                 Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{DateTime.Now.Year}-Rechnung"));
                 Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{DateTime.Now.Year}-Reservierung"));
-                Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, "Datenbank"));
-                CreateDatabase(Path.Combine(Paths.ManagementPath, "Datenbank", $"Mieterliste-{DateTime.Now.Year}.xlsx"));
+                Directory.CreateDirectory(Paths.DatabasePath);
+                CreateDatabase(Path.Combine(Paths.DatabasePath, $"Mieterliste-{DateTime.Now.Year}.xlsx"));
             }
             else
             {
@@ -24,9 +24,9 @@ namespace Reservo
                     Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{DateTime.Now.Year}-Reservierung"));
                 }
             }
-            if (!File.Exists(Path.Combine(Paths.ManagementPath, "Datenbank", $"Mieterliste-{DateTime.Now.Year}.xlsx")))
+            if (!File.Exists(Path.Combine(Paths.DatabasePath, $"Mieterliste-{DateTime.Now.Year}.xlsx")))
             {
-                CreateDatabase(Path.Combine(Paths.ManagementPath, "Datenbank", $"Mieterliste-{DateTime.Now.Year}.xlsx"));
+                CreateDatabase(Path.Combine(Paths.DatabasePath, $"Mieterliste-{DateTime.Now.Year}.xlsx"));
             }
         }
 

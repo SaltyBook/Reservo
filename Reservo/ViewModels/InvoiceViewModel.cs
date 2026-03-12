@@ -4,6 +4,7 @@ using Reservo.Models;
 using Reservo.Services.Invoice;
 using Reservo.Services.Window;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 #endregion
 
@@ -13,6 +14,8 @@ namespace Reservo.ViewModels
     {
         private readonly IInvoiceService _invoiceService;
         private readonly IWindowService _windowService;
+
+        private const int DefaultItemCount = 16;
 
         public ObservableCollection<TableEntry> Items { get; }
 
@@ -29,7 +32,9 @@ namespace Reservo.ViewModels
             Items = BuildItems();
 
             foreach (var item in Items)
-                item.PropertyChanged += (_, __) => RecalculateTotal();
+            {
+                item.PropertyChanged += OnItemChanged;
+            }
 
             CreateInvoiceCommand = new RelayCommand(_ => CreateInvoice(year));
 
@@ -41,20 +46,25 @@ namespace Reservo.ViewModels
         {
             var list = new ObservableCollection<TableEntry>();
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < DefaultItemCount; i++)
             {
+                var template = InvoiceItem.allInvoiceItems[i];
+
                 var item = new TableEntry
                 {
                     Quantity = 0,
-                    Description = InvoiceItem.allInvoiceItems[i].Description,
-                    Factor = InvoiceItem.allInvoiceItems[i].Factor
+                    Description = template.Description,
+                    Factor = template.Factor
                 };
 
                 if (i > 12)
                 {
                     item.IsEditableTotal = true;
+
                     if (i == 15)
+                    {
                         item.IsEditableDescription = true;
+                    }
                 }
 
                 list.Add(item);
@@ -69,18 +79,24 @@ namespace Reservo.ViewModels
             return list;
         }
 
+        private void OnItemChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            RecalculateTotal();
+        }
+
         //Calculates and updates the total value of all invoice items.
         private void RecalculateTotal()
         {
             double sum = Items
                 .Where(x => !x.IsTotalRow)
-                .Sum(x => x.IsEditableTotal
-                    ? x.TotalValue ?? 0
-                    : x.Quantity * double.Parse(x.Factor));
+                .Sum(items => items.IsEditableTotal
+                    ? items.TotalValue ?? 0
+                    : items.Quantity * double.Parse(items.Factor));
 
             Items.Last().TotalValue = sum;
         }
 
+        //Creates the invoice using InvoiceService and then closes the window
         private void CreateInvoice(string year)
         {
             _invoiceService.CreateInvoice(Entry, Items.ToList(), year);

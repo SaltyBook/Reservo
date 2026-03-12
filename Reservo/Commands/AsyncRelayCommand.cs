@@ -9,7 +9,7 @@ namespace Reservo.Commands
 
         public AsyncRelayCommand(Func<Task> execute, Func<bool>? canExecute = null)
         {
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
@@ -21,6 +21,9 @@ namespace Reservo.Commands
         }
 
         public event EventHandler? CanExecuteChanged;
-        public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

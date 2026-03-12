@@ -5,27 +5,29 @@ namespace Reservo.ViewModels
 {
     class SettingsViewModel : BaseViewModel
     {
-        private string _username = "";
+        private string _username = string.Empty;
         public string Username
         {
             get => _username;
             set
             {
-                _username = value;
-                OnPropertyChanged();
-                SaveCredentialsCommand.RaiseCanExecuteChanged();
+                if (SetProperty(ref _username, value))
+                {
+                    SaveCredentialsCommand.RaiseCanExecuteChanged();
+                }
             }
         }
 
-        private string _password = "";
+        private string _password = string.Empty;
         public string Password
         {
             get => _password;
             set
             {
-                _password = value;
-                OnPropertyChanged();
-                SaveCredentialsCommand.RaiseCanExecuteChanged();
+                if (SetProperty(ref _password, value))
+                {
+                    SaveCredentialsCommand.RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -33,43 +35,45 @@ namespace Reservo.ViewModels
         public bool UseServer
         {
             get => _useServer;
-            set
-            {
-                _useServer = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref _useServer, value);
         }
 
-        private string _serverPath = "";
+        private string _serverPath = string.Empty;
         public string ServerPath
         {
             get => _serverPath;
             set
             {
-                _serverPath = value;
-                OnPropertyChanged();
+                if (SetProperty(ref _serverPath, value))
+                {
+                    SaveServerCommand.RaiseCanExecuteChanged();
+                }
             }
         }
 
-        private string _trelloAPIKey = "";
-        public string TrelloAPIKey
+        private string _trelloApiKey = string.Empty;
+        public string TrelloApiKey
         {
-            get => _trelloAPIKey;
+            get => _trelloApiKey;
             set
             {
-                _trelloAPIKey = value;
-                OnPropertyChanged();
+                if (SetProperty(ref _trelloApiKey, value))
+                {
+                    SaveServerCommand.RaiseCanExecuteChanged();
+                }
             }
         }
 
-        private string _trelloAPIToken = "";
-        public string TrelloAPIToken
+        private string _trelloApiToken = string.Empty;
+        public string TrelloApiToken
         {
-            get => _trelloAPIToken;
+            get => _trelloApiToken;
             set
             {
-                _trelloAPIToken = value;
-                OnPropertyChanged();
+                if (SetProperty(ref _trelloApiToken, value))
+                {
+                    SaveServerCommand.RaiseCanExecuteChanged();
+                }
             }
         }
 
@@ -78,44 +82,49 @@ namespace Reservo.ViewModels
 
         public SettingsViewModel()
         {
-            SaveCredentialsCommand = new AsyncRelayCommand(SaveCredentials, CanSaveCredentials);
+            SaveCredentialsCommand = new AsyncRelayCommand(SaveCredentialsAsync, CanSaveCredentials);
             SaveServerCommand = new RelayCommand(SaveServer, CanSaveServer);
         }
 
-        private async Task SaveCredentials()
+        //Stores username and encrypted password
+        private async Task SaveCredentialsAsync()
         {
             await CredentialsService.WriteCredentials(Username, CryptoHelper.Encrypt(Password));
             await CredentialsService.ReadCredentials();
             ClearAll();
         }
 
+        //Check whether the user name and password are set
         private bool CanSaveCredentials()
         {
             return !string.IsNullOrWhiteSpace(Username)
                 && !string.IsNullOrWhiteSpace(Password);
         }
 
+        //Saves server path and Trello login details
         private void SaveServer(object? obj)
         {
-            InternCredentials.Write(ServerPath, TrelloAPIKey, TrelloAPIToken);
+            InternCredentials.Write(ServerPath, TrelloApiKey, TrelloApiToken);
             InternCredentials.Save();
             ClearAll();
         }
 
+        //Checks whether the server configuration are set
         private bool CanSaveServer(object? obj)
         {
             return !string.IsNullOrWhiteSpace(ServerPath)
-               && !string.IsNullOrWhiteSpace(TrelloAPIKey)
-               && !string.IsNullOrWhiteSpace(TrelloAPIToken);
+               && !string.IsNullOrWhiteSpace(TrelloApiKey)
+               && !string.IsNullOrWhiteSpace(TrelloApiToken);
         }
 
+        //Resets all input fields
         private void ClearAll()
         {
-            Username = "";
-            Password = "";
-            ServerPath = "";
-            TrelloAPIKey = "";
-            TrelloAPIToken = "";
+            Username = string.Empty;
+            Password = string.Empty;
+            ServerPath = string.Empty;
+            TrelloApiKey = string.Empty;
+            TrelloApiToken = string.Empty;
         }
     }
 }

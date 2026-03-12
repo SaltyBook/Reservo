@@ -8,45 +8,49 @@ namespace Reservo.ViewModels
     {
         private readonly IWindowService _windowService;
 
-        private string _subject = "";
+        private string _subject = string.Empty;
         public string Subject
         {
             get => _subject;
             set
             {
-                _subject = value;
-                OnPropertyChanged();
-                FeedBackCommand.RaiseCanExecuteChanged();
+                if (SetProperty(ref _subject, value))
+                {
+                    FeedBackCommand.RaiseCanExecuteChanged();
+                }
             }
         }
 
-        private string _message = "";
+        private string _message = string.Empty;
         public string Message
         {
             get => _message;
             set
             {
-                _message = value;
-                OnPropertyChanged();
-                FeedBackCommand.RaiseCanExecuteChanged();
+                if (SetProperty(ref _message, value))
+                {
+                    FeedBackCommand.RaiseCanExecuteChanged();
+                }
             }
         }
 
         public AsyncRelayCommand FeedBackCommand { get; }
 
-        public FeedBackViewModel(WindowService windowService)
+        public FeedBackViewModel(IWindowService windowService)
         {
             _windowService = windowService;
 
-            FeedBackCommand = new AsyncRelayCommand(Send, CanSend);
+            FeedBackCommand = new AsyncRelayCommand(SendAsync, CanSend);
         }
 
-        private async Task Send()
+        //Send the feedback to the external system Trello and then close the window
+        private async Task SendAsync()
         {
-            TrelloFeedBack.SentCard(Subject, Message);
+            TrelloFeedBack.SentCardAsync(Subject, Message);
             _windowService.Close(this);
         }
 
+        //Check whether the subject and message are set
         private bool CanSend()
         {
             return !string.IsNullOrWhiteSpace(Subject)

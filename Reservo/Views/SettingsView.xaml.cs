@@ -19,9 +19,9 @@ namespace Reservo.Views
             (DataContext as SettingsViewModel)!.Password = ((PasswordBox)sender).Password;
         }
 
-        private void PasswordBox_APITokenChanged(object sender, RoutedEventArgs e)
+        private void PasswordBox_ApiTokenChanged(object sender, RoutedEventArgs e)
         {
-            (DataContext as SettingsViewModel)!.TrelloAPIToken = ((PasswordBox)sender).Password;
+            (DataContext as SettingsViewModel)!.TrelloApiToken = ((PasswordBox)sender).Password;
         }
     }
 }
