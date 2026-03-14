@@ -63,8 +63,7 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TabControl Name="currentTable"
-                    Grid.Row="1"
+        <TabControl Grid.Row="1"
                     ItemsSource="{Binding Workbooks}"
                     SelectedItem="{Binding SelectedWorkbook}">
             <TabControl.ItemTemplate>
@@ -83,7 +82,15 @@
                               Margin="10"
                               GridLinesVisibility="All"
                               BorderThickness="0"
-                              HeadersVisibility="Column">
+                              HeadersVisibility="Column"
+                              EnableRowVirtualization="True"
+                              EnableColumnVirtualization="True"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling"
+                              VirtualizingPanel.ScrollUnit="Pixel"
+                              VirtualizingPanel.CacheLength="2"
+                              VirtualizingPanel.CacheLengthUnit="Page"
+                              ScrollViewer.CanContentScroll="True">
                         <DataGrid.RowStyle>
                             <Style TargetType="DataGridRow">
                                 <Setter Property="Background"
@@ -152,7 +159,7 @@
                             <DataGridTextColumn  IsReadOnly="True"
                                                  Header="ID"
                                                  Binding="{Binding Id, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                 Width="Auto"
+                                                 Width="SizeToHeader"
                                                  CanUserReorder="False"
                                                  CanUserResize="False" />
                             <behavior:OneClickDataGridTemplateColumn Header="Gruppe"
@@ -207,16 +214,16 @@
                             </behavior:OneClickDataGridTemplateColumn>
                             <DataGridTextColumn Header="Anzahl Gäste"
                                                 Binding="{Binding GuestCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="SizeToHeader" />
                             <DataGridTextColumn Header="Anrede"
                                                 Binding="{Binding Salutation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="SizeToHeader" />
                             <DataGridTextColumn Header="Vorname"
                                                 Binding="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="120" />
                             <DataGridTextColumn Header="Nachname"
                                                 Binding="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="120" />
                             <DataGridTextColumn Header="Straße"
                                                 Binding="{Binding Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 Width="Auto" />
@@ -224,7 +231,7 @@
                                                 Binding="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 Width="Auto" />
                             <DataGridTemplateColumn Header="Anreise"
-                                                    Width="Auto"
+                                                    Width="170"
                                                     SortMemberPath="Arrival">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -238,7 +245,7 @@
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Abreise"
-                                                    Width="Auto"
+                                                    Width="170"
                                                     SortMemberPath="Departure">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -253,33 +260,33 @@
                             </DataGridTemplateColumn>
                             <DataGridTextColumn Header="Nächte"
                                                 Binding="{Binding NightCount, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="SizeToHeader" />
                             <DataGridCheckBoxColumn Header="Infoblatt"
                                                     Binding="{Binding InfoSheet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Width="Auto" />
+                                                    Width="SizeToHeader" />
                             <DataGridCheckBoxColumn Header="Kalendereintrag"
                                                     Binding="{Binding CalendarEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Width="Auto" />
+                                                    Width="SizeToHeader" />
                             <DataGridTextColumn Header="Rechnungsnr."
                                                 Binding="{Binding InvoiceNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="SizeToHeader" />
                             <DataGridTextColumn Header="Gesamt"
                                                 Binding="{Binding Total, Converter={StaticResource EuroFormat}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                 Width="Auto" />
                             <DataGridCheckBoxColumn Header="Altersprüfung"
                                                     Binding="{Binding AgeCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Width="Auto" />
+                                                    Width="SizeToHeader" />
                             <DataGridCheckBoxColumn Header="Zelt"
                                                     Binding="{Binding Tent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Width="Auto" />
+                                                    Width="SizeToHeader" />
                             <DataGridTextColumn Header="Getränke"
                                                 Binding="{Binding Drinks, Converter={StaticResource EuroFormat}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="SizeToHeader" />
                             <DataGridTextColumn Header="Letzter Besuch"
                                                 Binding="{Binding LastVisit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                Width="Auto" />
+                                                Width="SizeToHeader" />
                             <DataGridTemplateColumn Header="Reserviert"
-                                                    Width="Auto"
+                                                    Width="SizeToHeader"
                                                     SortMemberPath="Reserved">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -306,7 +313,7 @@
                                                 Width="Auto" />
                             <DataGridCheckBoxColumn Header="Storniert"
                                                     Binding="{Binding Canceled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Width="Auto" />
+                                                    Width="SizeToHeader" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </DataTemplate>

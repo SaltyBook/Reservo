@@ -27,6 +27,8 @@ namespace Reservo.Utils
 
                 bool isHeader = true;
                 int row = 0;
+                int consecutiveEmptyRows = 0;
+                const int maxEmptyRowsBeforeStop = 2;
 
                 while (reader.Read())
                 {
@@ -37,6 +39,29 @@ namespace Reservo.Utils
                         isHeader = false;
                         continue;
                     }
+
+                    if (IsRowEmpty(reader))
+                    {
+                        consecutiveEmptyRows++;
+
+                        // Wenn viele leere Zeilen in Folge auftreten,
+                        // wird von einem tatsächlichen Datenende ausgegangen.
+                        if (consecutiveEmptyRows >= maxEmptyRowsBeforeStop)
+                        {
+                            Log.Information(
+                                "Lesevorgang für {Path} beendet: {Count} leere Zeilen in Folge ab Zeile {Row}.",
+                                path,
+                                consecutiveEmptyRows,
+                                row);
+
+                            break;
+                        }
+
+                        continue;
+                    }
+
+                    // Sobald wieder Daten gefunden werden, wird der Zähler zurückgesetzt.
+                    consecutiveEmptyRows = 0;
 
                     if (!TryParseRow(reader, out var entry))
                     {
@@ -56,6 +81,21 @@ namespace Reservo.Utils
             }
 
             return result;
+        }
+
+        private static bool IsRowEmpty(IExcelDataReader reader)
+        {
+            for (int columnIndex = 0; columnIndex < reader.FieldCount; columnIndex++)
+            {
+                var value = reader.GetValue(columnIndex);
+
+                if (value is not null && !string.IsNullOrWhiteSpace(value.ToString()))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         // Writes a collection of Entry objects to the Excel worksheet.

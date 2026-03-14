@@ -1,4 +1,5 @@
-﻿using Reservo.Classes;
+﻿#region Usings
+using Reservo.Classes;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using Reservo.Services.Dialog;
@@ -9,6 +10,7 @@ using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+#endregion
 
 namespace Reservo.ViewModels
 {
