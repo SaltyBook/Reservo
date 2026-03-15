@@ -1,6 +1,7 @@
 ﻿#region Usings
 using Reservo.Commands;
 using Reservo.Enums;
+using Reservo.Services.Dialog;
 using Reservo.Views;
 #endregion
 
@@ -8,6 +9,8 @@ namespace Reservo.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
+        private readonly IDialogService _dialogService;
+
         private BaseViewModel _currentViewModel;
         public BaseViewModel CurrentViewModel
         {
@@ -31,6 +34,8 @@ namespace Reservo.ViewModels
 
         public MainViewModel()
         {
+            _dialogService = new DialogService();
+
             _tenantViewModel = new TenantViewModel();
             _settingsViewModel = new SettingsViewModel();
 
@@ -41,6 +46,20 @@ namespace Reservo.ViewModels
             ShowSettingsCommand = new RelayCommand(_ => ShowView(_settingsViewModel, MenuItemType.Settings));
 
             FeedBackCommand = new RelayCommand(OpenFeedbackDialog);
+
+            Init();
+        }
+
+        //init StartUp
+        private async void Init()
+        {
+            var credentialResult = await StartupService.RunAsync();
+
+            if (!credentialResult.Success)
+            {
+                // Fehler
+                _dialogService.ShowError("Fehler", credentialResult.Message);
+            }
         }
 
         // Load Workbooks (.xslx files)
@@ -65,7 +84,7 @@ namespace Reservo.ViewModels
         //Opens Feedback View
         private void OpenFeedbackDialog(object? obj)
         {
-            FeedBack feedbackWindow = new FeedBack(new FeedBackViewModel(new WindowService()));
+            FeedBack feedbackWindow = new FeedBack(new FeedBackViewModel());
             feedbackWindow.ShowDialog();
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace Reservo.Services.Credentials
+﻿using Serilog;
+
+namespace Reservo.Services.Credentials
 {
     public static class InternCredentials
     {
@@ -28,14 +30,28 @@
 
         public static void Write(string serverPath, string trelloAPIKey, string trelloAPIToken)
         {
+            Log.Information("Schreibe interne Konfiguration");
+
             ServerPath = serverPath;
             TrelloApiKey = trelloAPIKey;
             TrelloApiToken = trelloAPIToken;
         }
 
-        public static void Save()
+        public static ServiceResult Save()
         {
-            Settings.Default.Save();
+            Log.Information("Speichere interne Konfiguration in Settings");
+
+            try
+            {
+                Settings.Default.Save();
+                Log.Information("Interne Konfiguration erfolgreich gespeichert");
+                return ServiceResult.Ok("Einstellungen wurden erfolgreich gespeichert.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Fehler beim Speichern der internen Konfiguration");
+                return ServiceResult.Fail("Die Einstellungen konnten nicht gespeichert werden.");
+            }
         }
     }
 }

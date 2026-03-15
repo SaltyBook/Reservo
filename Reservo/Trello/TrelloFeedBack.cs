@@ -1,33 +1,47 @@
-﻿using Reservo.Services.Credentials;
+﻿#region Usings
+using Reservo.Services.Credentials;
+using Serilog;
 using System.Net.Http;
 using System.Text.Json;
-using System.Windows;
+#endregion
 
 namespace Reservo.Trello
 {
     public static class TrelloFeedBack
     {
-        public static async void SentCardAsync(string subject, string message)
+        public static async Task<ServiceResult> SendCardAsync(string subject, string message)
         {
+            Log.Information("Sende Feedback an Trello. Betreff: {Subject}", subject);
+
             if (string.IsNullOrWhiteSpace(InternCredentials.TrelloApiKey) || string.IsNullOrWhiteSpace(InternCredentials.TrelloApiToken))
             {
-                Console.WriteLine("Bitte TRELLO_API_KEY und TRELLO_API_TOKEN setzen.");
+                Log.Warning("Trello-Feedback konnte nicht gesendet werden, da API-Key oder Token fehlen");
+                return ServiceResult.Fail("Trello ist nicht vollständig konfiguriert.");
             }
 
             var listId = "69aabdd49d14296b88814bc6";
 
-            using var httpClient = new HttpClient();
+            try
+            {
+                using var httpClient = new HttpClient();
 
-            var createdCard = await CreateCardAsync(
-                httpClient,
-                InternCredentials.TrelloApiKey,
-                CryptoHelper.Decrypt(InternCredentials.TrelloApiToken),
-                listId,
-                subject,
-                message
-            );
+                var createdCard = await CreateCardAsync(
+                    httpClient,
+                    InternCredentials.TrelloApiKey,
+                    CryptoHelper.Decrypt(InternCredentials.TrelloApiToken),
+                    listId,
+                    subject,
+                    message
+                );
+                Log.Information("Trello-Karte erfolgreich erstellt. Id: {Id}, Name: {Name}", createdCard.Id, createdCard.Name);
 
-            MessageBox.Show("Fehler/Feedback erfolgreich gesendet", "Nachricht gesendet");
+                return ServiceResult.Ok("Fehler/Feedback wurde erfolgreich gesendet.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Fehler beim Senden des Feedbacks an Trello");
+                return ServiceResult.Fail("Das Feedback konnte nicht an Trello gesendet werden.");
+            }
         }
 
         private static async Task<TrelloCardResponse> CreateCardAsync(HttpClient httpClient, string apiKey, string apiToken, string listId, string name, string description)
@@ -41,8 +55,7 @@ namespace Reservo.Trello
                 ["desc"] = description
             };
 
-            var queryString = string.Join("&", query.Select(kvp =>
-                $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+            var queryString = string.Join("&", query.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
 
             var url = $"https://api.trello.com/1/cards?{queryString}";
 
@@ -51,14 +64,15 @@ namespace Reservo.Trello
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception($"Trello API Fehler ({(int)response.StatusCode}): {content}");
+                Log.Warning("Trello API Fehler. StatusCode: {StatusCode}, Response: {Response}", response.StatusCode, content);
+                throw new Exception($"Trello API Fehler ({(int)response.StatusCode})");
             }
 
-            var result = JsonSerializer.Deserialize<TrelloCardResponse>(content,
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var result = JsonSerializer.Deserialize<TrelloCardResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             if (result == null)
             {
+                Log.Warning("Trello-Antwort konnte nicht deserialisiert werden");
                 throw new Exception("Antwort von Trello konnte nicht gelesen werden.");
             }
 

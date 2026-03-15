@@ -6,13 +6,13 @@ namespace Reservo
 {
     public static class StartupService
     {
-        public async static void Run()
+        public static async Task<ServiceResult> RunAsync()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             StartUp.CreateFolderStructure();
             Invoice.CreateItems();
             CredentialsService.Load();
-            await CredentialsService.ReadCredentials();
+            return await CredentialsService.ReadCredentials();
         }
     }
 }

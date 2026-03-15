@@ -1,10 +1,13 @@
 ﻿using Reservo.Commands;
 using Reservo.Services.Credentials;
+using Reservo.Services.Dialog;
 
 namespace Reservo.ViewModels
 {
     class SettingsViewModel : BaseViewModel
     {
+        private readonly IDialogService _dialogService;
+
         private string _username = string.Empty;
         public string Username
         {
@@ -80,8 +83,11 @@ namespace Reservo.ViewModels
         public AsyncRelayCommand SaveCredentialsCommand { get; }
         public RelayCommand SaveServerCommand { get; }
 
-        public SettingsViewModel()
+        public SettingsViewModel() : this(new DialogService()) { }
+
+        public SettingsViewModel(IDialogService dialog)
         {
+            _dialogService = dialog;
             SaveCredentialsCommand = new AsyncRelayCommand(SaveCredentialsAsync, CanSaveCredentials);
             SaveServerCommand = new RelayCommand(SaveServer, CanSaveServer);
         }
@@ -89,8 +95,18 @@ namespace Reservo.ViewModels
         //Stores username and encrypted password
         private async Task SaveCredentialsAsync()
         {
-            await CredentialsService.WriteCredentials(Username, CryptoHelper.Encrypt(Password));
-            await CredentialsService.ReadCredentials();
+            var credentialResult = await CredentialsService.WriteCredentials(Username, CryptoHelper.Encrypt(Password));
+            if (!credentialResult.Success)
+            {
+                // Fehler
+                _dialogService.ShowError("Fehler", credentialResult.Message);
+            }
+            var credentialResult2 = await CredentialsService.ReadCredentials();
+            if (!credentialResult2.Success)
+            {
+                // Fehler
+                _dialogService.ShowError("Fehler", credentialResult2.Message);
+            }
             ClearAll();
         }
 
@@ -105,7 +121,12 @@ namespace Reservo.ViewModels
         private void SaveServer(object? obj)
         {
             InternCredentials.Write(ServerPath, TrelloApiKey, TrelloApiToken);
-            InternCredentials.Save();
+            var credentialResult = InternCredentials.Save();
+            if (!credentialResult.Success)
+            {
+                // Fehler
+                _dialogService.ShowError("Fehler", credentialResult.Message);
+            }
             ClearAll();
         }
 

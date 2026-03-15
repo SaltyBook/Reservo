@@ -51,6 +51,8 @@ namespace Reservo.ViewModels
         public ICommand OpenNoteCommand { get; }
         #endregion
 
+        public WorkbookViewModel(string filePath) : this(filePath, new FileService(), new DocumentService(), new DialogService()) { }
+
         public WorkbookViewModel(string filePath, IFileService files, IDocumentService documents, IDialogService dialog)
         {
             Log.Information("WorkbookViewModel initialisiert");

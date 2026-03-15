@@ -3,8 +3,6 @@ using Reservo.Classes;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using Reservo.Services.Dialog;
-using Reservo.Services.Document;
-using Reservo.Services.File;
 using Reservo.Utils;
 using Serilog;
 using System.Collections.ObjectModel;
@@ -17,8 +15,6 @@ namespace Reservo.ViewModels
     class TenantViewModel : BaseViewModel
     {
         private readonly IDialogService _dialogService;
-        private readonly IFileService _filesService;
-        private readonly IDocumentService _documentsSerive;
 
         public ObservableCollection<WorkbookViewModel> Workbooks { get; } = new();
 
@@ -39,25 +35,30 @@ namespace Reservo.ViewModels
         public int PastEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Departure < DateTime.Today && !e.Canceled) ?? 0;
         public int CanceledEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Canceled) ?? 0;
 
-        public TenantViewModel() : this(new DialogService(), new FileService(), new DocumentService()) { }
+        public TenantViewModel() : this(new DialogService()) { }
 
-        public TenantViewModel(IDialogService dialog, IFileService files, IDocumentService documents)
+        public TenantViewModel(IDialogService dialog)
         {
             Log.Information("MainViewModel initialisiert");
 
             _dialogService = dialog;
-            _filesService = files;
-            _documentsSerive = documents;
         }
 
         //Loads all Excel files from the database directory
         public async Task LoadWorkbooks()
         {
+            var watch = System.Diagnostics.Stopwatch.StartNew();
+
             Log.Information("Lade Excel-Dateien aus {Dir}", Paths.DatabasePath);
 
             var workbookFiles = Directory.GetFiles(Paths.DatabasePath, "*.xlsx").OrderByDescending(file => file).ToList();
 
             Workbooks.Clear();
+
+            int loadedFiles = 0;
+            int totalEntries = 0;
+            var warnings = new List<string>();
+            var errors = new List<string>();
 
             foreach (var file in workbookFiles)
             {
@@ -65,7 +66,13 @@ namespace Reservo.ViewModels
 
                 var result = await Task.Run(() => XLSX.LoadXLSX(file));
 
-                var workbookViewModel = new WorkbookViewModel(file, _filesService, _documentsSerive, _dialogService)
+                if (result.HasErrors)
+                {
+                    errors.AddRange(result.Errors);
+                    continue;
+                }
+
+                var workbookViewModel = new WorkbookViewModel(file)
                 {
                     Entries = new ObservableCollection<Entry>(result.Entries)
                 };
@@ -76,11 +83,19 @@ namespace Reservo.ViewModels
                 }
 
                 Workbooks.Add(workbookViewModel);
+
+                loadedFiles++;
+                totalEntries += result.Entries.Count;
+                warnings.AddRange(result.Warnings);
             }
 
             SelectedWorkbook = Workbooks.FirstOrDefault();
 
             CheckAllEntryDates();
+
+            watch.Stop();
+
+            Log.Information("Laden abgeschlossen: {LoadedFiles} Dateien, {TotalEntries} Einträge, {Warnings} Warnungen, {Errors} Fehler, Dauer {ElapsedMs} ms", loadedFiles, totalEntries, warnings.Count, errors.Count, watch.ElapsedMilliseconds);
         }
 
         //Saves all loaded workbooks
@@ -90,13 +105,22 @@ namespace Reservo.ViewModels
 
             if (Workbooks.Count == 0)
             {
+                _dialogService.ShowInfo("Speichern", "Es sind keine Tabellen zum Speichern geladen.");
                 return;
             }
 
             foreach (var workbook in Workbooks)
             {
-                Log.Information("Speichere Workbook {File}", workbook.FilePath);
-                XLSX.SaveXLSX(workbook.FilePath, workbook.Entries);
+                try
+                {
+                    Log.Information("Speichere Workbook {File}", workbook.FilePath);
+                    XLSX.SaveXLSX(workbook.FilePath, workbook.Entries);
+                }
+                catch (Exception ex)
+                {
+                    var fileName = Path.GetFileName(workbook.FilePath);
+                    Log.Error(ex, "Fehler beim Speichern von Workbook {File}", workbook.FilePath);
+                }
             }
         }
 

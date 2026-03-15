@@ -19,7 +19,7 @@ namespace Reservo
 
         public void CreateInvoice(Entry entry, string year)
         {
-            var vm = new InvoiceViewModel(entry, new InvoiceService(), new WindowService(), year);
+            var vm = new InvoiceViewModel(entry, year);
             var window = new InvoiceWindow(vm);
             window.ShowDialog();
         }

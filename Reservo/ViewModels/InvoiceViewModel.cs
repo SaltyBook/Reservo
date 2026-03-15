@@ -23,7 +23,9 @@ namespace Reservo.ViewModels
 
         public ICommand CreateInvoiceCommand { get; }
 
-        public InvoiceViewModel(Entry entry, IInvoiceService invoiceService, IWindowService windowService, string year)
+        public InvoiceViewModel(Entry entry, string year) : this(entry, year, new InvoiceService(), new WindowService()) { }
+
+        public InvoiceViewModel(Entry entry, string year, IInvoiceService invoiceService, IWindowService windowService)
         {
             Entry = entry;
             _invoiceService = invoiceService;

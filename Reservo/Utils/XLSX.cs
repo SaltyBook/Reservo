@@ -48,12 +48,7 @@ namespace Reservo.Utils
                         // wird von einem tatsächlichen Datenende ausgegangen.
                         if (consecutiveEmptyRows >= maxEmptyRowsBeforeStop)
                         {
-                            Log.Information(
-                                "Lesevorgang für {Path} beendet: {Count} leere Zeilen in Folge ab Zeile {Row}.",
-                                path,
-                                consecutiveEmptyRows,
-                                row);
-
+                            Log.Information("Lesevorgang für {Path} beendet: {Count} leere Zeilen in Folge ab Zeile {Row}.", path, consecutiveEmptyRows, row);
                             break;
                         }
 
@@ -72,12 +67,19 @@ namespace Reservo.Utils
                     result.Entries.Add(entry);
                 }
 
-                Log.Information("Excel geladen: {Count} Einträge, {Errors} Fehler", result.Entries.Count, result.Errors.Count);
+                if (result.Entries.Count == 0)
+                {
+                    result.Warnings.Add($"Die Datei '{Path.GetFileName(path)}' enthält keine lesbaren Einträge.");
+                }
+
+                Log.Information("Excel-Datei geladen: {Path}, {Count} Einträge, {Warnings} Warnungen, {Errors} Fehler", path, result.Entries.Count, result.Warnings.Count, result.Errors.Count);
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "Fehler beim Laden der Excel-Datei");
-                throw;
+                var error = $"Die Datei '{Path.GetFileName(path)}' konnte nicht geladen werden.";
+                result.Errors.Add(error);
+
+                Log.Error(ex, "Fehler beim Laden der Excel-Datei {Path}", path);
             }
 
             return result;

@@ -15,7 +15,7 @@ namespace Reservo.Documents
     public class EMail
     {
         //Creates a prefilled email draft in Mozilla Thunderbird for a given entry.
-        //The method connects to an IMAP mailbox, searches the inbox and sent folder for the most recent email exchanged with the recipient,
+        //The method connects to an IMAP mailbox, searches the inbox and send folder for the most recent email exchanged with the recipient,
         //and quotes the latest message in the new email body.
         //It builds an HTML email with a predefined signature, optional invoice or reservation attachment, and launches Thunderbird with the composed email ready to send.
         public static void CreateEMail(Entry entry, string year, bool invoice)
@@ -28,16 +28,16 @@ namespace Reservo.Documents
                 client.Connect("secureimap.t-online.de", 993);
                 client.Authenticate(CredentialsService.creds.Username, CryptoHelper.Decrypt(CredentialsService.creds.Password));
                 var inboxMessage = GetLatestMessage(client, client.Inbox, entry.EMail);
-                var sentMessage = GetLatestMessage(client, client.GetFolder(SpecialFolder.Sent), entry.EMail);
+                var sendMessage = GetLatestMessage(client, client.GetFolder(SpecialFolder.Sent), entry.EMail);
 
                 if (inboxMessage != null)
                 {
-                    if (sentMessage != null)
+                    if (sendMessage != null)
                     {
-                        if (inboxMessage.Date < sentMessage.Date)
+                        if (inboxMessage.Date < sendMessage.Date)
                         {
-                            quoted = GetOldMessages(sentMessage);
-                            subject = sentMessage.Subject;
+                            quoted = GetOldMessages(sendMessage);
+                            subject = sendMessage.Subject;
                         }
                         else
                         {
@@ -53,10 +53,10 @@ namespace Reservo.Documents
                 }
                 else
                 {
-                    if (sentMessage != null)
+                    if (sendMessage != null)
                     {
-                        quoted = GetOldMessages(sentMessage);
-                        subject = sentMessage.Subject;
+                        quoted = GetOldMessages(sendMessage);
+                        subject = sendMessage.Subject;
                     }
                 }
                 client.Disconnect(true);
@@ -68,7 +68,7 @@ namespace Reservo.Documents
             OpenThunderbird(entry.EMail, subject, body, attachment);
         }
 
-        //Returns the latest email from the given folder sent from the specified address.
+        //Returns the latest email from the given folder send from the specified address.
         private static MimeMessage GetLatestMessage(ImapClient client, IMailFolder folder, string fromAddress)
         {
             folder.Open(FolderAccess.ReadOnly);

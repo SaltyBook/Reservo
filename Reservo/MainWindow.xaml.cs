@@ -15,7 +15,6 @@ namespace Reservo.Views
         public MainWindow()
         {
             InitializeComponent();
-            StartupService.Run();
         }
 
         // When the main window is fully loaded, it executes the LoadEntriesCommand
