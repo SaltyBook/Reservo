@@ -1,127 +1,201 @@
 ﻿<UserControl x:Class="Reservo.Views.SettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Reservo.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
+
+    <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="12" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="1">
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Einstellungen"
+                       FontSize="24"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource Brush.TextPrimary}" />
+            <TextBlock Text="Verwalte Zugangsdaten, Serverpfade und Integrationen."
+                       Margin="0,4,0,0"
+                       FontSize="13"
+                       Foreground="{StaticResource Brush.TextSecondary}" />
+        </StackPanel>
+
+        <TabControl Grid.Row="2"
+                    Style="{StaticResource ModernTabControlStyle}"
+                    ItemContainerStyle="{StaticResource ModernTabItemStyle}">
+
+            <!-- E-Mail -->
             <TabItem Header="E-Mail">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="50" />
-                    </Grid.RowDefinitions>
-
-                    <!-- Überschrift -->
-                    <TextBlock Text="E-Mail Zugangsdaten"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               HorizontalAlignment="Center"
-                               Margin="0,0,0,5" />
-
-                    <!-- Username -->
-                    <StackPanel Grid.Row="1"
-                                Margin="0,0,0,10">
-                        <TextBlock Text="Username" />
-                        <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
-                                 Height="20" />
-                    </StackPanel>
-
-                    <!-- Passwort -->
-                    <StackPanel Grid.Row="2"
-                                Margin="0,0,0,10">
-                        <TextBlock Text="Passwort" />
-                        <PasswordBox PasswordChanged="PasswordBox_PasswordChanged"
-                                     PasswordChar="*"
-                                     Height="20" />
-                    </StackPanel>
-
-                    <!-- Speichern -->
-                    <Button Grid.Row="4"
-                            Content="Speichern"
-                            Height="25"
-                            Width="100"
-                            HorizontalAlignment="Center"
-                            Command="{Binding SaveCredentialsCommand}"
-                            CommandParameter="{Binding ElementName=PasswordBox, Path=Password}"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Server">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                        <RowDefinition Height="50" />
-                    </Grid.RowDefinitions>
+                <Border Margin="0,8,0,0"
+                        Background="{StaticResource Brush.Surface}"
+                        BorderBrush="{StaticResource Brush.Border}"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="24">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="16" />
                             <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <!-- Überschrift Server -->
-                        <TextBlock Text="Serverdaten"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,5" />
-                        <CheckBox Grid.Row="1"
-                                  IsChecked="{Binding UseServer, UpdateSourceTrigger=PropertyChanged}">
-                            <TextBlock Text="Server benutzen?" />
-                        </CheckBox>
-                        <StackPanel Grid.Row="2"
-                                    Margin="0,0,0,10">
-                            <TextBlock Text="Serverpfad" />
-                            <TextBox Text="{Binding ServerPath, UpdateSourceTrigger=PropertyChanged}"
-                                     Height="20" />
-                        </StackPanel>
-                    </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="24" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <!-- Überschrift Trello -->
-                        <TextBlock Text="Trello Daten"
-                                   FontSize="16"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center"
-                                   Margin="0,0,0,5" />
-                        <!-- APIKey -->
-                        <StackPanel Grid.Row="1"
-                                    Margin="0,0,0,10">
-                            <TextBlock Text="ApiKey" />
-                            <TextBox Text="{Binding TrelloApiKey, UpdateSourceTrigger=PropertyChanged}"
-                                     Height="20" />
+
+                        <StackPanel Grid.Row="0">
+                            <TextBlock Text="E-Mail Zugangsdaten"
+                                       Style="{StaticResource SectionTitleStyle}" />
+                            <TextBlock Text="Lege die Zugangsdaten für den Versand von Reservierungen und Rechnungen fest."
+                                       Style="{StaticResource SectionDescriptionStyle}" />
                         </StackPanel>
-                        <!-- APIToken -->
-                        <StackPanel Grid.Row="2"
-                                    Margin="0,0,0,10">
-                            <TextBlock Text="ApiToken" />
-                            <PasswordBox PasswordChanged="PasswordBox_ApiTokenChanged"
+
+                        <StackPanel Grid.Row="2">
+                            <TextBlock Text="Benutzername"
+                                       Style="{StaticResource FormLabelStyle}" />
+                            <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource ModernTextBoxStyle}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4">
+                            <TextBlock Text="Passwort"
+                                       Style="{StaticResource FormLabelStyle}" />
+                            <PasswordBox x:Name="MailPasswordBox"
+                                         PasswordChanged="PasswordBox_PasswordChanged"
                                          PasswordChar="*"
-                                         Height="20" />
+                                         Style="{StaticResource ModernPasswordBoxStyle}" />
                         </StackPanel>
+
+                        <Grid Grid.Row="6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock VerticalAlignment="Center"
+                                       FontSize="12"
+                                       Foreground="{StaticResource Brush.TextSecondary}"
+                                       Text="Die Zugangsdaten werden lokal gespeichert." />
+
+                            <Button Grid.Column="1"
+                                    Content="Speichern"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Command="{Binding SaveCredentialsCommand}"
+                                    CommandParameter="{Binding ElementName=MailPasswordBox, Path=Password}" />
+                        </Grid>
                     </Grid>
-                    <!-- Speichern -->
-                    <Button Grid.Row="4"
-                            Content="Speichern"
-                            Height="25"
-                            Width="100"
-                            HorizontalAlignment="Center"
-                            Command="{Binding SaveServerCommand}"/>
-                </Grid>
+                </Border>
+            </TabItem>
+
+            <!-- Server -->
+            <TabItem Header="Server">
+                <ScrollViewer Margin="0,8,0,0"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+
+                        <!-- Serverdaten -->
+                        <Border Background="{StaticResource Brush.Surface}"
+                                BorderBrush="{StaticResource Brush.Border}"
+                                BorderThickness="1"
+                                CornerRadius="14"
+                                Padding="24"
+                                Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0">
+                                    <TextBlock Text="Serverdaten"
+                                               Style="{StaticResource SectionTitleStyle}" />
+                                    <TextBlock Text="Definiere, ob ein Serverpfad verwendet werden soll."
+                                               Style="{StaticResource SectionDescriptionStyle}" />
+                                </StackPanel>
+
+                                <CheckBox Grid.Row="2"
+                                          IsChecked="{Binding UseServer, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource ModernCheckBoxStyle}"
+                                          Content="Server verwenden" />
+
+                                <StackPanel Grid.Row="4">
+                                    <TextBlock Text="Serverpfad"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding ServerPath, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Trello -->
+                        <Border Background="{StaticResource Brush.Surface}"
+                                BorderBrush="{StaticResource Brush.Border}"
+                                BorderThickness="1"
+                                CornerRadius="14"
+                                Padding="24">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="24" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0">
+                                    <TextBlock Text="Trello Daten"
+                                               Style="{StaticResource SectionTitleStyle}" />
+                                    <TextBlock Text="API-Zugang für die Trello-Integration."
+                                               Style="{StaticResource SectionDescriptionStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2">
+                                    <TextBlock Text="API Key"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding TrelloApiKey, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="4">
+                                    <TextBlock Text="API Token"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <PasswordBox PasswordChanged="PasswordBox_ApiTokenChanged"
+                                                 PasswordChar="*"
+                                                 Style="{StaticResource ModernPasswordBoxStyle}" />
+                                </StackPanel>
+
+                                <Grid Grid.Row="6">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="12"
+                                               Foreground="{StaticResource Brush.TextSecondary}"
+                                               Text="Änderungen werden erst nach dem Speichern übernommen." />
+
+                                    <Button Grid.Column="1"
+                                            Content="Speichern"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Command="{Binding SaveServerCommand}" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
             </TabItem>
         </TabControl>
     </Grid>

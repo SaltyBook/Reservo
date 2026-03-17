@@ -58,7 +58,7 @@ namespace Reservo.ViewModels
             if (!credentialResult.Success)
             {
                 // Fehler
-                _dialogService.ShowError("Fehler", credentialResult.Message);
+                //_dialogService.ShowError("Fehler", credentialResult.Message);
             }
         }
 
@@ -84,7 +84,7 @@ namespace Reservo.ViewModels
         //Opens Feedback View
         private void OpenFeedbackDialog(object? obj)
         {
-            FeedBack feedbackWindow = new FeedBack(new FeedBackViewModel());
+            FeedBackWindow feedbackWindow = new FeedBackWindow(new FeedBackViewModel());
             feedbackWindow.ShowDialog();
         }
     }

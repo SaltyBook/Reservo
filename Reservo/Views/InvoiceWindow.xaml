@@ -3,81 +3,164 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:Reservo.ViewModels"
-        xmlns:local="clr-namespace:Reservo.Views"
         mc:Ignorable="d"
+        Title="Rechnung"
+        Height="620"
+        Width="760"
         WindowStartupLocation="CenterScreen"
-        Title="InvoiceWindow" Height="480" Width="600">
-    <Grid>
+        Style="{StaticResource DialogWindowStyle}">
+
+    <Grid Margin="24">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="24" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding Items}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False"
-                  PreviewKeyDown="DataGrid_PreviewKeyDown"
-                  Margin="10">
-            <DataGrid.Resources>
-                <Style TargetType="DataGridRow">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsTotalRow}" Value="True">
-                            <Setter Property="Background" Value="LightGoldenrodYellow"/>
-                            <Setter Property="FontWeight" Value="Bold"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </DataGrid.Resources>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Anzahl"
-                                    Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
-                                    Width="0.6*">
-                    <DataGridTextColumn.EditingElementStyle>
-                        <Style TargetType="TextBox">
-                            <EventSetter Event="PreviewTextInput" Handler="QuantityTextBox_PreviewTextInput"/>
-                        </Style>
-                    </DataGridTextColumn.EditingElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Beschreibung"
-                                    Binding="{Binding Description}"
-                                    Width="4*">
-                    <DataGridTextColumn.EditingElementStyle>
-                        <Style TargetType="TextBox">
-                            <Setter Property="IsReadOnly" Value="True"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsEditableDescription}" Value="True">
-                                    <Setter Property="IsReadOnly" Value="False"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTextColumn.EditingElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Faktor"
-                                    Binding="{Binding Factor, UpdateSourceTrigger=PropertyChanged}"
-                                    Width="*">
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Total"
-                                    Binding="{Binding Result, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                    Width="*">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="TextAlignment" Value="Right"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.EditingElementStyle>
-                        <Style TargetType="TextBox">
-                            <Setter Property="HorizontalAlignment" Value="Right"/>
-                            <Setter Property="IsReadOnly" Value="True"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsEditableTotal}" Value="True">
-                                    <Setter Property="IsReadOnly" Value="False"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </DataGridTextColumn.EditingElementStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Grid.Row="1" Height="40" Width="200" Content="Rechnung erstellen" Command="{Binding CreateInvoiceCommand}"/>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Rechnung erstellen"
+                       FontSize="22"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource Brush.TextPrimary}" />
+            <TextBlock Text="Bearbeite Positionen und erstelle anschließend die Rechnung."
+                       Margin="0,6,0,0"
+                       FontSize="13"
+                       Foreground="{StaticResource Brush.TextSecondary}" />
+        </StackPanel>
+
+        <!-- Grid Card -->
+        <Border Grid.Row="2"
+                Background="{StaticResource Brush.Surface}"
+                BorderBrush="{StaticResource Brush.Border}"
+                BorderThickness="1"
+                CornerRadius="14"
+                Padding="0">
+            <DataGrid ItemsSource="{Binding Items}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      PreviewKeyDown="DataGrid_PreviewKeyDown"
+                      Margin="0"
+                      SelectionUnit="FullRow"
+                      SelectionMode="Single"
+                      Style="{StaticResource ModernDataGridStyle}"
+                      CellStyle="{StaticResource ModernDataGridCellStyle}"
+                      ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}">
+
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow"
+                           BasedOn="{StaticResource ModernDataGridRowStyle}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsTotalRow}"
+                                         Value="True">
+                                <Setter Property="Background"
+                                        Value="#FEF3C7" />
+                                <Setter Property="FontWeight"
+                                        Value="SemiBold" />
+                            </DataTrigger>
+
+                            <Trigger Property="IsSelected"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="{StaticResource Brush.SidebarSelected}" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Anzahl"
+                                        Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="0.8*">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource ModernTextBoxStyle}">
+                                <EventSetter Event="PreviewTextInput"
+                                             Handler="QuantityTextBox_PreviewTextInput" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Beschreibung"
+                                        Binding="{Binding Description}"
+                                        Width="4*">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource ModernTextBoxStyle}">
+                                <Setter Property="IsReadOnly"
+                                        Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEditableDescription}"
+                                                 Value="True">
+                                        <Setter Property="IsReadOnly"
+                                                Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Faktor"
+                                        Binding="{Binding Factor, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="*">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource ModernTextBoxStyle}" />
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Total"
+                                        Binding="{Binding Result, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Width="1.2*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextAlignment"
+                                        Value="Right" />
+                                <Setter Property="VerticalAlignment"
+                                        Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox"
+                                   BasedOn="{StaticResource ModernTextBoxStyle}">
+                                <Setter Property="HorizontalContentAlignment"
+                                        Value="Right" />
+                                <Setter Property="IsReadOnly"
+                                        Value="True" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsEditableTotal}"
+                                                 Value="True">
+                                        <Setter Property="IsReadOnly"
+                                                Value="False" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Actions -->
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock VerticalAlignment="Center"
+                       FontSize="12"
+                       Foreground="{StaticResource Brush.TextSecondary}"
+                       Text="Die Positionen können vor dem Erstellen der Rechnung noch angepasst werden." />
+
+            <Button Grid.Column="1"
+                    Height="40"
+                    Content="Rechnung erstellen"
+                    Command="{Binding CreateInvoiceCommand}"
+                    Style="{StaticResource PrimaryButtonStyle}" />
+        </Grid>
     </Grid>
 </Window>

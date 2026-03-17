@@ -6,12 +6,30 @@
              xmlns:views="clr-namespace:Reservo.Views"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewModels:TenantViewModel}">
-            <views:TenantView />
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
 
-        <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
-            <views:SettingsView />
-        </DataTemplate>
+                <ResourceDictionary Source="Themes/Colors.xaml" />
+                <ResourceDictionary Source="Themes/Brushes.xaml" />
+                <ResourceDictionary Source="Themes/Sidebar.xaml" />
+                <ResourceDictionary Source="Themes/Menus.xaml" />
+                <ResourceDictionary Source="Themes/Status.xaml" />
+                <ResourceDictionary Source="Themes/TabControl.xaml" />
+                <ResourceDictionary Source="Themes/DataGrid.xaml" />
+                <ResourceDictionary Source="Themes/Buttons.xaml" />
+                <ResourceDictionary Source="Themes/Inputs.xaml" />
+                <ResourceDictionary Source="Themes/Windows.xaml" />
+                <ResourceDictionary Source="Themes/ComboBox.xaml" />
+
+            </ResourceDictionary.MergedDictionaries>
+        
+            <DataTemplate DataType="{x:Type viewModels:TenantViewModel}">
+                <views:TenantView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+                <views:SettingsView />
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
