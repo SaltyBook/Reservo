@@ -10,23 +10,46 @@ namespace Reservo.Converters
         //Returns an empty string for null inputs and the original value otherwise.
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            var de = new CultureInfo("de-DE");
+
             if (value == null)
-                return "";
+                return string.Empty;
 
             if (value is double d)
-                return $"{d:N2} €";
+                return d.ToString("N2", de) + " €";
 
-            if (double.TryParse(value.ToString(), out double parsed))
-                return $"{parsed:N2} €";
+            if (value is decimal dec)
+                return dec.ToString("N2", de) + " €";
+
+            var text = value.ToString()?.Trim();
+            if (string.IsNullOrWhiteSpace(text))
+                return string.Empty;
+
+            text = text.Replace("€", "").Trim();
+
+            if (double.TryParse(text, NumberStyles.Any, de, out var parsed))
+                return parsed.ToString("N2", de) + " €";
 
             return value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value.ToString() == "")
-                return null;
-            return value;
+            var de = new CultureInfo("de-DE");
+
+            if (value == null)
+                return 0d;
+
+            var text = value.ToString()?.Trim();
+            if (string.IsNullOrWhiteSpace(text))
+                return 0d;
+
+            text = text.Replace("€", "").Trim();
+
+            if (double.TryParse(text, NumberStyles.Any, de, out var parsed))
+                return parsed;
+
+            return Binding.DoNothing;
         }
     }
 }

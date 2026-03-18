@@ -268,14 +268,13 @@ namespace Reservo.Models
             else
             {
                 index = GetInvoiceCount(year);
-                InvoiceNumber = index;
             }
             return Path.Combine(Paths.ManagementPath, $"{year}-Rechnung", index.ToString("D2") + "-Rechnung-" + LastName + ".docx");
         }
 
         //Calculates the next available invoice number by counting existing invoice files for the current year.
         //The method uses a regular expression to match valid invoice filenames and returns the next sequential index.
-        private static int GetInvoiceCount(string year)
+        public int GetInvoiceCount(string year)
         {
             var muster = new Regex(@"^\d{2}-Rechnung.*\.docx$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
             return Directory.EnumerateFiles(Path.Combine(Paths.ManagementPath, $"{year}-Rechnung")).Select(Path.GetFileName).Count(name => muster.IsMatch(name)) + 1;

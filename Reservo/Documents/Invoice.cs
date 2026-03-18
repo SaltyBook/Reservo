@@ -15,6 +15,7 @@ namespace Reservo.Documents
         //conditionally removes optional rows(e.g.unused additional charges), saves the document, and updates the total amount in the associated data grid.
         public static void CreateInvoice(Entry entry, List<TableEntry> entries, string year)
         {
+            entry.InvoiceNumber = entry.GetInvoiceCount(year);
             string outputPath = entry.GetInvoicePath(year);
             string templatePath = Path.Combine(Paths.ResourcesPath, "Rechnung-Vorlage.docx");
             File.Copy(templatePath, outputPath, true);

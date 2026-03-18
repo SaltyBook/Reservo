@@ -64,7 +64,7 @@
                             <Trigger Property="IsSelected"
                                      Value="True">
                                 <Setter Property="Background"
-                                        Value="{StaticResource Brush.SidebarSelected}" />
+                                        Value="{StaticResource Brush.AccentSoftStrong}" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -75,8 +75,7 @@
                                         Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"
                                         Width="0.8*">
                         <DataGridTextColumn.EditingElementStyle>
-                            <Style TargetType="TextBox"
-                                   BasedOn="{StaticResource ModernTextBoxStyle}">
+                            <Style TargetType="TextBox">
                                 <EventSetter Event="PreviewTextInput"
                                              Handler="QuantityTextBox_PreviewTextInput" />
                             </Style>
@@ -87,8 +86,7 @@
                                         Binding="{Binding Description}"
                                         Width="4*">
                         <DataGridTextColumn.EditingElementStyle>
-                            <Style TargetType="TextBox"
-                                   BasedOn="{StaticResource ModernTextBoxStyle}">
+                            <Style TargetType="TextBox">
                                 <Setter Property="IsReadOnly"
                                         Value="True" />
                                 <Style.Triggers>
@@ -105,10 +103,6 @@
                     <DataGridTextColumn Header="Faktor"
                                         Binding="{Binding Factor, UpdateSourceTrigger=PropertyChanged}"
                                         Width="*">
-                        <DataGridTextColumn.EditingElementStyle>
-                            <Style TargetType="TextBox"
-                                   BasedOn="{StaticResource ModernTextBoxStyle}" />
-                        </DataGridTextColumn.EditingElementStyle>
                     </DataGridTextColumn>
 
                     <DataGridTextColumn Header="Total"
@@ -124,8 +118,7 @@
                         </DataGridTextColumn.ElementStyle>
 
                         <DataGridTextColumn.EditingElementStyle>
-                            <Style TargetType="TextBox"
-                                   BasedOn="{StaticResource ModernTextBoxStyle}">
+                            <Style TargetType="TextBox">
                                 <Setter Property="HorizontalContentAlignment"
                                         Value="Right" />
                                 <Setter Property="IsReadOnly"

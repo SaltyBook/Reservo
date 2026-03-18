@@ -149,7 +149,7 @@ namespace Reservo.ViewModels
             try
             {
                 var entry = SelectedEntry;
-                var documentPath = SelectedEntry.GetInvoicePath(Year);
+                var documentPath = entry.GetInvoicePath(Year);
 
                 if (!_fileService.Exists(documentPath))
                 {
@@ -157,7 +157,10 @@ namespace Reservo.ViewModels
                     _documentService.CreateInvoice(entry, Year);
                 }
 
-                _fileService.OpenFile(documentPath);
+                if (_fileService.Exists(documentPath))
+                {
+                    _fileService.OpenFile(documentPath);
+                }
             }
             catch (Exception ex)
             {
