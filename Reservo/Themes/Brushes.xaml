@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
     <SolidColorBrush x:Key="Brush.AppBackground"
                      Color="{StaticResource Color.AppBackground}" />
     <SolidColorBrush x:Key="Brush.Surface"
@@ -50,4 +51,22 @@
                      Color="{StaticResource Color.RowCanceled}" />
     <SolidColorBrush x:Key="Brush.NoteBackground"
                      Color="{StaticResource Color.NoteBackground}" />
+
+    <SolidColorBrush x:Key="Brush.InfoSoft"
+                     Color="{StaticResource Color.InfoSoft}" />
+    <SolidColorBrush x:Key="Brush.InfoStrong"
+                     Color="{StaticResource Color.InfoStrong}" />
+
+
+    <SolidColorBrush x:Key="Brush.SuccessStrong"
+                     Color="{StaticResource Color.SuccessStrong}" />
+
+    <SolidColorBrush x:Key="Brush.WarningStrong"
+                     Color="{StaticResource Color.WarningStrong}" />
+
+    <SolidColorBrush x:Key="Brush.ErrorSoft"
+                     Color="{StaticResource Color.ErrorSoft}" />
+    <SolidColorBrush x:Key="Brush.ErrorStrong"
+                     Color="{StaticResource Color.ErrorStrong}" />
+    
 </ResourceDictionary>

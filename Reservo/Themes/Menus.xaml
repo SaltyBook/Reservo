@@ -41,7 +41,7 @@
                                  Value="True">
                             <Setter TargetName="Root"
                                     Property="Background"
-                                    Value="{StaticResource Brush.AccentSoft}" />
+                                    Value="{StaticResource Brush.AccentSoftStrong}" />
                         </Trigger>
 
                         <Trigger Property="IsEnabled"

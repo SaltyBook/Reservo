@@ -103,7 +103,9 @@
                                             <Trigger Property="IsSelected"
                                                      Value="True">
                                                 <Setter Property="Background"
-                                                        Value="{StaticResource Brush.SidebarSelected}" />
+                                                        Value="{StaticResource Brush.AccentSoftStrong}" />
+                                                <Setter Property="Foreground"
+                                                        Value="{StaticResource Brush.TextPrimary}" />
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
