@@ -27,13 +27,13 @@ namespace Reservo
         public void CreateReservationMail(Entry entry, string year)
         {
             ExportPdf(entry.GetReservationPath(year));
-            EMail.CreateEMail(entry, year, false);
+            Documents.Email.CreateEmail(entry, year, false);
         }
 
         public void CreateInvoiceMail(Entry entry, string year)
         {
             ExportPdf(entry.GetInvoicePath(year));
-            EMail.CreateEMail(entry, year, true);
+            Documents.Email.CreateEmail(entry, year, true);
         }
 
         private void ExportPdf(string docxPath)

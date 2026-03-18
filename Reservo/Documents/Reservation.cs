@@ -1,9 +1,9 @@
 ﻿#region Usings
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using System.IO;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
 #endregion
 
 namespace Reservo.Documents
@@ -18,34 +18,33 @@ namespace Reservo.Documents
             string outputPath = entry.GetReservationPath(year);
             string templatePath = Path.Combine(Paths.ResourcesPath, "Reservierungsbestätigung-Vorlage.docx");
             File.Copy(templatePath, outputPath, true);
-            var replacements = new (string Placeholder, string Value)[]
+            using (var doc = DocX.Load(outputPath))
             {
-            ("{{Gruppe}}", entry.GroupName),
-            ("{{Anrede}}", entry.Salutation),
-            ("{{Vorname}}", entry.FirstName),
-            ("{{Name}}", entry.LastName),
-            ("{{Straße}}", entry.Street),
-            ("{{Ort}}", entry.Location),
-            ("{{Nummer}}", entry.Id.ToString()),
-            ("{{Jahr}}", string.Format("{0:yy}", DateTime.Now)),
-            ("{{Datum}}", string.Format("{0:dddd, d. MMMM yyyy}", DateTime.Now)),
-            ("{{Anreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Arrival)),
-            ("{{Abreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Departure))
-            };
-            using (var wordDoc = WordprocessingDocument.Open(outputPath, true))
-            {
-                var body = wordDoc.MainDocumentPart.Document.Body;
-                foreach (var text in body.Descendants<Text>())
+                var replacements = new (string Placeholder, string Value)[]
                 {
-                    foreach (var (placeholder, value) in replacements)
+                    ("{{Gruppe}}", entry.GroupName),
+                    ("{{Anrede}}", entry.Salutation),
+                    ("{{Vorname}}", entry.FirstName),
+                    ("{{Name}}", entry.LastName),
+                    ("{{Straße}}", entry.Street),
+                    ("{{Ort}}", entry.Location),
+                    ("{{Nummer}}", entry.Id.ToString()),
+                    ("{{Jahr}}", string.Format("{0:yy}", DateTime.Now)),
+                    ("{{Datum}}", string.Format("{0:dddd, d. MMMM yyyy}", DateTime.Now)),
+                    ("{{Anreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Arrival)),
+                    ("{{Abreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Departure))
+                };
+                foreach (var kv in replacements)
+                {
+                    doc.ReplaceText(new StringReplaceTextOptions
                     {
-                        if (text.Text.Contains(placeholder))
-                        {
-                            text.Text = text.Text.Replace(placeholder, value);
-                        }
-                    }
+                        SearchValue = kv.Placeholder,
+                        NewValue = kv.Value,
+                        EscapeRegEx = true,   // geschweifte Klammern werden sicher maskiert
+                        RemoveEmptyParagraph = true,   // leere Absätze nach Ersetzung aufräumen
+                    });
                 }
-                wordDoc.MainDocumentPart.Document.Save();
+                doc.Save();
             }
         }
     }

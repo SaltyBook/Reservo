@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel>
-            <TextBlock Text="Mieterliste"
+            <TextBlock Text="CVJM Freizeit- und Bildungsstätte Niederdieten"
                        FontSize="24"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource Brush.TextPrimary}" />

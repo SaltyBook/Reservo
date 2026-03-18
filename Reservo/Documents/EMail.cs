@@ -12,13 +12,13 @@ using System.IO;
 
 namespace Reservo.Documents
 {
-    public class EMail
+    public class Email
     {
         //Creates a prefilled email draft in Mozilla Thunderbird for a given entry.
         //The method connects to an IMAP mailbox, searches the inbox and send folder for the most recent email exchanged with the recipient,
         //and quotes the latest message in the new email body.
         //It builds an HTML email with a predefined signature, optional invoice or reservation attachment, and launches Thunderbird with the composed email ready to send.
-        public static void CreateEMail(Entry entry, string year, bool invoice)
+        public static void CreateEmail(Entry entry, string year, bool invoice)
         {
             string quoted = "";
             string subject = "";

@@ -76,7 +76,6 @@ namespace Reservo.Documents
                 if (entries[15].Result == "0,00 €" || entries[15].Description == "Zusatz")
                 {
                     doc.Tables[0].RemoveRow(doc.Tables[0].Rows.Count - 3);
-
                 }
                 doc.Save();
             }
