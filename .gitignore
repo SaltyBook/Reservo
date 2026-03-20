@@ -205,8 +205,9 @@ DocProject/Help/*.hhp
 DocProject/Help/Html2
 DocProject/Help/html
 
-# Click-Once directory
-publish/
+# Publish profiles
+Properties/PublishProfiles/*.pubxml
+Properties/PublishProfiles/*.pubxml.user
 
 # Publish Web Output
 *.[Pp]ublish.xml
