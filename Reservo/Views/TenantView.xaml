@@ -45,7 +45,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TabControl Grid.Row="0"
+            <TabControl Grid.Row="2"
                         ItemsSource="{Binding Workbooks}"
                         SelectedItem="{Binding SelectedWorkbook}"
                         Style="{StaticResource ModernTabControlStyle}"
@@ -79,7 +79,12 @@
                                       VirtualizingPanel.ScrollUnit="Pixel"
                                       VirtualizingPanel.CacheLength="2"
                                       VirtualizingPanel.CacheLengthUnit="Page"
+                                      VerticalScrollBarVisibility="Auto"
                                       ScrollViewer.CanContentScroll="True"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
                                       Style="{StaticResource ModernDataGridStyle}"
                                       CellStyle="{StaticResource ModernDataGridCellStyle}"
                                       ColumnHeaderStyle="{StaticResource ModernDataGridColumnHeaderStyle}">

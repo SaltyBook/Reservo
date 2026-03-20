@@ -89,7 +89,7 @@ namespace Reservo.ViewModels
                 warnings.AddRange(result.Warnings);
             }
 
-            SelectedWorkbook = Workbooks.FirstOrDefault();
+            SelectedWorkbook = Workbooks.FirstOrDefault(x => x.Year == DateTime.Now.Year.ToString());
 
             CheckAllEntryDates();
 
@@ -119,7 +119,7 @@ namespace Reservo.ViewModels
                 catch (Exception ex)
                 {
                     var fileName = Path.GetFileName(workbook.FilePath);
-                    Log.Error(ex, "Fehler beim Speichern von Workbook {File}", workbook.FilePath);
+                    Log.Error(ex, "Fehler beim Speichern von Workbook {File}", fileName);
                 }
             }
         }
