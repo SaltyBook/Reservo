@@ -260,13 +260,13 @@ _pkginfo.txt
 !?*.[Cc]ache/
 
 # Others
+*.pfx
 ClientBin/
 ~$*
 *~
 *.dbmdl
 *.dbproj.schemaview
 *.jfm
-*.pfx
 *.publishsettings
 orleans.codegen.cs
 
