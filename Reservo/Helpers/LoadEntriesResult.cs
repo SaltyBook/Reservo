@@ -1,6 +1,6 @@
 ﻿using Reservo.Models;
 
-namespace Reservo.Utils
+namespace Reservo.Helpers
 {
     public class LoadEntriesResult
     {

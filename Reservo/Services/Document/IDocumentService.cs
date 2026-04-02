@@ -1,4 +1,5 @@
 ﻿using Reservo.Models;
+using Reservo.Services.Email;
 
 namespace Reservo.Services.Document
 {
@@ -6,7 +7,7 @@ namespace Reservo.Services.Document
     {
         void CreateReservation(Entry entry, string year);
         void CreateInvoice(Entry entry, string year);
-        void CreateReservationMail(Entry entry, string year);
-        void CreateInvoiceMail(Entry entry, string year);
+        void CreateReservationMail(Entry entry, string year, IEmailService email);
+        void CreateInvoiceMail(Entry entry, string year, IEmailService email);
     }
 }

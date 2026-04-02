@@ -1,9 +1,8 @@
 ﻿#region Usings
-using Reservo.Classes;
+using Reservo.Helpers;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using Reservo.Services.Dialog;
-using Reservo.Utils;
 using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;

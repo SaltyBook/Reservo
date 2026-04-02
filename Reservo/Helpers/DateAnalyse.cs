@@ -1,6 +1,6 @@
 ﻿using Reservo.Models;
 
-namespace Reservo.Classes
+namespace Reservo.Helpers
 {
     public static class DateAnalyse
     {

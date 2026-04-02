@@ -1,19 +1,18 @@
-﻿#region Usings
-using Reservo.Infrastructure;
+﻿using Reservo.Infrastructure;
 using Reservo.Models;
+using Reservo.Services.Invoice;
 using System.IO;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
-#endregion
 
-namespace Reservo.Documents
+namespace Reservo
 {
-    public static class Invoice
+    public class InvoiceService : IInvoiceService
     {
         //Generates an invoice document based on a Word template and the provided entry data.
         //The method copies the invoice template, replaces predefined placeholders with customer, booking, and pricing information,
         //conditionally removes optional rows(e.g.unused additional charges), saves the document, and updates the total amount in the associated data grid.
-        public static void CreateInvoice(Entry entry, List<TableEntry> entries, string year)
+        public void CreateInvoice(Entry entry, List<TableEntry> entries, string year)
         {
             entry.InvoiceNumber = entry.GetInvoiceCount(year);
             string outputPath = entry.GetInvoicePath(year);
@@ -80,28 +79,6 @@ namespace Reservo.Documents
                 doc.Save();
             }
             UpdateDatagrid(entry, entries);
-        }
-
-        //Initializes the default list of invoice items with predefined descriptions and base prices.
-        //These items represent the standard pricing structure used for invoice calculation, such as overnight stays, age-based pricing, additional services, and optional extras.
-        public static void CreateItems()
-        {
-            _ = new InvoiceItem("Übernachtungen (Grundpreis bis 19 Personen)", "235,00");
-            _ = new InvoiceItem("Kinder und Jugendliche bis 17 Jahre", "0");
-            _ = new InvoiceItem("Junge Erwachsene bis 26 Jahre", "0");
-            _ = new InvoiceItem("Erwachsene", "0");
-            _ = new InvoiceItem("Übernachtungen Erwachsene ab 27 Jahre", "16,00");
-            _ = new InvoiceItem("Übernachtungen Erwachsene bis 26 Jahre", "15,00");
-            _ = new InvoiceItem("Übernachtungen Kinder und Jugendliche bis 17 Jahre", "11,00");
-            _ = new InvoiceItem("Tagesgäste pro Tag", "7,00");
-            _ = new InvoiceItem("Tage Heizkosten vom 1.10. – 30.4 und bei Bedarf", "40,00");
-            _ = new InvoiceItem("Bettwäsche (Leihgebühren) ", "10,00");
-            _ = new InvoiceItem("Maschinen Wäsche waschen", "4,00");
-            _ = new InvoiceItem("Leihgebühr Faltzelt", "25,00");
-            _ = new InvoiceItem("Kaminholz (kleine Kiste)", "5,00");
-            _ = new InvoiceItem("Endreinigung (90 – 170 Euro) ", "0");
-            _ = new InvoiceItem("Getränke laut beigefügter Rechnung (+20 € Lieferung) ", "0");
-            _ = new InvoiceItem("Zusatz", "0");
         }
 
         //Updates the total amount of the given entry based on the calculated invoice result.

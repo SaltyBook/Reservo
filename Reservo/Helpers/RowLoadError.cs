@@ -1,4 +1,4 @@
-﻿namespace Reservo.Utils
+﻿namespace Reservo.Helpers
 {
     public class RowLoadError
     {

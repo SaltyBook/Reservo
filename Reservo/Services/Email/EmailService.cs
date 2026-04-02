@@ -10,15 +10,15 @@ using System.Diagnostics;
 using System.IO;
 #endregion
 
-namespace Reservo.Documents
+namespace Reservo.Services.Email
 {
-    public class Email
+    public class EmailService : IEmailService
     {
         //Creates a prefilled email draft in Mozilla Thunderbird for a given entry.
         //The method connects to an IMAP mailbox, searches the inbox and send folder for the most recent email exchanged with the recipient,
         //and quotes the latest message in the new email body.
         //It builds an HTML email with a predefined signature, optional invoice or reservation attachment, and launches Thunderbird with the composed email ready to send.
-        public static void CreateEmail(Entry entry, string year, bool invoice)
+        public void CreateEmail(Entry entry, string year, bool invoice)
         {
             string quoted = "";
             string subject = "";
@@ -69,7 +69,7 @@ namespace Reservo.Documents
         }
 
         //Returns the latest email from the given folder send from the specified address.
-        private static MimeMessage GetLatestMessage(ImapClient client, IMailFolder folder, string fromAddress)
+        private MimeMessage GetLatestMessage(ImapClient client, IMailFolder folder, string fromAddress)
         {
             folder.Open(FolderAccess.ReadOnly);
             var uids = folder.Search(SearchQuery.FromContains(fromAddress));
@@ -86,45 +86,10 @@ namespace Reservo.Documents
             return latestMessage;
         }
 
-        //Builds the HTML body of the email for a given entry.
-        private static string BuildEmailBody(Entry entry, bool invoice, string quoted)
-        {
-            string imageHouse = $@"file://{Paths.ResourcesPath}/imageHouse.jpg";
-            string imageLogo = $@"file://{Paths.ResourcesPath}/imageLogo.png";
-
-            string textBody =
-            $"<p>Guten Tag {entry.Salutation} {entry.LastName},</p>";
-            if (invoice)
-            {
-                textBody += "<p>wir hoffen, dass alle wieder gut Zuhause angekommen sind.<br>Im Anhang finden Sie die Rechnung für Ihren Aufenthalt bei uns.</p>";
-            }
-            textBody +=
-            "<p>&nbsp;</p>" +
-            "<p>Mit freundlichen Grüßen</p>" +
-            "<p>Diana und Klaus Herget</p>" +
-            $"<img src=\"{imageHouse}\" width=\"216\" height=\"96\" />" +
-            $"<p>CVJM-Freizeitheim Niederdieten<br>Neuer Weg 11<br>35236 Breidenbach-Niederdieten</p>" +
-            $"<p>Festnetz: 06465-20089<br>Mobil: 0178-1968111</p>" +
-            $"<img src=\"{imageLogo}\" width=\"175\" height=\"85\" /> " +
-            $"<p><a href='https://www.cvjm-kv-biedenkopf.de/website/de/kv/cvjm-kreisverband-biedenkopf/gaestehaus'>Webseite</a></p>" +
-            $"<div name =\"quote\" style=\"margin:10px 5px 5px 10px; padding: 10px 0 10px 10px; border-left:2px solid #C3D9E5; word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;\">" +
-            $"<div style='white-space: normal; font-size:small; color:gray;'>{quoted}</div>";
-
-            return textBody.Replace("\"", "\\\"");
-        }
-
-        //Opens Thunderbird to compose an email with the given parameters.
-        private static void OpenThunderbird(string to, string subject, string body, string attachmentPath)
-        {
-            string thunderbirdPath = @"C:\Program Files\Mozilla Thunderbird\thunderbird.exe";
-            string arguments = $"-compose \"to='{to}',subject='{subject}',body='{body}',attachment='{attachmentPath}'\"";
-            Process.Start(thunderbirdPath, arguments);
-        }
-
         //Extracts and formats the content of a previous email message to be used as a quoted reply.
         //The method supports both plain text and HTML emails, prefixes lines in classic email quote style, filters unwanted HTML content,
         //and returns the formatted quoted message including sender and date information.
-        public static string GetOldMessages(MimeMessage message)
+        private string GetOldMessages(MimeMessage message)
         {
             string output = "";
             using (var quoted = new StringWriter())
@@ -166,6 +131,41 @@ namespace Reservo.Documents
                 output = quoted.ToString();
             }
             return "--\r\n" + output;
+        }
+
+        //Builds the HTML body of the email for a given entry.
+        private string BuildEmailBody(Entry entry, bool invoice, string quoted)
+        {
+            string imageHouse = $@"file://{Paths.ResourcesPath}/imageHouse.jpg";
+            string imageLogo = $@"file://{Paths.ResourcesPath}/imageLogo.png";
+
+            string textBody =
+            $"<p>Guten Tag {entry.Salutation} {entry.LastName},</p>";
+            if (invoice)
+            {
+                textBody += "<p>wir hoffen, dass alle wieder gut Zuhause angekommen sind.<br>Im Anhang finden Sie die Rechnung für Ihren Aufenthalt bei uns.</p>";
+            }
+            textBody +=
+            "<p>&nbsp;</p>" +
+            "<p>Mit freundlichen Grüßen</p>" +
+            "<p>Klaus Herget</p>" +
+            $"<img src=\"{imageHouse}\" width=\"216\" height=\"96\" />" +
+            $"<p>CVJM-Freizeitheim Niederdieten<br>Neuer Weg 11<br>35236 Breidenbach-Niederdieten</p>" +
+            $"<p>Festnetz: 06465-20089<br>Mobil: 0178-1968111</p>" +
+            $"<img src=\"{imageLogo}\" width=\"175\" height=\"85\" /> " +
+            $"<p><a href='https://www.cvjm-kv-biedenkopf.de/website/de/kv/cvjm-kreisverband-biedenkopf/gaestehaus'>Webseite</a></p>" +
+            $"<div name =\"quote\" style=\"margin:10px 5px 5px 10px; padding: 10px 0 10px 10px; border-left:2px solid #C3D9E5; word-wrap: break-word; -webkit-nbsp-mode: space; -webkit-line-break: after-white-space;\">" +
+            $"<div style='white-space: normal; font-size:small; color:gray;'>{quoted}</div>";
+
+            return textBody.Replace("\"", "\\\"");
+        }
+
+        //Opens Thunderbird to compose an email with the given parameters.
+        private void OpenThunderbird(string to, string subject, string body, string attachmentPath)
+        {
+            string thunderbirdPath = @"C:\Program Files\Mozilla Thunderbird\thunderbird.exe";
+            string arguments = $"-compose \"to='{to}',subject='{subject}',body='{body}',attachment='{attachmentPath}'\"";
+            Process.Start(thunderbirdPath, arguments);
         }
     }
 }

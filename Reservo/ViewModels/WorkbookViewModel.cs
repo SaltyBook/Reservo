@@ -5,6 +5,7 @@ using Reservo.Models;
 using Reservo.Services.Credentials;
 using Reservo.Services.Dialog;
 using Reservo.Services.Document;
+using Reservo.Services.Email;
 using Reservo.Services.File;
 using Serilog;
 using System.Collections.ObjectModel;
@@ -19,6 +20,7 @@ namespace Reservo.ViewModels
         private readonly IFileService _fileService;
         private readonly IDocumentService _documentService;
         private readonly IDialogService _dialogService;
+        private readonly IEmailService _emailService;
 
         public string FilePath { get; }
         public string DisplayName { get; }
@@ -51,9 +53,9 @@ namespace Reservo.ViewModels
         public ICommand OpenNoteCommand { get; }
         #endregion
 
-        public WorkbookViewModel(string filePath) : this(filePath, new FileService(), new DocumentService(), new DialogService()) { }
+        public WorkbookViewModel(string filePath) : this(filePath, new FileService(), new DocumentService(), new DialogService(), new EmailService()) { }
 
-        public WorkbookViewModel(string filePath, IFileService files, IDocumentService documents, IDialogService dialog)
+        public WorkbookViewModel(string filePath, IFileService files, IDocumentService documents, IDialogService dialog, IEmailService email)
         {
             Log.Information("WorkbookViewModel initialisiert");
 
@@ -64,6 +66,7 @@ namespace Reservo.ViewModels
             _fileService = files;
             _documentService = documents;
             _dialogService = dialog;
+            _emailService = email;
 
             AddEntryCommand = new RelayCommand(_ => AddEntry());
             DeleteEntryCommand = new RelayCommand(_ => DeleteEntry(), _ => SelectedEntry is not null);
@@ -190,7 +193,7 @@ namespace Reservo.ViewModels
 
             if (_fileService.Exists(documentPath))
             {
-                _documentService.CreateReservationMail(entry, Year);
+                _documentService.CreateReservationMail(entry, Year, _emailService);
             }
         }
 
@@ -216,7 +219,7 @@ namespace Reservo.ViewModels
 
             if (_fileService.Exists(documentPath))
             {
-                _documentService.CreateInvoiceMail(entry, Year);
+                _documentService.CreateInvoiceMail(entry, Year, _emailService);
             }
         }
 

@@ -7,7 +7,7 @@ using Serilog;
 using System.IO;
 #endregion
 
-namespace Reservo.Utils
+namespace Reservo.Helpers
 {
     public static class XLSX
     {
