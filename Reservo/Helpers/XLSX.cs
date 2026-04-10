@@ -238,6 +238,7 @@ namespace Reservo.Helpers
                     reader.GetString(Columns.Mobile),
                     reader.GetString(Columns.HomePhone),
                     reader.GetString(Columns.EMail),
+                    GetBool(reader.GetValue(Columns.Offer)),
                     GetBool(reader.GetValue(Columns.Canceled)),
                     reader.GetString(Columns.Note)
                 );
@@ -279,6 +280,7 @@ namespace Reservo.Helpers
             sheet.Cell(row, XL(Columns.Mobile)).Value = e.Mobile;
             sheet.Cell(row, XL(Columns.HomePhone)).Value = e.HomePhone;
             sheet.Cell(row, XL(Columns.EMail)).Value = e.EMail;
+            sheet.Cell(row, XL(Columns.Offer)).Value = e.Offer;
             sheet.Cell(row, XL(Columns.Canceled)).Value = e.Canceled;
             sheet.Cell(row, XL(Columns.Note)).Value = e.Note;
         }
@@ -349,8 +351,9 @@ namespace Reservo.Helpers
             public const int Mobile = 21;
             public const int HomePhone = 22;
             public const int EMail = 23;
-            public const int Canceled = 24;
-            public const int Note = 25;
+            public const int Offer = 24;
+            public const int Canceled = 25;
+            public const int Note = 26;
         }
     }
 }

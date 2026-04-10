@@ -359,6 +359,18 @@
                                     <DataGridTextColumn Header="E-Mail"
                                                         Binding="{Binding EMail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                         Width="Auto" />
+                                    <DataGridTemplateColumn Header="Angebot"
+                                                            Width="SizeToHeader">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding Offer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                          Style="{StaticResource ModernCheckBoxStyle}"
+                                                          HorizontalAlignment="Center"
+                                                          VerticalAlignment="Center"
+                                                          Focusable="False" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
                                     <DataGridTemplateColumn Header="Storniert"
                                                             Width="SizeToHeader">
                                         <DataGridTemplateColumn.CellTemplate>

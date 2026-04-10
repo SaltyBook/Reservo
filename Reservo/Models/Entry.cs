@@ -31,6 +31,7 @@ namespace Reservo.Models
         private string mobile = string.Empty;
         private string homePhone = string.Empty;
         private string eMail = string.Empty;
+        private bool offer;
         private bool canceled;
         private string note = string.Empty;
 
@@ -191,6 +192,12 @@ namespace Reservo.Models
             set => SetProperty(ref eMail, value);
         }
 
+        public bool Offer
+        {
+            get => offer;
+            set => SetProperty(ref offer, value);
+        }
+
         public bool Canceled
         {
             get => canceled;
@@ -210,7 +217,7 @@ namespace Reservo.Models
             set => SetProperty(ref _isNoteOpen, value);
         }
 
-        public Entry(int id, string groupName, int guestCount, string salutation, string firstName, string lastName, string street, string location, DateTime arrival, DateTime departure, int nightCount, bool infoSheet, bool calendarEntry, int? invoiceNumber, double? total, bool ageCheck, bool tent, double? drinks, int? lastVisit, DateTime reserved, ContactValues.Contact contactVia, string mobile, string homePhone, string eMail, bool canceled, string note)
+        public Entry(int id, string groupName, int guestCount, string salutation, string firstName, string lastName, string street, string location, DateTime arrival, DateTime departure, int nightCount, bool infoSheet, bool calendarEntry, int? invoiceNumber, double? total, bool ageCheck, bool tent, double? drinks, int? lastVisit, DateTime reserved, ContactValues.Contact contactVia, string mobile, string homePhone, string eMail, bool offer, bool canceled, string note)
         {
             this.id = id;
             this.groupName = groupName;
@@ -236,6 +243,7 @@ namespace Reservo.Models
             this.mobile = mobile;
             this.homePhone = homePhone;
             this.eMail = eMail;
+            this.offer = offer;
             this.canceled = canceled;
             this.note = note;
         }
