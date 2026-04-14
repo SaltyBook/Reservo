@@ -15,3 +15,16 @@ Die Anwendung ermöglicht das Laden, Bearbeiten und Speichern von Reservierungsd
 - 🔐 Speicherung von Credentials (lokal & extern)
 - 🧩 MVVM-Architektur
 - 📝 Logging mit Serilog
+
+## Screenshots
+
+![Hauptoberfläche](images/tenant.png)
+
+## Technologien
+
+- WPF (.NET)
+- C#
+- Serilog
+- HttpClient
+- ExcelDataReader
+- MVVM Pattern
