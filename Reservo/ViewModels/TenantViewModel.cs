@@ -1,4 +1,5 @@
 ﻿#region Usings
+using Reservo.Commands;
 using Reservo.Helpers;
 using Reservo.Infrastructure;
 using Reservo.Models;
@@ -7,6 +8,7 @@ using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Windows.Input;
 #endregion
 
 namespace Reservo.ViewModels
@@ -34,6 +36,13 @@ namespace Reservo.ViewModels
         public int PastEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Departure < DateTime.Today && !e.Canceled) ?? 0;
         public int CanceledEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Canceled) ?? 0;
 
+
+        private CopyToParameter? _copiedEntry;
+
+        public ICommand CopyCommand { get; }
+        public ICommand PasteCommand { get; }
+        public ICommand CutCommand { get; }
+
         public TenantViewModel() : this(new DialogService()) { }
 
         public TenantViewModel(IDialogService dialog)
@@ -41,6 +50,10 @@ namespace Reservo.ViewModels
             Log.Information("MainViewModel initialisiert");
 
             _dialogService = dialog;
+
+            CopyCommand = new RelayCommand(Copy, null);
+            PasteCommand = new RelayCommand(Paste, null);
+            CutCommand = new RelayCommand(Cut, null);
         }
 
         //Loads all Excel files from the database directory
@@ -170,6 +183,55 @@ namespace Reservo.ViewModels
             }
         }
         #endregion
+
+        private void Copy(object? _)
+        {
+            var entry = SelectedWorkbook?.SelectedEntry;
+            if (entry == null)
+                return;
+
+            _copiedEntry = new CopyToParameter(entry, SelectedWorkbook, false);
+
+            Log.Information("Eintrag {Id} kopiert", entry.Id);
+        }
+
+        private void Paste(object? _)
+        {
+            if (_copiedEntry == null || SelectedWorkbook == null)
+                return;
+
+            var target = SelectedWorkbook;
+
+            if (_copiedEntry.FromWorkbook == target)
+                return;
+
+            var nextId = target.Entries.Count == 0 ? 1 : target.Entries.Max(e => e.Id) + 1;
+
+            var copy = _copiedEntry.Entry.Clone(nextId, _copiedEntry.Delete);
+
+            copy.PropertyChanged += Entry_PropertyChanged;
+
+            target.Entries.Add(copy);
+            target.SelectedEntry = copy;
+
+            if (_copiedEntry.Delete)
+                _copiedEntry.FromWorkbook.Entries.Remove(_copiedEntry.Entry);
+
+            _copiedEntry = null;
+
+            Log.Information("Eintrag eingefügt in {Workbook}", target.DisplayName);
+        }
+
+        private void Cut(object? _)
+        {
+            var entry = SelectedWorkbook?.SelectedEntry;
+            if (entry == null)
+                return;
+
+            _copiedEntry = new CopyToParameter(entry, SelectedWorkbook, true);
+
+            Log.Information("Eintrag {Id} ausgeschnitten", entry.Id);
+        }
 
         //Responds to property changes in individual entries
         private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)

@@ -297,5 +297,60 @@ namespace Reservo.Models
             else
                 NightCount = 0;
         }
+
+        public Entry Clone(int nextId, bool completeClone)
+        {
+            if (completeClone)
+            {
+                return new Entry
+                {
+                    Id = nextId,
+                    GroupName = this.GroupName,
+                    GuestCount = this.GuestCount,
+                    Salutation = this.Salutation,
+                    FirstName = this.FirstName,
+                    LastName = this.LastName,
+                    Street = this.Street,
+                    Location = this.Location,
+                    Arrival = this.Arrival,
+                    Departure = this.Departure,
+                    NightCount = this.NightCount,
+                    infoSheet = this.InfoSheet,
+                    CalendarEntry = this.CalendarEntry,
+                    InvoiceNumber = this.InvoiceNumber,
+                    Total = this.Total,
+                    AgeCheck = this.AgeCheck,
+                    Tent = this.Tent,
+                    Drinks = this.Drinks,
+                    LastVisit = this.LastVisit,
+                    Reserved = this.Reserved,
+                    ContactVia = this.ContactVia,
+                    Mobile = this.Mobile,
+                    HomePhone = this.HomePhone,
+                    EMail = this.EMail,
+                    Offer = this.Offer,
+                    Canceled = this.Canceled,
+                    Note = this.Note
+                };
+            }
+            return new Entry
+            {
+                Id = nextId,
+                GroupName = this.GroupName,
+                GuestCount = this.GuestCount,
+                Salutation = this.Salutation,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                Street = this.Street,
+                Location = this.Location,
+                Arrival = this.Arrival,
+                Departure = this.Departure,
+                NightCount = this.NightCount,
+                ContactVia = this.ContactVia,
+                Mobile = this.Mobile,
+                HomePhone = this.HomePhone,
+                EMail = this.EMail
+            };
+        }
     }
 }
