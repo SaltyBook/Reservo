@@ -98,7 +98,7 @@ namespace Reservo.ViewModels
         //Deletes the currently selected entry
         public void DeleteEntry()
         {
-            if (SelectedEntry == null)
+            if (SelectedEntry is null)
             {
                 return;
             }
@@ -112,7 +112,7 @@ namespace Reservo.ViewModels
         //Creates a reservation document if necessary and then opens it
         private void CreateReservation()
         {
-            if (SelectedEntry == null)
+            if (SelectedEntry is null)
             {
                 return;
             }
@@ -142,7 +142,7 @@ namespace Reservo.ViewModels
         //Creates an invoice document if necessary and then opens it
         private void CreateInvoice()
         {
-            if (SelectedEntry == null)
+            if (SelectedEntry is null)
             {
                 return;
             }
@@ -157,7 +157,8 @@ namespace Reservo.ViewModels
                 if (!_fileService.Exists(documentPath))
                 {
                     Log.Debug("Rechnung existiert nicht, wird erstellt");
-                    _documentService.CreateInvoice(entry, Year);
+                    var window = _documentService.CreateInvoice(entry, Year);
+                    window.ShowDialog();
                 }
 
                 if (_fileService.Exists(documentPath))
@@ -202,7 +203,7 @@ namespace Reservo.ViewModels
         {
             Log.Information("Erstelle EMail mit Rechnung Klick");
 
-            if (SelectedEntry == null)
+            if (SelectedEntry is null)
             {
                 return;
             }

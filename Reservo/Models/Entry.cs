@@ -1,11 +1,11 @@
 ﻿using Reservo.Infrastructure;
-using Reservo.ViewModels;
+using System.ComponentModel;
 using System.IO;
 using System.Text.RegularExpressions;
 
 namespace Reservo.Models
 {
-    public class Entry : BaseViewModel
+    public class Entry : INotifyPropertyChanged
     {
         private int id;
         private string groupName = string.Empty;
@@ -38,49 +38,105 @@ namespace Reservo.Models
         public int Id
         {
             get => id;
-            set => SetProperty(ref id, value);
+            set
+            {
+                if (id != value)
+                {
+                    id = value;
+                    OnPropertyChanged(nameof(Id));
+                }
+            }
         }
 
         public string GroupName
         {
             get => groupName;
-            set => SetProperty(ref groupName, value);
+            set
+            {
+                if (groupName != value)
+                {
+                    groupName = value;
+                    OnPropertyChanged(nameof(GroupName));
+                }
+            }
         }
 
         public int GuestCount
         {
             get => guestCount;
-            set => SetProperty(ref guestCount, value);
+            set
+            {
+                if (guestCount != value)
+                {
+                    guestCount = value;
+                    OnPropertyChanged(nameof(GuestCount));
+                }
+            }
         }
 
         public string Salutation
         {
             get => salutation;
-            set => SetProperty(ref salutation, value);
+            set
+            {
+                if (salutation != value)
+                {
+                    salutation = value;
+                    OnPropertyChanged(nameof(Salutation));
+                }
+            }
         }
 
         public string FirstName
         {
             get => firstName;
-            set => SetProperty(ref firstName, value);
+            set
+            {
+                if (firstName != value)
+                {
+                    firstName = value;
+                    OnPropertyChanged(nameof(FirstName));
+                }
+            }
         }
 
         public string LastName
         {
             get => lastName;
-            set => SetProperty(ref lastName, value);
+            set
+            {
+                if (lastName != value)
+                {
+                    lastName = value;
+                    OnPropertyChanged(nameof(LastName));
+                }
+            }
         }
 
         public string Street
         {
             get => street;
-            set => SetProperty(ref street, value);
+            set
+            {
+                if (street != value)
+                {
+                    street = value;
+                    OnPropertyChanged(nameof(Street));
+                }
+            }
         }
 
         public string Location
         {
             get => location;
-            set => SetProperty(ref location, value);
+            set
+            {
+                if (location != value)
+                {
+                    location = value;
+                    OnPropertyChanged(nameof(Location));
+                }
+            }
         }
 
         public DateTime Arrival
@@ -88,8 +144,11 @@ namespace Reservo.Models
             get => arrival;
             set
             {
-                if (!SetProperty(ref arrival, value))
+                if (arrival == value)
                     return;
+
+                arrival = value;
+                OnPropertyChanged(nameof(Arrival));
 
                 Departure = arrival.AddDays(2);
                 CalcNightCount();
@@ -101,8 +160,11 @@ namespace Reservo.Models
             get => departure;
             set
             {
-                if (!SetProperty(ref departure, value))
+                if (departure == value)
                     return;
+
+                departure = value;
+                OnPropertyChanged(nameof(Departure));
 
                 CalcNightCount();
             }
@@ -111,110 +173,236 @@ namespace Reservo.Models
         public int NightCount
         {
             get => nightCount;
-            private set => SetProperty(ref nightCount, value);
+            set
+            {
+                if (nightCount != value)
+                {
+                    nightCount = value;
+                    OnPropertyChanged(nameof(NightCount));
+                }
+            }
         }
 
         public bool InfoSheet
         {
             get => infoSheet;
-            set => SetProperty(ref infoSheet, value);
+            set
+            {
+                if (infoSheet != value)
+                {
+                    infoSheet = value;
+                    OnPropertyChanged(nameof(InfoSheet));
+                }
+            }
         }
 
         public bool CalendarEntry
         {
             get => calendarEntry;
-            set => SetProperty(ref calendarEntry, value);
+            set
+            {
+                if (calendarEntry != value)
+                {
+                    calendarEntry = value;
+                    OnPropertyChanged(nameof(CalendarEntry));
+                }
+            }
         }
 
         public int? InvoiceNumber
         {
             get => invoiceNumber;
-            set => SetProperty(ref invoiceNumber, value);
+            set
+            {
+                if (invoiceNumber != value)
+                {
+                    invoiceNumber = value;
+                    OnPropertyChanged(nameof(InvoiceNumber));
+                }
+            }
         }
 
         public double? Total
         {
             get => total;
-            set => SetProperty(ref total, value);
+            set
+            {
+                if (total != value)
+                {
+                    total = value;
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
         }
 
         public bool AgeCheck
         {
             get => ageCheck;
-            set => SetProperty(ref ageCheck, value);
+            set
+            {
+                if (ageCheck != value)
+                {
+                    ageCheck = value;
+                    OnPropertyChanged(nameof(AgeCheck));
+                }
+            }
         }
 
         public bool Tent
         {
             get => tent;
-            set => SetProperty(ref tent, value);
+            set
+            {
+                if (tent != value)
+                {
+                    tent = value;
+                    OnPropertyChanged(nameof(Tent));
+                }
+            }
         }
 
         public double? Drinks
         {
             get => drinks;
-            set => SetProperty(ref drinks, value);
+            set
+            {
+                if (drinks != value)
+                {
+                    drinks = value;
+                    OnPropertyChanged(nameof(Drinks));
+                }
+            }
         }
 
         public int? LastVisit
         {
             get => lastVisit;
-            set => SetProperty(ref lastVisit, value);
+            set
+            {
+                if (lastVisit != value)
+                {
+                    lastVisit = value;
+                    OnPropertyChanged(nameof(LastVisit));
+                }
+            }
         }
 
         public DateTime Reserved
         {
             get => reserved;
-            set => SetProperty(ref reserved, value);
+            set
+            {
+                if (reserved != value)
+                {
+                    reserved = value;
+                    OnPropertyChanged(nameof(Reserved));
+                }
+            }
         }
 
         public ContactValues.Contact ContactVia
         {
             get => contactVia;
-            set => SetProperty(ref contactVia, value);
+            set
+            {
+                if (contactVia != value)
+                {
+                    contactVia = value;
+                    OnPropertyChanged(nameof(ContactVia));
+                }
+            }
         }
 
         public string Mobile
         {
             get => mobile;
-            set => SetProperty(ref mobile, value);
+            set
+            {
+                if (mobile != value)
+                {
+                    mobile = value;
+                    OnPropertyChanged(nameof(Mobile));
+                }
+            }
         }
 
         public string HomePhone
         {
             get => homePhone;
-            set => SetProperty(ref homePhone, value);
+            set
+            {
+                if (homePhone != value)
+                {
+                    homePhone = value;
+                    OnPropertyChanged(nameof(HomePhone));
+                }
+            }
         }
 
         public string EMail
         {
             get => eMail;
-            set => SetProperty(ref eMail, value);
+            set
+            {
+                if (eMail != value)
+                {
+                    eMail = value;
+                    OnPropertyChanged(nameof(EMail));
+                }
+            }
         }
 
         public bool Offer
         {
             get => offer;
-            set => SetProperty(ref offer, value);
+            set
+            {
+                if (offer != value)
+                {
+                    offer = value;
+                    OnPropertyChanged(nameof(Offer));
+                }
+            }
         }
 
         public bool Canceled
         {
             get => canceled;
-            set => SetProperty(ref canceled, value);
+            set
+            {
+                if (canceled != value)
+                {
+                    canceled = value;
+                    OnPropertyChanged(nameof(Canceled));
+                }
+            }
         }
 
         public string Note
         {
             get => note;
-            set => SetProperty(ref note, value);
+            set
+            {
+                if (note != value)
+                {
+                    note = value;
+                    OnPropertyChanged(nameof(Note));
+                }
+            }
         }
 
-        private bool _isNoteOpen;
+        private bool isNoteOpen;
         public bool IsNoteOpen
         {
-            get => _isNoteOpen;
-            set => SetProperty(ref _isNoteOpen, value);
+            get => isNoteOpen;
+            set
+            {
+                if (isNoteOpen != value)
+                {
+                    isNoteOpen = value;
+                    OnPropertyChanged(nameof(IsNoteOpen));
+                }
+            }
         }
 
         public Entry(int id, string groupName, int guestCount, string salutation, string firstName, string lastName, string street, string location, DateTime arrival, DateTime departure, int nightCount, bool infoSheet, bool calendarEntry, int? invoiceNumber, double? total, bool ageCheck, bool tent, double? drinks, int? lastVisit, DateTime reserved, ContactValues.Contact contactVia, string mobile, string homePhone, string eMail, bool offer, bool canceled, string note)
@@ -269,7 +457,7 @@ namespace Reservo.Models
         public string GetInvoicePath(string year)
         {
             int index = -1;
-            if (InvoiceNumber != null && invoiceNumber != 0)
+            if (InvoiceNumber is not null && invoiceNumber != 0)
             {
                 index = (int)InvoiceNumber;
             }
@@ -298,41 +486,42 @@ namespace Reservo.Models
                 NightCount = 0;
         }
 
-        public Entry Clone(int nextId, bool completeClone)
+        public Entry FullClone(int nextId)
         {
-            if (completeClone)
+            return new Entry
             {
-                return new Entry
-                {
-                    Id = nextId,
-                    GroupName = this.GroupName,
-                    GuestCount = this.GuestCount,
-                    Salutation = this.Salutation,
-                    FirstName = this.FirstName,
-                    LastName = this.LastName,
-                    Street = this.Street,
-                    Location = this.Location,
-                    Arrival = this.Arrival,
-                    Departure = this.Departure,
-                    NightCount = this.NightCount,
-                    infoSheet = this.InfoSheet,
-                    CalendarEntry = this.CalendarEntry,
-                    InvoiceNumber = this.InvoiceNumber,
-                    Total = this.Total,
-                    AgeCheck = this.AgeCheck,
-                    Tent = this.Tent,
-                    Drinks = this.Drinks,
-                    LastVisit = this.LastVisit,
-                    Reserved = this.Reserved,
-                    ContactVia = this.ContactVia,
-                    Mobile = this.Mobile,
-                    HomePhone = this.HomePhone,
-                    EMail = this.EMail,
-                    Offer = this.Offer,
-                    Canceled = this.Canceled,
-                    Note = this.Note
-                };
-            }
+                Id = nextId,
+                GroupName = this.GroupName,
+                GuestCount = this.GuestCount,
+                Salutation = this.Salutation,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                Street = this.Street,
+                Location = this.Location,
+                Arrival = this.Arrival,
+                Departure = this.Departure,
+                NightCount = this.NightCount,
+                infoSheet = this.InfoSheet,
+                CalendarEntry = this.CalendarEntry,
+                InvoiceNumber = this.InvoiceNumber,
+                Total = this.Total,
+                AgeCheck = this.AgeCheck,
+                Tent = this.Tent,
+                Drinks = this.Drinks,
+                LastVisit = this.LastVisit,
+                Reserved = this.Reserved,
+                ContactVia = this.ContactVia,
+                Mobile = this.Mobile,
+                HomePhone = this.HomePhone,
+                EMail = this.EMail,
+                Offer = this.Offer,
+                Canceled = this.Canceled,
+                Note = this.Note
+            };
+        }
+
+        public Entry PartialClone(int nextId)
+        {
             return new Entry
             {
                 Id = nextId,
@@ -351,6 +540,12 @@ namespace Reservo.Models
                 HomePhone = this.HomePhone,
                 EMail = this.EMail
             };
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

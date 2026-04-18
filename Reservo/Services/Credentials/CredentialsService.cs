@@ -18,6 +18,9 @@ namespace Reservo.Services.Credentials
         // Credentials
         public static SmtpCredentials? creds = null;
 
+        //Thunderbird Pfad
+        public static readonly string thunderbirdPath = @"C:\Program Files\Mozilla Thunderbird\thunderbird.exe";
+
         public static void Load()
         {
             Log.Information("Initialisiere CredentialsService");
@@ -44,7 +47,7 @@ namespace Reservo.Services.Credentials
             {
                 var existsResponse = await client.GetFromJsonAsync<ExistsResponse>(apiBaseUrl + "/exists");
 
-                if (existsResponse == null)
+                if (existsResponse is null)
                 {
                     Log.Warning("Antwort auf /exists war null");
                     return ServiceResult.Fail("Der Status der Zugangsdaten konnte nicht geprüft werden.");
@@ -58,7 +61,7 @@ namespace Reservo.Services.Credentials
 
                 creds = await client.GetFromJsonAsync<SmtpCredentials>(apiBaseUrl);
 
-                if (creds == null)
+                if (creds is null)
                 {
                     Log.Warning("SMTP-Credentials konnten nicht deserialisiert werden");
                     return ServiceResult.Fail("Die Zugangsdaten konnten nicht gelesen werden.");
@@ -109,10 +112,5 @@ namespace Reservo.Services.Credentials
                 return ServiceResult.Fail("Beim Speichern der Zugangsdaten ist ein Fehler aufgetreten.");
             }
         }
-    }
-
-    class ExistsResponse
-    {
-        public bool Exists { get; set; }
     }
 }

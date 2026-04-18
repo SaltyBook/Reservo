@@ -35,7 +35,7 @@ namespace Reservo.Infrastructure
         {
             var dialog = new DialogWindow(title, message, dialogType, showCancel);
 
-            if (owner != null)
+            if (owner is not null)
                 dialog.Owner = owner;
 
             return dialog.ShowDialog() == true;

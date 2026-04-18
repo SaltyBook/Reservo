@@ -44,7 +44,7 @@ namespace Reservo.Behavior
             var grid = (DataGrid)sender;
 
             var order = ColumnOrderService.Load();
-            if (order != null)
+            if (order is not null)
                 ColumnOrderService.Apply(grid, order);
         }
     }

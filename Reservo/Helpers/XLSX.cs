@@ -297,22 +297,22 @@ namespace Reservo.Helpers
 
         private static bool GetBool(object? value)
         {
-            return value != null && value != DBNull.Value && Convert.ToBoolean(value);
+            return value is not null && value != DBNull.Value && Convert.ToBoolean(value);
         }
 
         private static int? GetNullableInt(object? value)
         {
-            return value == null || value == DBNull.Value ? null : Convert.ToInt32(value);
+            return value is null || value == DBNull.Value ? null : Convert.ToInt32(value);
         }
 
         private static double? GetNullableDouble(object? value)
         {
-            return value == null || value == DBNull.Value ? null : Convert.ToDouble(value);
+            return value is null || value == DBNull.Value ? null : Convert.ToDouble(value);
         }
 
         private static ContactValues.Contact GetContact(object? value)
         {
-            if (value == null || value == DBNull.Value)
+            if (value is null || value == DBNull.Value)
                 return ContactValues.Contact.Sonstiges;
 
             return Enum.TryParse<ContactValues.Contact>(value.ToString(), out var result)

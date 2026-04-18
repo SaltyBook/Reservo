@@ -12,7 +12,7 @@ namespace Reservo.Converters
         {
             var de = new CultureInfo("de-DE");
 
-            if (value == null)
+            if (value is null)
                 return string.Empty;
 
             if (value is double d)
@@ -37,7 +37,7 @@ namespace Reservo.Converters
         {
             var de = new CultureInfo("de-DE");
 
-            if (value == null)
+            if (value is null)
                 return 0d;
 
             var text = value.ToString()?.Trim();

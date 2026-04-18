@@ -186,8 +186,8 @@ namespace Reservo.ViewModels
 
         private void Copy(object? _)
         {
-            var entry = SelectedWorkbook?.SelectedEntry;
-            if (entry == null)
+            var entry = SelectedWorkbook.SelectedEntry;
+            if (entry is null)
                 return;
 
             _copiedEntry = new CopyToParameter(entry, SelectedWorkbook, false);
@@ -197,7 +197,7 @@ namespace Reservo.ViewModels
 
         private void Paste(object? _)
         {
-            if (_copiedEntry == null || SelectedWorkbook == null)
+            if (_copiedEntry is null || SelectedWorkbook is null)
                 return;
 
             var target = SelectedWorkbook;
@@ -207,17 +207,24 @@ namespace Reservo.ViewModels
 
             var nextId = target.Entries.Count == 0 ? 1 : target.Entries.Max(e => e.Id) + 1;
 
-            var copy = _copiedEntry.Entry.Clone(nextId, _copiedEntry.Delete);
+            Entry? copy;
+
+            if (_copiedEntry.Delete)
+            {
+                copy = _copiedEntry.Entry.FullClone(nextId);
+                _copiedEntry.FromWorkbook.Entries.Remove(_copiedEntry.Entry);
+            }
+            else
+            {
+                copy = _copiedEntry.Entry.PartialClone(nextId);
+            }
+
+            _copiedEntry = null;
 
             copy.PropertyChanged += Entry_PropertyChanged;
 
             target.Entries.Add(copy);
             target.SelectedEntry = copy;
-
-            if (_copiedEntry.Delete)
-                _copiedEntry.FromWorkbook.Entries.Remove(_copiedEntry.Entry);
-
-            _copiedEntry = null;
 
             Log.Information("Eintrag eingefügt in {Workbook}", target.DisplayName);
         }
@@ -225,7 +232,7 @@ namespace Reservo.ViewModels
         private void Cut(object? _)
         {
             var entry = SelectedWorkbook?.SelectedEntry;
-            if (entry == null)
+            if (entry is null)
                 return;
 
             _copiedEntry = new CopyToParameter(entry, SelectedWorkbook, true);

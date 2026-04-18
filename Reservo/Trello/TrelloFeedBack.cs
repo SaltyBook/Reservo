@@ -70,7 +70,7 @@ namespace Reservo.Trello
 
             var result = JsonSerializer.Deserialize<TrelloCardResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-            if (result == null)
+            if (result is null)
             {
                 Log.Warning("Trello-Antwort konnte nicht deserialisiert werden");
                 throw new Exception("Antwort von Trello konnte nicht gelesen werden.");

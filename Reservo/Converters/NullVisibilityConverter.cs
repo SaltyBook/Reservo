@@ -10,7 +10,7 @@ namespace Reservo.Converters
         //Returns an empty string for non-DateTime values.
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values[0] == null) return Visibility.Hidden;
+            if (values[0] is null) return Visibility.Hidden;
             bool.TryParse(values[1].ToString(), out bool result);
             if (values[0].ToString() == "" && !result) return Visibility.Hidden;
             return Visibility.Visible;

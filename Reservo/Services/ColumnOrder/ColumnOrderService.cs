@@ -50,7 +50,7 @@ namespace Reservo
                 var column = grid.Columns.FirstOrDefault(c =>
                     c.Header?.ToString() == info.Key);
 
-                if (column != null)
+                if (column is not null)
                     column.DisplayIndex = index++;
             }
         }

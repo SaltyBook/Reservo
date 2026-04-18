@@ -25,14 +25,14 @@ namespace Reservo.Services.Email
 
             using (var client = new ImapClient())
             {
-                client.Connect("secureimap.t-online.de", 993);
+                client.Connect(CredentialsService.creds.SmtpHost, CredentialsService.creds.Port);
                 client.Authenticate(CredentialsService.creds.Username, CryptoHelper.Decrypt(CredentialsService.creds.Password));
                 var inboxMessage = GetLatestMessage(client, client.Inbox, entry.EMail);
                 var sendMessage = GetLatestMessage(client, client.GetFolder(SpecialFolder.Sent), entry.EMail);
 
-                if (inboxMessage != null)
+                if (inboxMessage is not null)
                 {
-                    if (sendMessage != null)
+                    if (sendMessage is not null)
                     {
                         if (inboxMessage.Date < sendMessage.Date)
                         {
@@ -53,7 +53,7 @@ namespace Reservo.Services.Email
                 }
                 else
                 {
-                    if (sendMessage != null)
+                    if (sendMessage is not null)
                     {
                         quoted = GetOldMessages(sendMessage);
                         subject = sendMessage.Subject;
@@ -79,7 +79,7 @@ namespace Reservo.Services.Email
             foreach (var uid in uids)
             {
                 var message = folder.GetMessage(uid);
-                if (latestMessage == null || message.Date > latestMessage.Date)
+                if (latestMessage is null || message.Date > latestMessage.Date)
                     latestMessage = message;
             }
 
@@ -96,13 +96,13 @@ namespace Reservo.Services.Email
             {
                 var sender = message.Sender ?? message.From.Mailboxes.FirstOrDefault();
                 quoted.WriteLine("Am {0} schrieb {1}:", message.Date.ToString("f"), !string.IsNullOrEmpty(sender.Name) ? sender.Name : sender.Address);
-                if (message.TextBody != null)
+                if (message.TextBody is not null)
                 {
                     using (var reader = new StringReader(message.TextBody))
                     {
                         string line;
 
-                        while ((line = reader.ReadLine()) != null)
+                        while ((line = reader.ReadLine()) is not null)
                         {
                             quoted.Write("> ");
                             quoted.WriteLine(line);
@@ -115,7 +115,7 @@ namespace Reservo.Services.Email
                     {
                         string line;
 
-                        while ((line = reader.ReadLine()) != null)
+                        while ((line = reader.ReadLine()) is not null)
                         {
                             if (line.Contains("gruppenhaus.de")) break;
                             if (line == "" || line.StartsWith("<div>&nbsp;")) continue;
@@ -163,9 +163,8 @@ namespace Reservo.Services.Email
         //Opens Thunderbird to compose an email with the given parameters.
         private void OpenThunderbird(string to, string subject, string body, string attachmentPath)
         {
-            string thunderbirdPath = @"C:\Program Files\Mozilla Thunderbird\thunderbird.exe";
             string arguments = $"-compose \"to='{to}',subject='{subject}',body='{body}',attachment='{attachmentPath}'\"";
-            Process.Start(thunderbirdPath, arguments);
+            Process.Start(CredentialsService.thunderbirdPath, arguments);
         }
     }
 }

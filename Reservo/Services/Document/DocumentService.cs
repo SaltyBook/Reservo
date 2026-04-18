@@ -53,11 +53,11 @@ namespace Reservo
             }
         }
 
-        public void CreateInvoice(Entry entry, string year)
+        public InvoiceWindow CreateInvoice(Entry entry, string year)
         {
             var vm = new InvoiceViewModel(entry, year);
             var window = new InvoiceWindow(vm);
-            window.ShowDialog();
+            return window;
         }
 
         public void CreateReservationMail(Entry entry, string year, IEmailService emailService)
