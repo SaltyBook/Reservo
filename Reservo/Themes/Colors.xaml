@@ -29,6 +29,7 @@
     <Color x:Key="Color.RowHover">#F8FAFC</Color>
     <Color x:Key="Color.RowPast">#E5E7EB</Color>
     <Color x:Key="Color.RowCanceled">#FEE2E2</Color>
+    <Color x:Key="Color.RowOffer">#FFFFE0</Color>
     <Color x:Key="Color.NoteBackground">#FFFBEB</Color>
 
     <Color x:Key="Color.InfoSoft">#E8EEFF</Color>

@@ -59,8 +59,9 @@ namespace Reservo
                 worksheet.Cell(1, 22).Value = "Mobil";
                 worksheet.Cell(1, 23).Value = "Festnetz";
                 worksheet.Cell(1, 24).Value = "Email";
-                worksheet.Cell(1, 25).Value = "Storniert";
-                worksheet.Cell(1, 26).Value = "Notizen";
+                worksheet.Cell(1, 25).Value = "Storniert?";
+                worksheet.Cell(1, 26).Value = "Angebot?";
+                worksheet.Cell(1, 27).Value = "Notizen";
                 worksheet.Row(1).Style.Font.Bold = true;
                 worksheet.Columns().AdjustToContents();
                 workbook.SaveAs(database);

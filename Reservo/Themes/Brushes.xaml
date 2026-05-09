@@ -49,6 +49,8 @@
                      Color="{StaticResource Color.RowPast}" />
     <SolidColorBrush x:Key="Brush.RowCanceled"
                      Color="{StaticResource Color.RowCanceled}" />
+    <SolidColorBrush x:Key="Brush.RowOffer"
+                     Color="{StaticResource Color.RowOffer}" />
     <SolidColorBrush x:Key="Brush.NoteBackground"
                      Color="{StaticResource Color.NoteBackground}" />
 
