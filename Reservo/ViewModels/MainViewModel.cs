@@ -3,6 +3,7 @@ using Reservo.Commands;
 using Reservo.Enums;
 using Reservo.Services.Dialog;
 using Reservo.Views;
+using System.Drawing;
 #endregion
 
 namespace Reservo.ViewModels
@@ -23,6 +24,13 @@ namespace Reservo.ViewModels
         {
             get => _selectedMenuItem;
             set => SetProperty(ref _selectedMenuItem, value);
+        }
+
+        private string _serverReachable = "#FF0000";
+        public string ServerReachable
+        {
+            get => _serverReachable;
+            set => SetProperty(ref _serverReachable, value);
         }
 
         private readonly TenantViewModel _tenantViewModel;
@@ -60,6 +68,10 @@ namespace Reservo.ViewModels
                 // Fehler
                 //_dialogService.ShowError("Fehler", credentialResult.Message);
             }
+            else
+            {
+                ServerReachable = "#00FF00";
+            }           
         }
 
         // Load Workbooks (.xslx files)

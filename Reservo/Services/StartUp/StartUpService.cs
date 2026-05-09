@@ -8,6 +8,7 @@ namespace Reservo
         public static async Task<ServiceResult> RunAsync()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            StartUp.CheckDatabasePath();
             StartUp.CreateFolderStructure();
             CredentialsService.Load();
             return await CredentialsService.ReadCredentials();

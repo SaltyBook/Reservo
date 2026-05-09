@@ -8,6 +8,19 @@ namespace Reservo.ViewModels
     {
         private readonly IDialogService _dialogService;
 
+        private string _databasePath = string.Empty;
+        public string DatabasePath
+        {
+            get => _databasePath;
+            set
+            {
+                if (SetProperty(ref _databasePath, value))
+                {
+                    SaveDatabaseCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
         private string _username = string.Empty;
         public string Username
         {
@@ -80,6 +93,7 @@ namespace Reservo.ViewModels
             }
         }
 
+        public RelayCommand SaveDatabaseCommand { get; }
         public AsyncRelayCommand SaveCredentialsCommand { get; }
         public RelayCommand SaveServerCommand { get; }
 
@@ -88,8 +102,33 @@ namespace Reservo.ViewModels
         public SettingsViewModel(IDialogService dialog)
         {
             _dialogService = dialog;
+            SaveDatabaseCommand = new RelayCommand(SaveDatabase, CanSaveDatabase);
             SaveCredentialsCommand = new AsyncRelayCommand(SaveCredentialsAsync, CanSaveCredentials);
             SaveServerCommand = new RelayCommand(SaveServer, CanSaveServer);
+
+            if (!String.IsNullOrEmpty(InternCredentials.DatabasePath))
+            {
+                DatabasePath = InternCredentials.DatabasePath;
+            }
+        }
+
+        //Saves database path
+        private void SaveDatabase(object? obj)
+        {
+            InternCredentials.WriteDatabaseCredentials(DatabasePath);
+            var credentialResult = InternCredentials.Save();
+            if (!credentialResult.Success)
+            {
+                // Fehler
+                _dialogService.ShowError("Fehler", credentialResult.Message);
+            }
+        }
+
+        //Checks whether the database configuration are set
+        private bool CanSaveDatabase(object? obj)
+        {
+            return true;
+            return !string.IsNullOrWhiteSpace(DatabasePath);
         }
 
         //Stores username and encrypted password
@@ -120,7 +159,7 @@ namespace Reservo.ViewModels
         //Saves server path and Trello login details
         private void SaveServer(object? obj)
         {
-            InternCredentials.Write(ServerPath, TrelloApiKey, TrelloApiToken);
+            InternCredentials.WriteServerCredentials(ServerPath, TrelloApiKey, TrelloApiToken);
             var credentialResult = InternCredentials.Save();
             if (!credentialResult.Success)
             {

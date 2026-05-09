@@ -1,11 +1,20 @@
 ﻿using ClosedXML.Excel;
 using Reservo.Infrastructure;
+using Reservo.Services.Credentials;
 using System.IO;
 
 namespace Reservo
 {
     public class StartUp
     {
+        public static void CheckDatabasePath()
+        {
+            if (!String.IsNullOrEmpty(InternCredentials.DatabasePath) && Directory.Exists(InternCredentials.DatabasePath))
+            {
+                Paths.DatabasePath = InternCredentials.DatabasePath;
+            }
+        }
+
         public static void CreateFolderStructure()
         {
             if (!Directory.Exists(Paths.ManagementPath))

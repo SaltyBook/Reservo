@@ -4,6 +4,12 @@ namespace Reservo.Services.Credentials
 {
     public static class InternCredentials
     {
+        public static string DatabasePath
+        {
+            get => Settings.Default.DatabasePath;
+            set => Settings.Default.DatabasePath = value;
+        }
+
         public static string ServerPath
         {
             get => Settings.Default.ServerPath;
@@ -28,9 +34,16 @@ namespace Reservo.Services.Credentials
             }
         }
 
-        public static void Write(string serverPath, string trelloAPIKey, string trelloAPIToken)
+        public static void WriteDatabaseCredentials(string databasePath)
         {
-            Log.Information("Schreibe interne Konfiguration");
+            Log.Information("Schreibe interne Datenbank Konfiguration");
+
+            DatabasePath = databasePath;
+        }
+
+        public static void WriteServerCredentials(string serverPath, string trelloAPIKey, string trelloAPIToken)
+        {
+            Log.Information("Schreibe interne Server Konfiguration");
 
             ServerPath = serverPath;
             TrelloApiKey = trelloAPIKey;

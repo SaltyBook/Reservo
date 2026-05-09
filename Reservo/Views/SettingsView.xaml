@@ -29,6 +29,52 @@
                     Style="{StaticResource ModernTabControlStyle}"
                     ItemContainerStyle="{StaticResource ModernTabItemStyle}">
 
+            <!-- Datenbank -->
+            <TabItem Header="Datenbank">
+                <Border Margin="0,8,0,0"
+                        Background="{StaticResource Brush.Surface}"
+                        BorderBrush="{StaticResource Brush.Border}"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="24">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="24" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Grid.Row="0">
+                            <TextBlock Text="Datenbank"
+                                       Style="{StaticResource SectionTitleStyle}" />
+                            <TextBlock Text="Lege den Pfad der Datenbank fest."
+                                       Style="{StaticResource SectionDescriptionStyle}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2">
+                            <TextBlock Text="Pfad"
+                                       Style="{StaticResource FormLabelStyle}" />
+                            <TextBox Text="{Binding DatabasePath, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource ModernTextBoxStyle}" />
+                        </StackPanel>
+
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="1"
+                                    Content="Speichern"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Command="{Binding SaveDatabaseCommand}"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </TabItem>
+
             <!-- E-Mail -->
             <TabItem Header="E-Mail">
                 <Border Margin="0,8,0,0"
@@ -94,8 +140,7 @@
 
             <!-- Server -->
             <TabItem Header="Server">
-                <ScrollViewer Margin="0,8,0,0"
-                              VerticalScrollBarVisibility="Auto"
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Disabled">
                     <StackPanel>
 
