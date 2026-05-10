@@ -74,9 +74,24 @@
                     </Button>
 
                     <Button Content="Statistiken"
-                            Command="{Binding ShowSettingsCommand}"
-                            IsEnabled="False"
-                            Style="{StaticResource SidebarNavButtonStyle}" />
+                            Command="{Binding ShowStatisticCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button"
+                                   BasedOn="{StaticResource SidebarNavButtonStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMenuItem}"
+                                                 Value="{x:Static enums:MenuItemType.Statistic}">
+                                        <Setter Property="Background"
+                                                Value="{StaticResource Brush.SidebarSelected}" />
+                                        <Setter Property="Foreground"
+                                                Value="White" />
+                                        <Setter Property="FontWeight"
+                                                Value="SemiBold" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
 
                     <Button Content="Einstellungen"
                             Command="{Binding ShowSettingsCommand}">

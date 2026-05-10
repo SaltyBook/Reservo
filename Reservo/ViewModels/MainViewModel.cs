@@ -34,9 +34,11 @@ namespace Reservo.ViewModels
         }
 
         private readonly TenantViewModel _tenantViewModel;
+        private readonly StatisticViewModel _statisticViewModel;
         private readonly SettingsViewModel _settingsViewModel;
 
         public RelayCommand ShowTenantCommand { get; }
+        public RelayCommand ShowStatisticCommand { get; }
         public RelayCommand ShowSettingsCommand { get; }
         public RelayCommand FeedBackCommand { get; }
 
@@ -45,12 +47,14 @@ namespace Reservo.ViewModels
             _dialogService = new DialogService();
 
             _tenantViewModel = new TenantViewModel();
+            _statisticViewModel = new StatisticViewModel();
             _settingsViewModel = new SettingsViewModel();
 
             _currentViewModel = _tenantViewModel;
             _selectedMenuItem = MenuItemType.Tenant;
 
             ShowTenantCommand = new RelayCommand(_ => ShowView(_tenantViewModel, MenuItemType.Tenant));
+            ShowStatisticCommand = new RelayCommand(_ => ShowView(_statisticViewModel, MenuItemType.Statistic));
             ShowSettingsCommand = new RelayCommand(_ => ShowView(_settingsViewModel, MenuItemType.Settings));
 
             FeedBackCommand = new RelayCommand(OpenFeedbackDialog);
@@ -66,7 +70,7 @@ namespace Reservo.ViewModels
             if (!credentialResult.Success)
             {
                 // Fehler
-                //_dialogService.ShowError("Fehler", credentialResult.Message);
+                _dialogService.ShowError("Fehler", credentialResult.Message);
             }
             else
             {

@@ -28,6 +28,10 @@
                 <views:TenantView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModels:StatisticViewModel}">
+                <views:StatisticView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
                 <views:SettingsView />
             </DataTemplate>
