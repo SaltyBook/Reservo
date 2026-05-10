@@ -47,7 +47,7 @@ namespace Reservo.ViewModels
 
         public TenantViewModel(IDialogService dialog)
         {
-            Log.Information("MainViewModel initialisiert");
+            Log.Information("TenantViewModel initialisiert");
 
             _dialogService = dialog;
 
@@ -57,7 +57,7 @@ namespace Reservo.ViewModels
         }
 
         //Loads all Excel files from the database directory
-        public async Task LoadWorkbooks()
+        public async Task LoadWorkbooks(StatisticViewModel statisticViewModel)
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -104,6 +104,8 @@ namespace Reservo.ViewModels
             SelectedWorkbook = Workbooks.FirstOrDefault(x => x.Year == DateTime.Now.Year.ToString());
 
             CheckAllEntryDates();
+
+            statisticViewModel.FillStatisticData(Workbooks);
 
             watch.Stop();
 

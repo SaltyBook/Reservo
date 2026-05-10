@@ -6,7 +6,72 @@
              xmlns:local="clr-namespace:Reservo.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Label Content="Test" VerticalAlignment="Center" HorizontalAlignment="Center" />
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="20" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Statistik Mieterdaten"
+                       FontSize="24"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource Brush.TextPrimary}" />
+            <TextBlock Text="Zeigt dir eine Statistik zu den Mieterdaten aus 2026."
+                       Margin="0,4,0,0"
+                       FontSize="13"
+                       Foreground="{StaticResource Brush.TextSecondary}" />
+        </StackPanel>
+
+        <WrapPanel Grid.Row="2">
+            <StackPanel Margin="10">
+                <TextBlock Text="Anzahl der Buchungen"
+                           Style="{StaticResource FormLabelStyle}" />
+                <TextBox Text="{Binding AllReservations, UpdateSourceTrigger=PropertyChanged}"
+                         TextAlignment="Center"
+                         Focusable="False"
+                         Style="{StaticResource ModernTextBoxStyle}" />
+            </StackPanel>
+            <StackPanel Margin="10">
+                <TextBlock Text="Gesamtzahl der Gruppenübernachtungen"
+                           Style="{StaticResource FormLabelStyle}" />
+                <TextBox Text="{Binding AllNights, UpdateSourceTrigger=PropertyChanged}"
+                         TextAlignment="Center"
+                         Focusable="False"
+                         Style="{StaticResource ModernTextBoxStyle}" />
+            </StackPanel>
+            <StackPanel Margin="10">
+                <TextBlock Text="Gesamtzahl der Übernachtungen aller Gäste"
+                           Style="{StaticResource FormLabelStyle}" />
+                <TextBox Text="{Binding AllGuestsNights, UpdateSourceTrigger=PropertyChanged}"
+                         TextAlignment="Center"
+                         Focusable="False"
+                         Style="{StaticResource ModernTextBoxStyle}" />
+            </StackPanel>
+            <StackPanel Margin="10">
+                <TextBlock Text="Gesamtzahl der Gäste"
+                           Style="{StaticResource FormLabelStyle}" />
+                <TextBox Text="{Binding AllGuests, UpdateSourceTrigger=PropertyChanged}"
+                         TextAlignment="Center"
+                         Focusable="False"
+                         Style="{StaticResource ModernTextBoxStyle}" />
+            </StackPanel>
+            <StackPanel Margin="10">
+                <TextBlock Text="Durchschnittliche Gruppengröße"
+                           Style="{StaticResource FormLabelStyle}" />
+                <TextBox Text="{Binding AverageGroupSize, UpdateSourceTrigger=PropertyChanged}"
+                         TextAlignment="Center"
+                         Focusable="False"
+                         Style="{StaticResource ModernTextBoxStyle}" />
+            </StackPanel>
+            <StackPanel Margin="10">
+                <TextBlock Text="Durchschnittliche Zahl der Übernachtungen pro Gruppe"
+                           Style="{StaticResource FormLabelStyle}" />
+                <TextBox Text="{Binding AverageNightCount, UpdateSourceTrigger=PropertyChanged}"    
+                         TextAlignment="Center"
+                         Focusable="False"
+                         Style="{StaticResource ModernTextBoxStyle}" />
+            </StackPanel>
+        </WrapPanel>
     </Grid>
 </UserControl>

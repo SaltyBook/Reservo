@@ -81,7 +81,7 @@ namespace Reservo.ViewModels
         // Load Workbooks (.xslx files)
         public void LoadWorkbooks()
         {
-            _ = _tenantViewModel.LoadWorkbooks();
+            _ = _tenantViewModel.LoadWorkbooks(_statisticViewModel);
         }
 
         // Save Workbooks (.xslx files)
