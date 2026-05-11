@@ -40,6 +40,15 @@ namespace Reservo.ViewModels
         public RelayCommand ShowSettingsCommand { get; }
         public RelayCommand FeedBackCommand { get; }
 
+
+        //Testing
+        public int Counter { get; private set; }
+
+        public void Increment()
+        {
+            Counter++;
+        }
+
         public MainViewModel()
         {
             _dialogService = new DialogService();
