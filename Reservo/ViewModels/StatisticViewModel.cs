@@ -1,4 +1,5 @@
-﻿using Reservo.Models;
+﻿using PublicHoliday;
+using Reservo.Models;
 using Serilog;
 using System.Collections.ObjectModel;
 
@@ -27,12 +28,27 @@ namespace Reservo.ViewModels
             }
         }
 
+        private IDictionary<DateTime, string> _publicHolidays;
+        public IDictionary<DateTime, string> PublicHolidays
+        {
+            get { return _publicHolidays; }
+            set
+            {
+                _publicHolidays = value;
+                OnPropertyChanged();
+            }
+        }
+
         public StatisticViewModel()
         {
             Log.Information("StatisticViewModel initialisiert");
+
             StatisticData = new ObservableCollection<StatisticData>();
             StatisticData.Add(new StatisticData());
             StatisticData[0].DisplayName = "Alle Jahre";
+
+            var calendar = new GermanPublicHoliday { State = GermanPublicHoliday.States.HE };
+            PublicHolidays = calendar.PublicHolidayNames(DateTime.Now.Year);
         }
 
         public void FillStatisticData(ObservableCollection<WorkbookViewModel> workbooks)

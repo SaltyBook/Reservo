@@ -33,7 +33,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
@@ -142,6 +142,46 @@
                                            FontWeight="Bold" />
                             </StackPanel>
                         </Border>
+                    </Grid>
+
+                    <Grid Grid.Row="3"
+                          Margin="10"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Bottom">
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock  Grid.Row="0"
+                                    Text="Feiertage"
+                                    FontSize="16"
+                                    FontWeight="SemiBold"
+                                    Margin="10"
+                                    Foreground="{StaticResource Brush.TextPrimary}" />
+
+                        <ListBox Grid.Row="1"
+                                 ItemsSource="{Binding PublicHolidays}"
+                                 Margin="10"
+                                 BorderThickness="0"
+                                 Background="Transparent"
+                                 IsHitTestVisible="False">
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <TextBlock Text="{Binding Key, StringFormat={}{0:dd.MM.yyyy}}"/>
+
+                                        <TextBlock Text="{Binding Value}"
+                                                   Margin="10,0,0,0" />
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+
+                        </ListBox>
                     </Grid>
                 </Grid>
             </TabItem>
