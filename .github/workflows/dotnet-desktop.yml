@@ -1,0 +1,62 @@
+name: WPF CI - Build, Test & Coverage
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: windows-latest
+
+    steps:
+      # Checkout Code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # .NET Setup
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      # Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Build solution
+      - name: Build solution
+        run: dotnet build --configuration Release --no-restore
+
+      # Run tests + Coverage
+      - name: Test with coverage
+        run: |
+          dotnet test --configuration Release --no-build ^
+          --collect:"XPlat Code Coverage" ^
+          --results-directory ./TestResults
+
+      # Install report generator
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      # Generate HTML coverage report
+      - name: Generate coverage report
+        run: |
+          reportgenerator ^
+          -reports:TestResults/**/coverage.cobertura.xml ^
+          -targetdir:CoverageReport ^
+          -reporttypes:Html
+
+      # Upload Test Results
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
+
+      # Upload Coverage Report
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: CoverageReport
