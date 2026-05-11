@@ -9,69 +9,163 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="12" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
             <TextBlock Text="Statistik Mieterdaten"
                        FontSize="24"
                        FontWeight="SemiBold"
                        Foreground="{StaticResource Brush.TextPrimary}" />
-            <TextBlock Text="Zeigt dir eine Statistik zu den Mieterdaten aus 2026."
+            <TextBlock Text="Zeigt dir Statistiken zu den Mieterdaten."
                        Margin="0,4,0,0"
                        FontSize="13"
                        Foreground="{StaticResource Brush.TextSecondary}" />
         </StackPanel>
 
-        <WrapPanel Grid.Row="2">
-            <StackPanel Margin="10">
-                <TextBlock Text="Anzahl der Buchungen"
-                           Style="{StaticResource FormLabelStyle}" />
-                <TextBox Text="{Binding AllReservations, UpdateSourceTrigger=PropertyChanged}"
-                         TextAlignment="Center"
-                         Focusable="False"
-                         Style="{StaticResource ModernTextBoxStyle}" />
-            </StackPanel>
-            <StackPanel Margin="10">
-                <TextBlock Text="Gesamtzahl der Gruppenübernachtungen"
-                           Style="{StaticResource FormLabelStyle}" />
-                <TextBox Text="{Binding AllNights, UpdateSourceTrigger=PropertyChanged}"
-                         TextAlignment="Center"
-                         Focusable="False"
-                         Style="{StaticResource ModernTextBoxStyle}" />
-            </StackPanel>
-            <StackPanel Margin="10">
-                <TextBlock Text="Gesamtzahl der Übernachtungen aller Gäste"
-                           Style="{StaticResource FormLabelStyle}" />
-                <TextBox Text="{Binding AllGuestsNights, UpdateSourceTrigger=PropertyChanged}"
-                         TextAlignment="Center"
-                         Focusable="False"
-                         Style="{StaticResource ModernTextBoxStyle}" />
-            </StackPanel>
-            <StackPanel Margin="10">
-                <TextBlock Text="Gesamtzahl der Gäste"
-                           Style="{StaticResource FormLabelStyle}" />
-                <TextBox Text="{Binding AllGuests, UpdateSourceTrigger=PropertyChanged}"
-                         TextAlignment="Center"
-                         Focusable="False"
-                         Style="{StaticResource ModernTextBoxStyle}" />
-            </StackPanel>
-            <StackPanel Margin="10">
-                <TextBlock Text="Durchschnittliche Gruppengröße"
-                           Style="{StaticResource FormLabelStyle}" />
-                <TextBox Text="{Binding AverageGroupSize, UpdateSourceTrigger=PropertyChanged}"
-                         TextAlignment="Center"
-                         Focusable="False"
-                         Style="{StaticResource ModernTextBoxStyle}" />
-            </StackPanel>
-            <StackPanel Margin="10">
-                <TextBlock Text="Durchschnittliche Zahl der Übernachtungen pro Gruppe"
-                           Style="{StaticResource FormLabelStyle}" />
-                <TextBox Text="{Binding AverageNightCount, UpdateSourceTrigger=PropertyChanged}"    
-                         TextAlignment="Center"
-                         Focusable="False"
-                         Style="{StaticResource ModernTextBoxStyle}" />
-            </StackPanel>
-        </WrapPanel>
+        <TabControl Grid.Row="2"
+                    Style="{StaticResource ModernTabControlStyle}"
+                    ItemContainerStyle="{StaticResource ModernTabItemStyle}">
+
+            <!-- Mieter -->
+            <TabItem Header="Mieter">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox Grid.Row="0"
+                              Width="180"
+                              HorizontalAlignment="Left"
+                              Margin="10"
+                              ItemsSource="{Binding StatisticData}"
+                              SelectedItem="{Binding SelectedStatisticData, UpdateSourceTrigger=PropertyChanged}"
+                              Style="{StaticResource ModernComboBoxStyle}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <Grid Grid.Row="2"
+                          Margin="10">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Buchungen -->
+                        <Border Grid.Row="0"
+                                Grid.Column="0"
+                                Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Buchungen"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBlock Text="{Binding SelectedStatisticData.AllReservations}"
+                                           FontSize="20"
+                                           FontWeight="Bold" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Gäste -->
+                        <Border Grid.Row="0"
+                                Grid.Column="1"
+                                Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Gäste"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBlock Text="{Binding SelectedStatisticData.AllGuests}"
+                                           FontSize="20"
+                                           FontWeight="Bold" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Nächte -->
+                        <Border Grid.Row="1"
+                                Grid.Column="0"
+                                Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Nächte (Gruppen)"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBlock Text="{Binding SelectedStatisticData.AllNights}"
+                                           FontSize="20"
+                                           FontWeight="Bold" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Gäste-Nächte -->
+                        <Border Grid.Row="1"
+                                Grid.Column="1"
+                                Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Gäste-Nächte"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBlock Text="{Binding SelectedStatisticData.AllGuestsNights}"
+                                           FontSize="20"
+                                           FontWeight="Bold" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Durchschnitt Gruppe -->
+                        <Border Grid.Row="2"
+                                Grid.Column="0"
+                                Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Ø Gruppengröße"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBlock Text="{Binding SelectedStatisticData.AverageGroupSize}"
+                                           FontSize="20"
+                                           FontWeight="Bold" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Durchschnitt Nächte -->
+                        <Border Grid.Row="2"
+                                Grid.Column="1"
+                                Style="{StaticResource CardStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Ø Nächte"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBlock Text="{Binding SelectedStatisticData.AverageNightCount}"
+                                           FontSize="20"
+                                           FontWeight="Bold" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+            <!-- Stunden -->
+            <TabItem Header="Stunden">
+                <Border Margin="0,8,0,0"
+                        Background="{StaticResource Brush.Surface}"
+                        BorderBrush="{StaticResource Brush.Border}"
+                        BorderThickness="1"
+                        CornerRadius="14"
+                        Padding="24">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="24" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                    </Grid>
+                </Border>
+            </TabItem>
+            
+        </TabControl>
     </Grid>
 </UserControl>

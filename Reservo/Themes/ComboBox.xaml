@@ -84,8 +84,10 @@
                                                   Margin="12,0,8,0"
                                                   VerticalAlignment="Center"
                                                   HorizontalAlignment="Left"
+                                                  RecognizesAccessKey="True"
                                                   Content="{TemplateBinding SelectionBoxItem}"
-                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" />
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}" />
 
                                 <ToggleButton Grid.Column="1"
                                               Focusable="False"
@@ -115,8 +117,11 @@
                                     BorderThickness="1"
                                     CornerRadius="10"
                                     MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}">
-                                <ScrollViewer MaxHeight="260">
-                                    <ItemsPresenter />
+                                <ScrollViewer MaxHeight="260"
+                                              CanContentScroll="True">
+
+                                    <StackPanel IsItemsHost="True"
+                                                KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
                             </Border>
                         </Popup>

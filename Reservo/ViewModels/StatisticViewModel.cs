@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using Reservo.Models;
 using Serilog;
 using System.Collections.ObjectModel;
 
@@ -6,65 +6,65 @@ namespace Reservo.ViewModels
 {
     class StatisticViewModel : BaseViewModel
     {
-        private int _allReservations;
-        public int AllReservations
+        private ObservableCollection<StatisticData> _statisticData;
+        public ObservableCollection<StatisticData> StatisticData
         {
-            get { return _allReservations; }
-            set { _allReservations = value; }
+            get { return _statisticData; }
+            set
+            {
+                _statisticData = value;
+            }
         }
 
-        private int _allNights;
-        public int AllNights
+        private StatisticData _selectedStatisticData;
+        public StatisticData SelectedStatisticData
         {
-            get { return _allNights; }
-            set { _allNights = value; }
-        }
-
-        private int _allGuestsNights;
-        public int AllGuestsNights
-        {
-            get { return _allGuestsNights; }
-            set { _allGuestsNights = value; }
-        }
-
-        private int _allGuests;
-        public int AllGuests
-        {
-            get { return _allGuests; }
-            set { _allGuests = value; }
-        }
-
-        private int _averageGroupSize;
-        public int AverageGroupSize
-        {
-            get { return _averageGroupSize; }
-            set { _averageGroupSize = value; }
-        }
-
-        private int _averageNightCount;
-        public int AverageNightCount
-        {
-            get { return _averageNightCount; }
-            set { _averageNightCount = value; }
+            get { return _selectedStatisticData; }
+            set
+            {
+                _selectedStatisticData = value;
+                OnPropertyChanged();
+            }
         }
 
         public StatisticViewModel()
         {
             Log.Information("StatisticViewModel initialisiert");
+            StatisticData = new ObservableCollection<StatisticData>();
+            StatisticData.Add(new StatisticData());
+            StatisticData[0].DisplayName = "Alle Jahre";
         }
 
         public void FillStatisticData(ObservableCollection<WorkbookViewModel> workbooks)
         {
-            Log.Information("Lade Statistik 2026");
-            WorkbookViewModel workbook = workbooks.FirstOrDefault(x => x.Year == DateTime.Now.Year.ToString());
-            var entries = workbook.Entries.Where(x => !x.Canceled);
-            AllReservations = entries.Count();
-            AllNights = entries.Sum(x => x.NightCount);
-            AllGuestsNights = entries.Sum(x => x.NightCount * x.GuestCount);
-            AllGuests = entries.Sum(x => x.GuestCount);
-            AverageGroupSize = AllGuests / AllReservations;
-            AverageNightCount = AllNights / AllReservations;
-            Log.Information("Laden für Statistik 2026 abgeschlossen.");
+            Log.Information("Lade Statistiken");
+
+            foreach (WorkbookViewModel workbook in workbooks)
+            {
+                StatisticData.Add(new StatisticData());
+
+                var entries = workbook.Entries.Where(x => !x.Canceled);
+
+                StatisticData[StatisticData.Count - 1].DisplayName = workbook.DisplayName;
+                StatisticData[StatisticData.Count - 1].AllReservations = entries.Count();
+                StatisticData[StatisticData.Count - 1].AllNights = entries.Sum(x => x.NightCount);
+                StatisticData[StatisticData.Count - 1].AllGuestsNights = entries.Sum(x => x.NightCount * x.GuestCount);
+                StatisticData[StatisticData.Count - 1].AllGuests = entries.Sum(x => x.GuestCount);
+                StatisticData[StatisticData.Count - 1].AverageGroupSize = StatisticData[StatisticData.Count - 1].AllGuests / StatisticData[StatisticData.Count - 1].AllReservations;
+                StatisticData[StatisticData.Count - 1].AverageNightCount = StatisticData[StatisticData.Count - 1].AllNights / StatisticData[StatisticData.Count - 1].AllReservations;
+
+                StatisticData[0].AllReservations += StatisticData[StatisticData.Count - 1].AllReservations;
+                StatisticData[0].AllNights += StatisticData[StatisticData.Count - 1].AllNights;
+                StatisticData[0].AllGuestsNights += StatisticData[StatisticData.Count - 1].AllGuestsNights;
+                StatisticData[0].AllGuests += StatisticData[StatisticData.Count - 1].AllGuests;
+            }
+
+            StatisticData[0].AverageGroupSize += StatisticData[0].AllGuests / StatisticData[0].AllReservations;
+            StatisticData[0].AverageNightCount += StatisticData[0].AllNights / StatisticData[0].AllReservations;
+
+            SelectedStatisticData = StatisticData.First(x => x.DisplayName.EndsWith(DateTime.Now.Year.ToString()));
+
+            Log.Information("Laden für Statistiken abgeschlossen.");
         }
     }
 }
