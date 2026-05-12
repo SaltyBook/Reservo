@@ -1,14 +1,15 @@
 ﻿#region Usings
-using Microsoft.Office.Interop.Word;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using Reservo.Services.Document;
 using Reservo.Services.Email;
 using Reservo.ViewModels;
 using Reservo.Views;
+using Spire.Doc;
 using System.IO;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
+using Document = Spire.Doc.Document;
 #endregion
 
 namespace Reservo
@@ -82,11 +83,12 @@ namespace Reservo
             if (File.Exists(pdfPath))
                 File.Delete(pdfPath);
 
-            var app = new Application();
-            var doc = app.Documents.Open(docxPath);
-            doc.ExportAsFixedFormat(pdfPath, WdExportFormat.wdExportFormatPDF);
-            doc.Close();
-            app.Quit();
+            //Load Document
+            Document document = new Document();
+            document.LoadFromFile(docxPath);
+
+            //Convert Word to PDF
+            document.SaveToFile(pdfPath, FileFormat.PDF);
         }
     }
 }
