@@ -30,10 +30,7 @@ jobs:
 
       # Run tests + Coverage
       - name: Test with coverage
-        run: |
-          dotnet test --configuration Release --no-build ^
-          --collect:"XPlat Code Coverage" ^
-          --results-directory ./TestResults
+        run: dotnet test --configuration Release --no-build --collect:"XPlat Code Coverage" --results-directory ./TestResults
 
       # Install report generator
       - name: Install ReportGenerator
@@ -41,11 +38,7 @@ jobs:
 
       # Generate HTML coverage report
       - name: Generate coverage report
-        run: |
-          reportgenerator ^
-          -reports:TestResults/**/coverage.cobertura.xml ^
-          -targetdir:CoverageReport ^
-          -reporttypes:Html
+        run: reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:CoverageReport -reporttypes:Html
 
       # Upload Test Results
       - name: Upload test results
