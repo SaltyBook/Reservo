@@ -64,5 +64,19 @@ namespace Reservo.Models
             get { return _averageNightCount; }
             set { _averageNightCount = value; }
         }
+
+        private decimal _totalAmount;
+        public decimal TotalAmount
+        {
+            get { return _totalAmount; }
+            set { _totalAmount = value; }
+        }
+
+        private int _groupCheckCount;
+        public int GroupCheckCount
+        {
+            get { return _groupCheckCount; }
+            set { _groupCheckCount = value; }
+        }
     }
 }

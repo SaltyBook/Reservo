@@ -7,6 +7,8 @@
                      Color="{StaticResource Color.Surface}" />
     <SolidColorBrush x:Key="Brush.SurfaceAlt"
                      Color="{StaticResource Color.SurfaceAlt}" />
+    <SolidColorBrush x:Key="Brush.SurfaceSecondary"
+                     Color="{StaticResource Color.SurfaceSecondary}" />
 
     <SolidColorBrush x:Key="Brush.Sidebar"
                      Color="{StaticResource Color.Sidebar}" />

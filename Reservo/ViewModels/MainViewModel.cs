@@ -50,8 +50,8 @@ namespace Reservo.ViewModels
             _statisticViewModel = new StatisticViewModel();
             _settingsViewModel = new SettingsViewModel();
 
-            _currentViewModel = _tenantViewModel;
-            _selectedMenuItem = MenuItemType.Tenant;
+            _currentViewModel = _statisticViewModel;
+            _selectedMenuItem = MenuItemType.Statistic;
 
             ShowTenantCommand = new RelayCommand(_ => ShowView(_tenantViewModel, MenuItemType.Tenant));
             ShowStatisticCommand = new RelayCommand(_ => ShowView(_statisticViewModel, MenuItemType.Statistic));

@@ -4,6 +4,7 @@
     <Color x:Key="Color.AppBackground">#F5F7FA</Color>
     <Color x:Key="Color.Surface">#FFFFFF</Color>
     <Color x:Key="Color.SurfaceAlt">#F9FAFB</Color>
+    <Color x:Key="Color.SurfaceSecondary">#F3F5F7</Color>
 
     <Color x:Key="Color.Sidebar">#16181D</Color>
     <Color x:Key="Color.SidebarHover">#23262D</Color>

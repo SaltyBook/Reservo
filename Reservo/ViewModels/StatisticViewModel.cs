@@ -68,11 +68,15 @@ namespace Reservo.ViewModels
                 StatisticData[StatisticData.Count - 1].AllGuests = entries.Sum(x => x.GuestCount);
                 StatisticData[StatisticData.Count - 1].AverageGroupSize = StatisticData[StatisticData.Count - 1].AllGuests / StatisticData[StatisticData.Count - 1].AllReservations;
                 StatisticData[StatisticData.Count - 1].AverageNightCount = StatisticData[StatisticData.Count - 1].AllNights / StatisticData[StatisticData.Count - 1].AllReservations;
+                StatisticData[StatisticData.Count - 1].TotalAmount = (decimal)entries.Sum(x => x.Total);
+                StatisticData[StatisticData.Count - 1].GroupCheckCount = entries.Where(x => x.AgeCheck).Count();
 
                 StatisticData[0].AllReservations += StatisticData[StatisticData.Count - 1].AllReservations;
                 StatisticData[0].AllNights += StatisticData[StatisticData.Count - 1].AllNights;
                 StatisticData[0].AllGuestsNights += StatisticData[StatisticData.Count - 1].AllGuestsNights;
                 StatisticData[0].AllGuests += StatisticData[StatisticData.Count - 1].AllGuests;
+                StatisticData[0].TotalAmount += StatisticData[StatisticData.Count - 1].TotalAmount;
+                StatisticData[0].GroupCheckCount += StatisticData[StatisticData.Count - 1].GroupCheckCount;
             }
 
             StatisticData[0].AverageGroupSize += StatisticData[0].AllGuests / StatisticData[0].AllReservations;
