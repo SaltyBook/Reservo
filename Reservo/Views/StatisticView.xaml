@@ -230,6 +230,11 @@
                                            Foreground="{StaticResource Brush.TextPrimary}" />
 
                                 <StackPanel Margin="0,6">
+                                    <TextBlock Text="DIE WERTE HIER SIND NUR TEMPORÄR UND STATISCH!"
+                                               FontSize="14" />
+                                </StackPanel>
+
+                                <StackPanel Margin="0,6">
                                     <TextBlock Text="• Noch 12 freie Wochenenden"
                                                FontSize="14" />
                                 </StackPanel>
@@ -277,24 +282,226 @@
 
             <!-- Stunden -->
             <TabItem Header="Stunden">
+
                 <Border Margin="0,8,0,0"
                         Background="{StaticResource Brush.Surface}"
                         BorderBrush="{StaticResource Brush.Border}"
                         BorderThickness="1"
                         CornerRadius="14"
                         Padding="24">
+
                     <Grid>
+
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="20" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="24" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
+
+                        <!-- HEADER -->
+                        <Grid Grid.Row="0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel>
+
+                                <TextBlock Text="Mitarbeiterstunden"
+                                           FontSize="24"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource Brush.TextPrimary}" />
+
+                                <TextBlock Text="Arbeitsstunden pro Monat verwalten."
+                                           Margin="0,4,0,0"
+                                           FontSize="13"
+                                           Foreground="{StaticResource Brush.TextSecondary}" />
+
+                            </StackPanel>
+
+                            <!-- BUTTONS -->
+                            <StackPanel Grid.Column="1"
+                                        Orientation="Horizontal">
+
+                                <Button Content="+ Mitarbeiter"
+                                        Width="130"
+                                        Height="38"
+                                        Margin="0,0,10,0"
+                                        Command="{Binding AddEmployeeCommand}" />
+
+                                <Button Content="Löschen"
+                                        Width="100"
+                                        Height="38"
+                                        Command="{Binding RemoveEmployeeCommand}" />
+
+                            </StackPanel>
+
+                        </Grid>
+
+                        <!-- TABELLE -->
+                        <DataGrid Grid.Row="2"
+                                  ItemsSource="{Binding Employees}"
+                                  SelectedItem="{Binding SelectedEmployee}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal"
+                                  RowHeaderWidth="0"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  ColumnHeaderHeight="45">
+
+                            <DataGrid.Columns>
+
+                                <!-- NAME -->
+                                <DataGridTextColumn Header="Mitarbeiter"
+                                                    Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="180" />
+
+                                <!-- MONATE -->
+                                <DataGridTextColumn Header="Jan"
+                                                    Binding="{Binding January, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Feb"
+                                                    Binding="{Binding February, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Mär"
+                                                    Binding="{Binding March, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Apr"
+                                                    Binding="{Binding April, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Mai"
+                                                    Binding="{Binding May, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Jun"
+                                                    Binding="{Binding June, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Jul"
+                                                    Binding="{Binding July, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Aug"
+                                                    Binding="{Binding August, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Sep"
+                                                    Binding="{Binding September, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Okt"
+                                                    Binding="{Binding October, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Nov"
+                                                    Binding="{Binding November, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <DataGridTextColumn Header="Dez"
+                                                    Binding="{Binding December, UpdateSourceTrigger=PropertyChanged}"
+                                                    Width="70" />
+
+                                <!-- SUMME -->
+                                <DataGridTextColumn Header="Gesamt"
+                                                    Binding="{Binding TotalHours}"
+                                                    Width="100"
+                                                    IsReadOnly="True" />
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+
+                        <!-- SUMMENZEILE -->
+                        <Border Grid.Row="3"
+                                Margin="0,10,0,0"
+                                Padding="10"
+                                CornerRadius="10"
+                                Background="{StaticResource Brush.SurfaceSecondary}">
+
+                            <Grid>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180" />
+
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+                                    <ColumnDefinition Width="70" />
+
+                                    <ColumnDefinition Width="100" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0"
+                                           Text="Gesamt"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center" />
+
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding HoursSummary.January}" />
+
+                                <TextBlock Grid.Column="2"
+                                           Text="{Binding HoursSummary.February}" />
+
+                                <TextBlock Grid.Column="3"
+                                           Text="{Binding HoursSummary.March}" />
+
+                                <TextBlock Grid.Column="4"
+                                           Text="{Binding HoursSummary.April}" />
+
+                                <TextBlock Grid.Column="5"
+                                           Text="{Binding HoursSummary.May}" />
+
+                                <TextBlock Grid.Column="6"
+                                           Text="{Binding HoursSummary.June}" />
+
+                                <TextBlock Grid.Column="7"
+                                           Text="{Binding HoursSummary.July}" />
+
+                                <TextBlock Grid.Column="8"
+                                           Text="{Binding HoursSummary.August}" />
+
+                                <TextBlock Grid.Column="9"
+                                           Text="{Binding HoursSummary.September}" />
+
+                                <TextBlock Grid.Column="10"
+                                           Text="{Binding HoursSummary.October}" />
+
+                                <TextBlock Grid.Column="11"
+                                           Text="{Binding HoursSummary.November}" />
+
+                                <TextBlock Grid.Column="12"
+                                           Text="{Binding HoursSummary.December}" />
+
+                                <TextBlock Grid.Column="13"
+                                           Text="{Binding HoursSummary.Total}"
+                                           FontWeight="SemiBold" />
+
+                            </Grid>
+
+                        </Border>
+
                     </Grid>
+
                 </Border>
+
             </TabItem>
-            
+
         </TabControl>
     </Grid>
 </UserControl>
