@@ -9,6 +9,7 @@ using Reservo.Services.Email;
 using Reservo.Services.File;
 using Serilog;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Input;
 #endregion
@@ -50,6 +51,7 @@ namespace Reservo.ViewModels
         public ICommand CreateInvoiceCommand { get; }
         public ICommand CreateReservationEmailCommand { get; }
         public ICommand CreateInvoiceEmailCommand { get; }
+        public ICommand CreateCalendarEntryCommand { get; }
         public ICommand OpenNoteCommand { get; }
         #endregion
 
@@ -74,6 +76,7 @@ namespace Reservo.ViewModels
             CreateInvoiceCommand = new RelayCommand(_ => CreateInvoice(), _ => SelectedEntry is not null);
             CreateReservationEmailCommand = new RelayCommand(_ => CreateReservationEmail(), CanCreateEmail);
             CreateInvoiceEmailCommand = new RelayCommand(_ => CreateInvoiceEmail(), CanCreateEmail);
+            CreateCalendarEntryCommand = new RelayCommand(_ => CreateCalendarEntry(), _ => SelectedEntry is not null);
             OpenNoteCommand = new RelayCommand(_ => OpenNote(), _ => SelectedEntry is not null);
 
             if (!CheckFolderExisting())
@@ -222,6 +225,26 @@ namespace Reservo.ViewModels
             {
                 _documentService.CreateInvoiceMail(entry, Year, _emailService, _dialogService);
             }
+        }
+
+        private void CreateCalendarEntry()
+        {
+            string start = SelectedEntry.Arrival.ToString("yyyyMMddTHHmmss"); // YYYYMMDDTHHMMSS
+            string end = SelectedEntry.Departure.ToString("yyyyMMddTHHmmss");
+
+            string name = SelectedEntry.GroupName;
+
+            string url =
+                "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+                $"&text=Reservierung {name}" +
+                "&details=Hier könnten alle Infos stehen." +
+                $"&dates={start}/{end}";
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
 
         //Opens the note view of the currently selected entry

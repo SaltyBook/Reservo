@@ -148,6 +148,10 @@
                                                   Command="{Binding CreateInvoiceEmailCommand}"
                                                   Style="{StaticResource ModernMenuItemStyle}" />
                                         <Separator />
+                                        <MenuItem Header="Kalendereintrag erstellen"
+                                                  Command="{Binding CreateCalendarEntryCommand}"
+                                                  Style="{StaticResource ModernMenuItemStyle}" />
+                                        <Separator />
                                         <MenuItem Header="Notiz erstellen"
                                                   Command="{Binding OpenNoteCommand}"
                                                   Style="{StaticResource ModernMenuItemStyle}" />
