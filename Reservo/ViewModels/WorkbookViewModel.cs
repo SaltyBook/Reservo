@@ -194,7 +194,7 @@ namespace Reservo.ViewModels
 
             if (_fileService.Exists(documentPath))
             {
-                _documentService.CreateReservationMail(entry, Year, _emailService);
+                _documentService.CreateReservationMail(entry, Year, _emailService, _dialogService);
             }
         }
 
@@ -220,7 +220,7 @@ namespace Reservo.ViewModels
 
             if (_fileService.Exists(documentPath))
             {
-                _documentService.CreateInvoiceMail(entry, Year, _emailService);
+                _documentService.CreateInvoiceMail(entry, Year, _emailService, _dialogService);
             }
         }
 

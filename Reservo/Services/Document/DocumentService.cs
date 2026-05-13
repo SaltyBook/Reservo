@@ -1,6 +1,7 @@
 ﻿#region Usings
 using Reservo.Infrastructure;
 using Reservo.Models;
+using Reservo.Services.Dialog;
 using Reservo.Services.Document;
 using Reservo.Services.Email;
 using Reservo.ViewModels;
@@ -61,27 +62,37 @@ namespace Reservo
             return window;
         }
 
-        public void CreateReservationMail(Entry entry, string year, IEmailService emailService)
+        public void CreateReservationMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService)
         {
-            ExportPdf(entry.GetReservationPath(year));
-            emailService.CreateEmail(entry, year, false);
+            if(ExportPdf(entry.GetReservationPath(year), dialogService))
+                emailService.CreateEmail(entry, year, false);
         }
 
-        public void CreateInvoiceMail(Entry entry, string year, IEmailService emailService)
+        public void CreateInvoiceMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService)
         {
-            ExportPdf(entry.GetInvoicePath(year));
-            emailService.CreateEmail(entry, year, true);
+            if(ExportPdf(entry.GetInvoicePath(year), dialogService))
+                emailService.CreateEmail(entry, year, true);
         }
 
-        private void ExportPdf(string docxPath)
+        private bool ExportPdf(string docxPath, IDialogService dialogService)
         {
             if (!File.Exists(docxPath))
-                return;
+            {
+                dialogService.ShowInfo("Fehlende Datei", $"Der Pfad {docxPath} existiert nicht!");
+                return false;
+            }
+
+            if (IsFileLocked(new FileInfo(docxPath)))
+            {
+                dialogService.ShowInfo("Datei bereits verwendet", $"Die Datei {docxPath} wird bereits verwendet!");
+                return false;
+            }
 
             string pdfPath = Path.ChangeExtension(docxPath, ".pdf");
 
             if (File.Exists(pdfPath))
                 File.Delete(pdfPath);
+
 
             //Load Document
             Document document = new Document();
@@ -89,6 +100,30 @@ namespace Reservo
 
             //Convert Word to PDF
             document.SaveToFile(pdfPath, FileFormat.PDF);
+
+            return true;
+        }
+
+        protected virtual bool IsFileLocked(FileInfo file)
+        {
+            try
+            {
+                using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    stream.Close();
+                }
+            }
+            catch (IOException)
+            {
+                //the file is unavailable because it is:
+                //still being written to
+                //or being processed by another thread
+                //or does not exist (has already been processed)
+                return true;
+            }
+
+            //file is not locked
+            return false;
         }
     }
 }
