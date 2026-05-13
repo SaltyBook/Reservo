@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Reservo.Models
@@ -77,6 +79,20 @@ namespace Reservo.Models
         {
             get { return _groupCheckCount; }
             set { _groupCheckCount = value; }
+        }
+
+        private int _allCanceled;
+        public int AllCanceled
+        {
+            get { return _allCanceled; }
+            set { _allCanceled = value; }
+        }
+
+        private IEnumerable<ISeries> _pieSeries;
+        public IEnumerable<ISeries> PieSeries 
+        {
+            get { return _pieSeries; }
+            set { _pieSeries = value; }
         }
     }
 }

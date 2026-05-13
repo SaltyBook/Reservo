@@ -1,9 +1,12 @@
-﻿using PublicHoliday;
+﻿using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using PublicHoliday;
 using Reservo.Commands;
 using Reservo.Models;
 using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Input;
@@ -102,6 +105,7 @@ namespace Reservo.ViewModels
                 StatisticData[StatisticData.Count - 1].AverageNightCount = StatisticData[StatisticData.Count - 1].AllNights / StatisticData[StatisticData.Count - 1].AllReservations;
                 StatisticData[StatisticData.Count - 1].TotalAmount = (decimal)entries.Sum(x => x.Total);
                 StatisticData[StatisticData.Count - 1].GroupCheckCount = entries.Where(x => x.AgeCheck).Count();
+                StatisticData[StatisticData.Count - 1].AllCanceled = workbook.Entries.Where(x => x.Canceled).Count();
 
                 StatisticData[0].AllReservations += StatisticData[StatisticData.Count - 1].AllReservations;
                 StatisticData[0].AllNights += StatisticData[StatisticData.Count - 1].AllNights;
@@ -109,10 +113,45 @@ namespace Reservo.ViewModels
                 StatisticData[0].AllGuests += StatisticData[StatisticData.Count - 1].AllGuests;
                 StatisticData[0].TotalAmount += StatisticData[StatisticData.Count - 1].TotalAmount;
                 StatisticData[0].GroupCheckCount += StatisticData[StatisticData.Count - 1].GroupCheckCount;
+                StatisticData[0].AllCanceled += StatisticData[StatisticData.Count - 1].AllCanceled;
+
+                StatisticData[StatisticData.Count - 1].PieSeries = new ISeries[]
+                {
+                    new PieSeries<double>
+                    {
+                        Values = new double[] { StatisticData[StatisticData.Count - 1].AllReservations },
+                        Name = "Belegungen",
+                        Fill = LiveChartsCore.Painting.Paint.Parse("008001")
+                    },
+
+                    new PieSeries<double>
+                    {
+                        Values = new double[] {  StatisticData[StatisticData.Count - 1].AllCanceled },
+                        Name = "Stornierungen",
+                        Fill = LiveChartsCore.Painting.Paint.Parse("FE0000")
+                    }
+                };
             }
 
             StatisticData[0].AverageGroupSize += StatisticData[0].AllGuests / StatisticData[0].AllReservations;
             StatisticData[0].AverageNightCount += StatisticData[0].AllNights / StatisticData[0].AllReservations;
+
+            StatisticData[0].PieSeries = new ISeries[]
+                {
+                    new PieSeries<double>
+                    {
+                        Values = new double[] { StatisticData[0].AllReservations },
+                        Name = "Belegungen",
+                        Fill = LiveChartsCore.Painting.Paint.Parse("008001")
+                    },
+
+                    new PieSeries<double>
+                    {
+                        Values = new double[] {  StatisticData[0].AllCanceled },
+                        Name = "Stornierungen",
+                        Fill = LiveChartsCore.Painting.Paint.Parse("FE0000")
+                    }
+                };
 
             SelectedStatisticData = StatisticData.First(x => x.DisplayName.EndsWith(DateTime.Now.Year.ToString()));
 

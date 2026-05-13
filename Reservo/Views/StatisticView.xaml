@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Reservo.Views"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:viewmodels="clr-namespace:Reservo.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="20">
@@ -221,7 +223,7 @@
                         <Border Grid.Column="1"
                                 Style="{StaticResource DashboardCardStyle}">
 
-                            <StackPanel>
+                            <!--<StackPanel>
 
                                 <TextBlock Text="Infos &amp; Auslastung"
                                            FontSize="18"
@@ -259,12 +261,28 @@
                                                FontSize="14" />
                                 </StackPanel>
 
-                            </StackPanel>
+                            </StackPanel>-->
 
+
+                            <StackPanel>
+
+                                <TextBlock Text="Belegungen"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Margin="0,0,0,20"
+                                           Foreground="{StaticResource Brush.TextPrimary}" />
+
+                                <lvc:PieChart VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              Width="250"
+                                              Height="250"
+                                              Series="{Binding SelectedStatisticData.PieSeries}">
+                                </lvc:PieChart>
+
+                            </StackPanel>
                         </Border>
 
                     </Grid>
-
 
                     <!-- FOOTER -->
                     <Border Grid.Row="5"
