@@ -1,12 +1,12 @@
-﻿using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
+﻿using OxyPlot;
+using OxyPlot.Legends;
+using OxyPlot.Series;
 using PublicHoliday;
 using Reservo.Commands;
 using Reservo.Models;
 using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Input;
@@ -115,43 +115,45 @@ namespace Reservo.ViewModels
                 StatisticData[0].GroupCheckCount += StatisticData[StatisticData.Count - 1].GroupCheckCount;
                 StatisticData[0].AllCanceled += StatisticData[StatisticData.Count - 1].AllCanceled;
 
-                StatisticData[StatisticData.Count - 1].PieSeries = new ISeries[]
-                {
-                    new PieSeries<double>
-                    {
-                        Values = new double[] { StatisticData[StatisticData.Count - 1].AllReservations },
-                        Name = "Belegungen",
-                        Fill = LiveChartsCore.Painting.Paint.Parse("008001")
-                    },
+                var pieSerie = new PieSeries { StrokeThickness = 1, OutsideLabelFormat = "{1}", InsideLabelFormat = "{2:0}%", InsideLabelPosition = 0.7 };
 
-                    new PieSeries<double>
-                    {
-                        Values = new double[] {  StatisticData[StatisticData.Count - 1].AllCanceled },
-                        Name = "Stornierungen",
-                        Fill = LiveChartsCore.Painting.Paint.Parse("FE0000")
-                    }
-                };
+                pieSerie.Slices.Add(new PieSlice("Belegungen", StatisticData[StatisticData.Count - 1].AllReservations)
+                {
+                    Fill = OxyColor.Parse("#008001")
+                });
+
+                pieSerie.Slices.Add(new PieSlice("Stornierungen", StatisticData[StatisticData.Count - 1].AllCanceled)
+                {
+                    Fill = OxyColor.Parse("#FE0000")
+                });
+
+                StatisticData[StatisticData.Count - 1].PieModel.Legends.Add(new Legend
+                {
+                    LegendPosition = LegendPosition.RightTop,
+                    LegendPlacement = LegendPlacement.Outside,
+                    LegendOrientation = LegendOrientation.Vertical,
+                    FontSize = 12
+                });
+
+                StatisticData[StatisticData.Count - 1].PieModel.Series.Add(pieSerie);
             }
 
             StatisticData[0].AverageGroupSize += StatisticData[0].AllGuests / StatisticData[0].AllReservations;
             StatisticData[0].AverageNightCount += StatisticData[0].AllNights / StatisticData[0].AllReservations;
 
-            StatisticData[0].PieSeries = new ISeries[]
-                {
-                    new PieSeries<double>
-                    {
-                        Values = new double[] { StatisticData[0].AllReservations },
-                        Name = "Belegungen",
-                        Fill = LiveChartsCore.Painting.Paint.Parse("008001")
-                    },
+            var pieSeries = new PieSeries { StrokeThickness = 1, OutsideLabelFormat = "{1}", InsideLabelFormat = "{2:0}%", InsideLabelPosition = 0.7 };
 
-                    new PieSeries<double>
-                    {
-                        Values = new double[] {  StatisticData[0].AllCanceled },
-                        Name = "Stornierungen",
-                        Fill = LiveChartsCore.Painting.Paint.Parse("FE0000")
-                    }
-                };
+            pieSeries.Slices.Add(new PieSlice("Belegungen", StatisticData[0].AllReservations)
+            {
+                Fill = OxyColor.Parse("#008001")
+            });
+
+            pieSeries.Slices.Add(new PieSlice("Stornierungen", StatisticData[0].AllCanceled)
+            {
+                Fill = OxyColor.Parse("#FE0000")
+            });
+
+            StatisticData[0].PieModel.Series.Add(pieSeries);
 
             SelectedStatisticData = StatisticData.First(x => x.DisplayName.EndsWith(DateTime.Now.Year.ToString()));
 

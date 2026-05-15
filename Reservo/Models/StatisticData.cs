@@ -1,5 +1,4 @@
-﻿using LiveChartsCore;
-using LiveChartsCore.SkiaSharpView;
+﻿using OxyPlot;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -18,9 +17,9 @@ namespace Reservo.Models
         public string DisplayName
         {
             get { return _displayName; }
-            set 
+            set
             {
-                _displayName = value; 
+                _displayName = value;
                 OnPropertyChanged();
             }
         }
@@ -88,11 +87,11 @@ namespace Reservo.Models
             set { _allCanceled = value; }
         }
 
-        private IEnumerable<ISeries> _pieSeries;
-        public IEnumerable<ISeries> PieSeries 
+        private PlotModel _pieModel = new PlotModel();
+        public PlotModel PieModel
         {
-            get { return _pieSeries; }
-            set { _pieSeries = value; }
+            get { return _pieModel; }
+            set { _pieModel = value; }
         }
     }
 }

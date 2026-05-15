@@ -23,8 +23,7 @@ namespace Reservo.Models
             }
         }
 
-        public Dictionary<int, decimal> HoursPerMonth { get; set; }
-            = new Dictionary<int, decimal>();
+        public Dictionary<int, decimal> HoursPerMonth { get; set; } = new Dictionary<int, decimal>();
 
         public decimal January
         {
