@@ -1,6 +1,8 @@
 ﻿using Reservo.Infrastructure;
 using Serilog;
+using System.Globalization;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace Reservo
 {
@@ -16,6 +18,13 @@ namespace Reservo
             Log.Information("=== Anwendung gestartet ===");
 
             base.OnStartup(e);
+
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(
+                    XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)
+                )
+            );
         }
 
         protected override void OnExit(ExitEventArgs e)

@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="Themes/Brushes.xaml" />
                 <ResourceDictionary Source="Themes/Buttons.xaml" />
                 <ResourceDictionary Source="Themes/ComboBox.xaml" />
+                <ResourceDictionary Source="Themes/Dashboard.xaml" />
                 <ResourceDictionary Source="Themes/DataGrid.xaml" />
                 <ResourceDictionary Source="Themes/Forms.xaml" />
                 <ResourceDictionary Source="Themes/Inputs.xaml" />
@@ -26,6 +27,10 @@
         
             <DataTemplate DataType="{x:Type viewModels:TenantViewModel}">
                 <views:TenantView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModels:StatisticViewModel}">
+                <views:StatisticView />
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
