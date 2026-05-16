@@ -94,17 +94,17 @@
                                     <Style TargetType="DataGridRow"
                                            BasedOn="{StaticResource ModernDataGridRowStyle}">
                                         <Style.Triggers>
-                                            
-                                            <DataTrigger Binding="{Binding Departure, Converter={StaticResource IsPast}}"
-                                                         Value="True">
-                                                <Setter Property="Background"
-                                                        Value="{StaticResource Brush.RowPast}" />
-                                            </DataTrigger>
 
                                             <DataTrigger Binding="{Binding Offer}"
                                                          Value="True">
                                                 <Setter Property="Background"
                                                         Value="{StaticResource Brush.RowOffer}" />
+                                            </DataTrigger>
+
+                                            <DataTrigger Binding="{Binding Departure, Converter={StaticResource IsPast}}"
+                                                         Value="True">
+                                                <Setter Property="Background"
+                                                        Value="{StaticResource Brush.RowPast}" />
                                             </DataTrigger>
 
                                             <DataTrigger Binding="{Binding Canceled}"

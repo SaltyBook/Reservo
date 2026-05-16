@@ -242,7 +242,7 @@ namespace Reservo.ViewModels
                 "https://calendar.google.com/calendar/render?action=TEMPLATE" +
                 "&src=" + Uri.EscapeDataString(calendarId) +
                 $"&text=Reservierung {name}" +
-                $"&details=Anzahl der Teilnehmer {guestCount}" +
+                $"&details=Anzahl der Teilnehmer: {guestCount}" +
                 $"&dates={start}/{end}";
 
             Process.Start(new ProcessStartInfo
