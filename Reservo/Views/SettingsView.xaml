@@ -30,7 +30,7 @@
                     ItemContainerStyle="{StaticResource ModernTabItemStyle}">
 
             <!-- Datenbank -->
-            <TabItem Header="Datenbank">
+            <TabItem Header="Allgemein">
                 <Border Margin="0,8,0,0"
                         Background="{StaticResource Brush.Surface}"
                         BorderBrush="{StaticResource Brush.Border}"
@@ -47,17 +47,35 @@
                         </Grid.RowDefinitions>
 
                         <StackPanel Grid.Row="0">
+                            <StackPanel >
                             <TextBlock Text="Datenbank"
                                        Style="{StaticResource SectionTitleStyle}" />
                             <TextBlock Text="Lege den Pfad der Datenbank fest."
                                        Style="{StaticResource SectionDescriptionStyle}" />
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="Pfad"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBox Text="{Binding DatabasePath, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource ModernTextBoxStyle}" />
+                            </StackPanel>
                         </StackPanel>
 
                         <StackPanel Grid.Row="2">
-                            <TextBlock Text="Pfad"
-                                       Style="{StaticResource FormLabelStyle}" />
-                            <TextBox Text="{Binding DatabasePath, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource ModernTextBoxStyle}" />
+                            <StackPanel>
+                                <TextBlock Text="Kalender"
+                                           Style="{StaticResource SectionTitleStyle}" />
+                                <TextBlock Text="Lege die Kalender-ID fest."
+                                           Style="{StaticResource SectionDescriptionStyle}" />
+                            </StackPanel>
+
+                            <StackPanel>
+                                <TextBlock Text="Kalender-ID"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                <TextBox Text="{Binding CalendarID, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource ModernTextBoxStyle}" />
+                            </StackPanel>
                         </StackPanel>
 
                         <Grid Grid.Row="4">
@@ -69,7 +87,7 @@
                             <Button Grid.Column="1"
                                     Content="Speichern"
                                     Style="{StaticResource PrimaryButtonStyle}"
-                                    Command="{Binding SaveDatabaseCommand}"/>
+                                    Command="{Binding SaveGeneralCommand}" />
                         </Grid>
                     </Grid>
                 </Border>

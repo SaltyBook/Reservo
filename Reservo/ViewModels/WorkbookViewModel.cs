@@ -76,7 +76,7 @@ namespace Reservo.ViewModels
             CreateInvoiceCommand = new RelayCommand(_ => CreateInvoice(), _ => SelectedEntry is not null);
             CreateReservationEmailCommand = new RelayCommand(_ => CreateReservationEmail(), CanCreateEmail);
             CreateInvoiceEmailCommand = new RelayCommand(_ => CreateInvoiceEmail(), CanCreateEmail);
-            CreateCalendarEntryCommand = new RelayCommand(_ => CreateCalendarEntry(), _ => SelectedEntry is not null);
+            CreateCalendarEntryCommand = new RelayCommand(_ => CreateCalendarEntry(), CanCreateCalendarEntry);
             OpenNoteCommand = new RelayCommand(_ => OpenNote(), _ => SelectedEntry is not null);
 
             if (!CheckFolderExisting())
@@ -229,15 +229,20 @@ namespace Reservo.ViewModels
 
         private void CreateCalendarEntry()
         {
-            string start = SelectedEntry.Arrival.ToString("yyyyMMddTHHmmss"); // YYYYMMDDTHHMMSS
-            string end = SelectedEntry.Departure.ToString("yyyyMMddTHHmmss");
+            string calendarId = InternCredentials.CalendarID;
 
             string name = SelectedEntry.GroupName;
 
+            int guestCount = SelectedEntry.GuestCount;
+
+            string start = SelectedEntry.Arrival.ToString("yyyyMMddTHHmmss"); // YYYYMMDDTHHMMSS
+            string end = SelectedEntry.Departure.ToString("yyyyMMddTHHmmss");
+
             string url =
                 "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+                "&src=" + Uri.EscapeDataString(calendarId) +
                 $"&text=Reservierung {name}" +
-                "&details=Hier könnten alle Infos stehen." +
+                $"&details=Anzahl der Teilnehmer {guestCount}" +
                 $"&dates={start}/{end}";
 
             Process.Start(new ProcessStartInfo
@@ -263,6 +268,16 @@ namespace Reservo.ViewModels
         private bool CanCreateEmail(object? _)
         {
             return CredentialsService.creds is not null;
+        }
+
+        private bool CanCreateCalendarEntry(object? obj)
+        {
+            if (SelectedEntry is null || String.IsNullOrEmpty(InternCredentials.CalendarID))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         //Checks whether the invoice folder for the current year exists

@@ -8,6 +8,8 @@ namespace Reservo.ViewModels
     {
         private readonly IDialogService _dialogService;
 
+        //General
+
         private string _databasePath = string.Empty;
         public string DatabasePath
         {
@@ -16,10 +18,25 @@ namespace Reservo.ViewModels
             {
                 if (SetProperty(ref _databasePath, value))
                 {
-                    SaveDatabaseCommand.RaiseCanExecuteChanged();
+                    SaveGeneralCommand.RaiseCanExecuteChanged();
                 }
             }
         }
+
+        private string _calendarID = string.Empty;
+        public string CalendarID
+        {
+            get => _calendarID;
+            set
+            {
+                if (SetProperty(ref _calendarID, value))
+                {
+                    SaveGeneralCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        //Credentials
 
         private string _username = string.Empty;
         public string Username
@@ -67,6 +84,8 @@ namespace Reservo.ViewModels
             }
         }
 
+        //Trello
+
         private string _trelloApiKey = string.Empty;
         public string TrelloApiKey
         {
@@ -93,7 +112,7 @@ namespace Reservo.ViewModels
             }
         }
 
-        public RelayCommand SaveDatabaseCommand { get; }
+        public RelayCommand SaveGeneralCommand { get; }
         public AsyncRelayCommand SaveCredentialsCommand { get; }
         public RelayCommand SaveServerCommand { get; }
 
@@ -102,7 +121,7 @@ namespace Reservo.ViewModels
         public SettingsViewModel(IDialogService dialog)
         {
             _dialogService = dialog;
-            SaveDatabaseCommand = new RelayCommand(SaveDatabase, CanSaveDatabase);
+            SaveGeneralCommand = new RelayCommand(SaveGeneral, CanSaveGeneral);
             SaveCredentialsCommand = new AsyncRelayCommand(SaveCredentialsAsync, CanSaveCredentials);
             SaveServerCommand = new RelayCommand(SaveServer, CanSaveServer);
 
@@ -110,12 +129,17 @@ namespace Reservo.ViewModels
             {
                 DatabasePath = InternCredentials.DatabasePath;
             }
+
+            if (!String.IsNullOrEmpty(InternCredentials.CalendarID))
+            {
+                CalendarID = InternCredentials.CalendarID;
+            }
         }
 
         //Saves database path
-        private void SaveDatabase(object? obj)
+        private void SaveGeneral(object? obj)
         {
-            InternCredentials.WriteDatabaseCredentials(DatabasePath);
+            InternCredentials.WriteGeneralCredentials(DatabasePath, CalendarID);
             var credentialResult = InternCredentials.Save();
             if (!credentialResult.Success)
             {
@@ -125,7 +149,7 @@ namespace Reservo.ViewModels
         }
 
         //Checks whether the database configuration are set
-        private bool CanSaveDatabase(object? obj)
+        private bool CanSaveGeneral(object? obj)
         {
             return true;
             return !string.IsNullOrWhiteSpace(DatabasePath);

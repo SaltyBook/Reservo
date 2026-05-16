@@ -10,6 +10,12 @@ namespace Reservo.Services.Credentials
             set => Settings.Default.DatabasePath = value;
         }
 
+        public static string CalendarID
+        {
+            get => Settings.Default.CalendarID;
+            set => Settings.Default.CalendarID = value;
+        }
+
         public static string ServerPath
         {
             get => Settings.Default.ServerPath;
@@ -34,11 +40,12 @@ namespace Reservo.Services.Credentials
             }
         }
 
-        public static void WriteDatabaseCredentials(string databasePath)
+        public static void WriteGeneralCredentials(string databasePath, string calendarID)
         {
             Log.Information("Schreibe interne Datenbank Konfiguration");
 
             DatabasePath = databasePath;
+            CalendarID = calendarID;
         }
 
         public static void WriteServerCredentials(string serverPath, string trelloAPIKey, string trelloAPIToken)
