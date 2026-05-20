@@ -34,8 +34,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="20" />
+                        <RowDefinition Height="15" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="15" />
                         <RowDefinition Height="Auto" />
@@ -55,237 +54,254 @@
                         </ComboBox.ItemTemplate>
                     </ComboBox>
 
-                    <!-- STATISTIK CARDS -->
-                    <UniformGrid Grid.Row="1"
-                                 Rows="2"
-                                 Columns="4">
+                    <ScrollViewer Grid.Row="2"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
 
-                        <!-- Buchungen -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20" />
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="15" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <!-- STATISTIK CARDS -->
+                            <UniformGrid 
+                                Grid.Row="1"
+                                Rows="2"
+                                Columns="4">
 
-                                <TextBlock Text="Buchungen"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                                <!-- Buchungen -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.AllReservations}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Buchungen"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.AllReservations}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                        <!-- Gäste -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock Text="Gäste"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                                <!-- Gäste -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.AllGuests}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Gäste"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.AllGuests}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                        <!-- Nächte -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock Text="Nächte"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                                <!-- Nächte -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.AllNights}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Nächte"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.AllNights}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                        <!-- Ø Aufenthalt -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock Text="Ø Aufenthalt"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                            <!-- Ø Aufenthalt -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.AverageNightCount}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Ø Aufenthalt"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.AverageNightCount}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                        <!-- Gesamtsumme -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock Text="Gesamtsumme"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                                <!-- Gesamtsumme -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.TotalAmount, StringFormat={}{0:C}}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Gesamtsumme"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.TotalAmount, StringFormat={}{0:C}}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                        <!-- Gesamtsumme -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock Text="Ø Gruppengröße"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                                <!-- Gesamtsumme -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.AverageGroupSize}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Ø Gruppengröße"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.AverageGroupSize}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                        <!-- Gäste-Nächte -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock Text="Gäste-Nächte"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                                <!-- Gäste-Nächte -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.AllGuestsNights}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Gäste-Nächte"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.AllGuestsNights}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                        <!-- Gruppe über 27 -->
-                        <Border Style="{StaticResource DashboardCardStyle}">
-                            <StackPanel>
+                                    </StackPanel>
+                                </Border>
 
-                                <TextBlock Text="Gruppe über 27"
-                                           Style="{StaticResource DashboardCardTitle}" />
+                                <!-- Gruppe über 27 -->
+                                <Border Style="{StaticResource DashboardCardStyle}">
+                                    <StackPanel>
 
-                                <TextBlock Text="{Binding SelectedStatisticData.GroupCheckCount}"
-                                           Style="{StaticResource DashboardCardValue}" />
+                                        <TextBlock Text="Gruppe über 27"
+                                                   Style="{StaticResource DashboardCardTitle}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <TextBlock Text="{Binding SelectedStatisticData.GroupCheckCount}"
+                                                   Style="{StaticResource DashboardCardValue}" />
 
-                    </UniformGrid>
+                                    </StackPanel>
+                                </Border>
 
+                            </UniformGrid>
 
-                    <!-- UNTERER BEREICH -->
-                    <Grid Grid.Row="3">
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.3*" />
-                            <ColumnDefinition Width="1*" />
-                        </Grid.ColumnDefinitions>
+                            <!-- UNTERER BEREICH -->
+                            <Grid Grid.Row="3">
 
-                        <!-- Feiertage -->
-                        <Border Grid.Column="0"
-                                Style="{StaticResource DashboardCardStyle}">
+                                <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.3*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
 
-                            <StackPanel>
+                                <!-- Feiertage -->
+                                <Border Grid.Column="0"
+                                        Style="{StaticResource DashboardCardStyle}">
 
-                                <TextBlock Text="Feiertage"
-                                           FontSize="18"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,12"
-                                           Foreground="{StaticResource Brush.TextPrimary}" />
+                                    <StackPanel>
 
-                                <ItemsControl ItemsSource="{Binding PublicHolidays}">
+                                        <TextBlock Text="Feiertage"
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,12"
+                                                   Foreground="{StaticResource Brush.TextPrimary}" />
 
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
+                                        <ItemsControl ItemsSource="{Binding PublicHolidays}">
 
-                                            <Grid Margin="0,4">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
 
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="90" />
-                                                    <ColumnDefinition Width="*" />
-                                                </Grid.ColumnDefinitions>
+                                                    <Grid Margin="0,4">
 
-                                                <TextBlock Grid.Column="0"
-                                                           Text="{Binding Key, StringFormat={}{0:dd.MM.yy}}"
-                                                           Foreground="{StaticResource Brush.TextSecondary}" />
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="90" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
 
-                                                <TextBlock Grid.Column="1"
-                                                           Text="{Binding Value}"
-                                                           Foreground="{StaticResource Brush.TextPrimary}" />
+                                                        <TextBlock Grid.Column="0"
+                                                                   Text="{Binding Key, StringFormat={}{0:dd.MM.yy}}"
+                                                                   Foreground="{StaticResource Brush.TextSecondary}" />
 
-                                            </Grid>
+                                                        <TextBlock Grid.Column="1"
+                                                                   Text="{Binding Value}"
+                                                                   Foreground="{StaticResource Brush.TextPrimary}" />
 
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
+                                                    </Grid>
 
-                                </ItemsControl>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
 
-                            </StackPanel>
+                                        </ItemsControl>
 
-                        </Border>
+                                    </StackPanel>
 
+                                </Border>
 
-                        <!-- INFOS -->
-                        <Border Grid.Column="1"
-                                Style="{StaticResource DashboardCardStyle}">
 
-                            <!--<StackPanel>
+                                <!-- INFOS -->
+                                <Border Grid.Column="1"
+                                        Style="{StaticResource DashboardCardStyle}">
 
-                                <TextBlock Text="Infos &amp; Auslastung"
-                                           FontSize="18"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,12"
-                                           Foreground="{StaticResource Brush.TextPrimary}" />
+                                    <!--<StackPanel>
 
-                                <StackPanel Margin="0,6">
-                                    <TextBlock Text="DIE WERTE HIER SIND NUR TEMPORÄR UND STATISCH!"
-                                               FontSize="14" />
-                                </StackPanel>
+                                    <TextBlock Text="Infos &amp; Auslastung"
+                                               FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Margin="0,0,0,12"
+                                               Foreground="{StaticResource Brush.TextPrimary}" />
 
-                                <StackPanel Margin="0,6">
-                                    <TextBlock Text="• Noch 12 freie Wochenenden"
-                                               FontSize="14" />
-                                </StackPanel>
+                                    <StackPanel Margin="0,6">
+                                        <TextBlock Text="DIE WERTE HIER SIND NUR TEMPORÄR UND STATISCH!"
+                                                   FontSize="14" />
+                                    </StackPanel>
 
-                                <StackPanel Margin="0,6">
-                                    <TextBlock Text="• August fast ausgebucht"
-                                               FontSize="14" />
-                                </StackPanel>
+                                    <StackPanel Margin="0,6">
+                                        <TextBlock Text="• Noch 12 freie Wochenenden"
+                                                   FontSize="14" />
+                                    </StackPanel>
 
-                                <StackPanel Margin="0,6">
-                                    <TextBlock Text="• Ø Gruppengröße: 5 Gäste"
-                                               FontSize="14" />
-                                </StackPanel>
+                                    <StackPanel Margin="0,6">
+                                        <TextBlock Text="• August fast ausgebucht"
+                                                   FontSize="14" />
+                                    </StackPanel>
 
-                                <StackPanel Margin="0,6">
-                                    <TextBlock Text="• Beste Auslastung im Juli"
-                                               FontSize="14" />
-                                </StackPanel>
+                                    <StackPanel Margin="0,6">
+                                        <TextBlock Text="• Ø Gruppengröße: 5 Gäste"
+                                                   FontSize="14" />
+                                    </StackPanel>
 
-                                <StackPanel Margin="0,6">
-                                    <TextBlock Text="• Osterwochenende noch frei"
-                                               FontSize="14" />
-                                </StackPanel>
+                                    <StackPanel Margin="0,6">
+                                        <TextBlock Text="• Beste Auslastung im Juli"
+                                                   FontSize="14" />
+                                    </StackPanel>
 
-                            </StackPanel>-->
+                                    <StackPanel Margin="0,6">
+                                        <TextBlock Text="• Osterwochenende noch frei"
+                                                   FontSize="14" />
+                                    </StackPanel>
 
+                                    </StackPanel>-->
 
-                            <StackPanel>
 
-                                <TextBlock Text="Belegungen"
-                                           FontSize="18"
-                                           FontWeight="SemiBold"
-                                           Margin="0,0,0,20"
-                                           Foreground="{StaticResource Brush.TextPrimary}" />
+                                    <StackPanel>
 
-                                <oxy:PlotView VerticalAlignment="Center"
-                                              HorizontalAlignment="Center"
-                                              Width="500"
-                                              Height="250"
-                                              Model="{Binding SelectedStatisticData.PieModel}">
-                                </oxy:PlotView>
+                                        <TextBlock Text="Belegungen"
+                                                   FontSize="18"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,0,0,20"
+                                                   Foreground="{StaticResource Brush.TextPrimary}" />
 
-                            </StackPanel>
-                        </Border>
+                                        <oxy:PlotView VerticalAlignment="Center"
+                                                      HorizontalAlignment="Center"
+                                                      Width="500"
+                                                      Height="250"
+                                                      Model="{Binding SelectedStatisticData.PieModel}">
+                                        </oxy:PlotView>
 
-                    </Grid>
+                                    </StackPanel>
+                                </Border>
 
+                            </Grid>
+
+                           
+                        </Grid>
+
+                    </ScrollViewer>
+                    
                     <!-- FOOTER -->
-                    <Border Grid.Row="5"
+                    <Border Grid.Row="4"
                             Padding="12"
                             CornerRadius="10"
                             Background="{StaticResource Brush.SurfaceSecondary}">
@@ -314,7 +330,6 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="20" />
                             <RowDefinition Height="*" />
-                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
                         <!-- HEADER -->
@@ -370,6 +385,24 @@
                                   Background="Transparent"
                                   BorderThickness="0"
                                   ColumnHeaderHeight="45">
+
+                            <DataGrid.CellStyle>
+                                <Style TargetType="DataGridCell">
+
+                                    <Style.Triggers>
+
+                                        <DataTrigger Binding="{Binding IsSummaryRow}"
+                                                     Value="True">
+
+                                            <Setter Property="IsEnabled"
+                                                    Value="False" />
+
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+
+                                </Style>
+                            </DataGrid.CellStyle>
 
                             <DataGrid.Columns>
 
@@ -436,83 +469,6 @@
                             </DataGrid.Columns>
 
                         </DataGrid>
-
-                        <!-- SUMMENZEILE -->
-                        <Border Grid.Row="3"
-                                Margin="0,10,0,0"
-                                Padding="10"
-                                CornerRadius="10"
-                                Background="{StaticResource Brush.SurfaceSecondary}">
-
-                            <Grid>
-
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="180" />
-
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-                                    <ColumnDefinition Width="70" />
-
-                                    <ColumnDefinition Width="100" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0"
-                                           Text="Gesamt"
-                                           FontWeight="SemiBold"
-                                           VerticalAlignment="Center" />
-
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding HoursSummary.January}" />
-
-                                <TextBlock Grid.Column="2"
-                                           Text="{Binding HoursSummary.February}" />
-
-                                <TextBlock Grid.Column="3"
-                                           Text="{Binding HoursSummary.March}" />
-
-                                <TextBlock Grid.Column="4"
-                                           Text="{Binding HoursSummary.April}" />
-
-                                <TextBlock Grid.Column="5"
-                                           Text="{Binding HoursSummary.May}" />
-
-                                <TextBlock Grid.Column="6"
-                                           Text="{Binding HoursSummary.June}" />
-
-                                <TextBlock Grid.Column="7"
-                                           Text="{Binding HoursSummary.July}" />
-
-                                <TextBlock Grid.Column="8"
-                                           Text="{Binding HoursSummary.August}" />
-
-                                <TextBlock Grid.Column="9"
-                                           Text="{Binding HoursSummary.September}" />
-
-                                <TextBlock Grid.Column="10"
-                                           Text="{Binding HoursSummary.October}" />
-
-                                <TextBlock Grid.Column="11"
-                                           Text="{Binding HoursSummary.November}" />
-
-                                <TextBlock Grid.Column="12"
-                                           Text="{Binding HoursSummary.December}" />
-
-                                <TextBlock Grid.Column="13"
-                                           Text="{Binding HoursSummary.Total}"
-                                           FontWeight="SemiBold" />
-
-                            </Grid>
-
-                        </Border>
 
                     </Grid>
 

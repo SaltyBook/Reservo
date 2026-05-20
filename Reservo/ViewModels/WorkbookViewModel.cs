@@ -231,7 +231,7 @@ namespace Reservo.ViewModels
         {
             string calendarId = InternCredentials.CalendarID;
 
-            string name = SelectedEntry.GroupName;
+            string name = $"{SelectedEntry.GroupName} - {SelectedEntry.LastName}";
 
             int guestCount = SelectedEntry.GuestCount;
 

@@ -23,6 +23,8 @@ namespace Reservo.Models
             }
         }
 
+        public bool IsSummaryRow { get; set; }
+
         public Dictionary<int, decimal> HoursPerMonth { get; set; } = new Dictionary<int, decimal>();
 
         public decimal January
@@ -102,6 +104,7 @@ namespace Reservo.Models
             {
                 return HoursPerMonth.Values.Sum();
             }
+            set;
         }
 
         public decimal GetMonthHours(int month)

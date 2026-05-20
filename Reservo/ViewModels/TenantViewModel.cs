@@ -82,11 +82,11 @@ namespace Reservo.ViewModels
                 {
                     errors.AddRange(result.Errors);
                     continue;
-                }
+                }                
 
                 var workbookViewModel = new WorkbookViewModel(file)
                 {
-                    Entries = new ObservableCollection<Entry>(result.Entries)
+                    Entries = new ObservableCollection<Entry>(result.Entries.OrderBy(x => x.Arrival))
                 };
 
                 foreach (var entry in workbookViewModel.Entries)
@@ -128,7 +128,7 @@ namespace Reservo.ViewModels
                 try
                 {
                     Log.Information("Speichere Workbook {File}", workbook.FilePath);
-                    XLSX.SaveXLSX(workbook.FilePath, workbook.Entries);
+                    XLSX.SaveXLSX(workbook.FilePath, workbook.Entries.OrderBy(x => x.Id));
                 }
                 catch (Exception ex)
                 {

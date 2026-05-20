@@ -51,7 +51,7 @@ namespace Reservo.ViewModels
 
         public ObservableCollection<EmployeeHours> Employees { get; set; } = new ObservableCollection<EmployeeHours>();
 
-        public EmployeeHoursSummary HoursSummary { get; set; } = new EmployeeHoursSummary();
+        public EmployeeHours HoursSummary { get; set; } = null;
 
         private EmployeeHours _selectedEmployee;
         public EmployeeHours SelectedEmployee
@@ -162,7 +162,7 @@ namespace Reservo.ViewModels
 
         public void AddEmployee(object? obj)
         {
-            Employees.Add(new EmployeeHours()
+            Employees.Insert(Employees.Count - 1, new EmployeeHours()
             {
                 Name = "Neuer Mitarbeiter"
             });
@@ -180,7 +180,8 @@ namespace Reservo.ViewModels
             {
                 foreach (EmployeeHours employee in e.NewItems)
                 {
-                    employee.PropertyChanged += Employee_PropertyChanged;
+                    if(!employee.IsSummaryRow)
+                        employee.PropertyChanged += Employee_PropertyChanged;
                 }
             }
 
@@ -204,34 +205,52 @@ namespace Reservo.ViewModels
 
         private void RecalculateSummary()
         {
-            HoursSummary.January = Employees.Sum(x => x.January);
-            HoursSummary.February = Employees.Sum(x => x.February);
-            HoursSummary.March = Employees.Sum(x => x.March);
-            HoursSummary.April = Employees.Sum(x => x.April);
-            HoursSummary.May = Employees.Sum(x => x.May);
-            HoursSummary.June = Employees.Sum(x => x.June);
-            HoursSummary.July = Employees.Sum(x => x.July);
-            HoursSummary.August = Employees.Sum(x => x.August);
-            HoursSummary.September = Employees.Sum(x => x.September);
-            HoursSummary.October = Employees.Sum(x => x.October);
-            HoursSummary.November = Employees.Sum(x => x.November);
-            HoursSummary.December = Employees.Sum(x => x.December);
+            HoursSummary = Employees.FirstOrDefault(x => x.IsSummaryRow);
+            if (HoursSummary is not null)
+            {
+                var normalEmployees = Employees.Where(x => !x.IsSummaryRow);
 
-            HoursSummary.Total =
-                HoursSummary.January +
-                HoursSummary.February +
-                HoursSummary.March +
-                HoursSummary.April +
-                HoursSummary.May +
-                HoursSummary.June +
-                HoursSummary.July +
-                HoursSummary.August +
-                HoursSummary.September +
-                HoursSummary.October +
-                HoursSummary.November +
-                HoursSummary.December;
+                HoursSummary.January = normalEmployees.Sum(x => x.January);
+                HoursSummary.February = normalEmployees.Sum(x => x.February);
+                HoursSummary.March = normalEmployees.Sum(x => x.March);
+                HoursSummary.April = normalEmployees.Sum(x => x.April);
+                HoursSummary.May = normalEmployees.Sum(x => x.May);
+                HoursSummary.June = normalEmployees.Sum(x => x.June);
+                HoursSummary.July = normalEmployees.Sum(x => x.July);
+                HoursSummary.August = normalEmployees.Sum(x => x.August);
+                HoursSummary.September = normalEmployees.Sum(x => x.September);
+                HoursSummary.October = normalEmployees.Sum(x => x.October);
+                HoursSummary.November = normalEmployees.Sum(x => x.November);
+                HoursSummary.December = normalEmployees.Sum(x => x.December);
+                HoursSummary.TotalHours = normalEmployees.Sum(x => x.TotalHours);
 
-            OnPropertyChanged(nameof(HoursSummary));
+                OnPropertyChanged(nameof(HoursSummary));
+            }
+        }
+
+        private void UpdateSummary()
+        {
+            var summary = Employees.FirstOrDefault(x => x.IsSummaryRow);
+
+            if (summary == null)
+                return;
+
+            var normalEmployees = Employees.Where(x => !x.IsSummaryRow);
+
+            summary.January = normalEmployees.Sum(x => x.January);
+            summary.February = normalEmployees.Sum(x => x.February);
+            summary.March = normalEmployees.Sum(x => x.February);
+            summary.April = normalEmployees.Sum(x => x.February);
+            summary.May = normalEmployees.Sum(x => x.February);
+            summary.June = normalEmployees.Sum(x => x.February);
+            summary.July = normalEmployees.Sum(x => x.February);
+            summary.August = normalEmployees.Sum(x => x.February);
+            summary.September = normalEmployees.Sum(x => x.February);
+            summary.October = normalEmployees.Sum(x => x.February);
+            summary.November = normalEmployees.Sum(x => x.February);
+            summary.December = normalEmployees.Sum(x => x.December);
+
+            summary.TotalHours = normalEmployees.Sum(x => x.TotalHours);
         }
 
         private void SaveEmployeeHours()
@@ -248,7 +267,14 @@ namespace Reservo.ViewModels
         private void LoadEmployeeHours()
         {
             if (!File.Exists(_employeeHoursPath))
+            {
+                Employees.Add(new EmployeeHours
+                {
+                    Name = "Gesamt",
+                    IsSummaryRow = true
+                });
                 return;
+            }
 
             var json = File.ReadAllText(_employeeHoursPath);
 
@@ -262,6 +288,15 @@ namespace Reservo.ViewModels
             foreach (var employee in employees)
             {
                 Employees.Add(employee);
+            }
+
+            if (!Employees.Any(x => x.IsSummaryRow))
+            {
+                Employees.Add(new EmployeeHours
+                {
+                    Name = "Gesamt",
+                    IsSummaryRow = true
+                });
             }
 
             RecalculateSummary();
