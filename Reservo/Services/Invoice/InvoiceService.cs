@@ -28,7 +28,7 @@ namespace Reservo
 
             var data = _factory.Create(entry, entries);
 
-            var replacements = _mapper.Map(data);
+            var replacements = _mapper.Map(data, year);
 
             ProcessDocument(data, replacements, year);
 

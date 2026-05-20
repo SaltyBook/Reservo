@@ -4,6 +4,6 @@ namespace Reservo.Services.TemplateMapper
 {
     public interface IInvoiceTemplateMapper
     {
-        Dictionary<string, string> Map(InvoiceData data);
+        Dictionary<string, string> Map(InvoiceData data, string year);
     }
 }

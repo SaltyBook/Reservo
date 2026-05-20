@@ -38,13 +38,24 @@ namespace Reservo.ViewModels
             }
         }
 
-        private IDictionary<DateTime, string> _publicHolidays;
-        public IDictionary<DateTime, string> PublicHolidays
+        private IDictionary<DateTime, string> _publicHolidaysThisYear;
+        public IDictionary<DateTime, string> PublicHolidaysThisYear
         {
-            get { return _publicHolidays; }
+            get { return _publicHolidaysThisYear; }
             set
             {
-                _publicHolidays = value;
+                _publicHolidaysThisYear = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private IDictionary<DateTime, string> _publicHolidaysNextYear;
+        public IDictionary<DateTime, string> PublicHolidaysNextYear
+        {
+            get { return _publicHolidaysNextYear; }
+            set
+            {
+                _publicHolidaysNextYear = value;
                 OnPropertyChanged();
             }
         }
@@ -76,7 +87,8 @@ namespace Reservo.ViewModels
             StatisticData[0].DisplayName = "Alle Jahre";
 
             var calendar = new GermanPublicHoliday { State = GermanPublicHoliday.States.HE };
-            PublicHolidays = calendar.PublicHolidayNames(DateTime.Now.Year);
+            PublicHolidaysThisYear = calendar.PublicHolidayNames(DateTime.Now.Year);
+            PublicHolidaysNextYear = calendar.PublicHolidayNames(DateTime.Now.Year + 1);
 
             Employees.CollectionChanged += Employees_CollectionChanged;
 

@@ -3,6 +3,8 @@
     public class InvoiceData
     {
         public DateTime InvoiceDate = DateTime.Now;
+
+        public string Year { get; set; }
         public Entry Entry { get; set; }
         public string Price1 { get; set; }
         public int Children { get; set; }

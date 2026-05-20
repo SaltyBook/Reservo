@@ -190,43 +190,89 @@
                                 <Border Grid.Column="0"
                                         Style="{StaticResource DashboardCardStyle}">
 
-                                    <StackPanel>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="Feiertage"
-                                                   FontSize="18"
-                                                   FontWeight="SemiBold"
-                                                   Margin="0,0,0,12"
-                                                   Foreground="{StaticResource Brush.TextPrimary}" />
+                                        <TextBlock 
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Text="Feiertage"
+                                            FontSize="18"
+                                            FontWeight="SemiBold"
+                                            Margin="0,0,0,12"
+                                            Foreground="{StaticResource Brush.TextPrimary}" />
 
-                                        <ItemsControl ItemsSource="{Binding PublicHolidays}">
+                                        <StackPanel Grid.Row="1"
+                                                    Grid.Column="0">
+                    
+                                            <ItemsControl ItemsSource="{Binding PublicHolidaysThisYear}">
 
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
 
-                                                    <Grid Margin="0,4">
+                                                        <Grid Margin="0,4">
 
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="90" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="90" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
 
-                                                        <TextBlock Grid.Column="0"
-                                                                   Text="{Binding Key, StringFormat={}{0:dd.MM.yy}}"
-                                                                   Foreground="{StaticResource Brush.TextSecondary}" />
+                                                            <TextBlock Grid.Column="0"
+                                                                       Text="{Binding Key, StringFormat={}{0:dd.MM.yy}}"
+                                                                       Foreground="{StaticResource Brush.TextSecondary}" />
 
-                                                        <TextBlock Grid.Column="1"
-                                                                   Text="{Binding Value}"
-                                                                   Foreground="{StaticResource Brush.TextPrimary}" />
+                                                            <TextBlock Grid.Column="1"
+                                                                       Text="{Binding Value}"
+                                                                       Foreground="{StaticResource Brush.TextPrimary}" />
 
-                                                    </Grid>
+                                                        </Grid>
 
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
 
-                                        </ItemsControl>
+                                            </ItemsControl>
 
-                                    </StackPanel>
+                                        </StackPanel>
 
+                                        <StackPanel Grid.Row="1"
+                                                    Grid.Column="1">
+
+                                            <ItemsControl ItemsSource="{Binding PublicHolidaysNextYear}">
+
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+
+                                                        <Grid Margin="0,4">
+
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="90" />
+                                                                <ColumnDefinition Width="*" />
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <TextBlock Grid.Column="0"
+                                                                       Text="{Binding Key, StringFormat={}{0:dd.MM.yy}}"
+                                                                       Foreground="{StaticResource Brush.TextSecondary}" />
+
+                                                            <TextBlock Grid.Column="1"
+                                                                       Text="{Binding Value}"
+                                                                       Foreground="{StaticResource Brush.TextPrimary}" />
+
+                                                        </Grid>
+
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+
+                                            </ItemsControl>
+
+                                        </StackPanel>
+                                    </Grid>
                                 </Border>
 
 

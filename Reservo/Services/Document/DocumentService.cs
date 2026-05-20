@@ -36,7 +36,7 @@ namespace Reservo
                     ("{{Straße}}", entry.Street),
                     ("{{Ort}}", entry.Location),
                     ("{{Nummer}}", entry.Id.ToString()),
-                    ("{{Jahr}}", string.Format("{0:yy}", DateTime.Now)),
+                    ("{{Jahr}}", year),
                     ("{{Datum}}", string.Format("{0:dddd, d. MMMM yyyy}", DateTime.Now)),
                     ("{{Anreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Arrival)),
                     ("{{Abreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Departure))

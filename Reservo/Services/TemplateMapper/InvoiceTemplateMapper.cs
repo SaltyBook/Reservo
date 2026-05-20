@@ -4,7 +4,7 @@ namespace Reservo.Services.TemplateMapper
 {
     public class InvoiceTemplateMapper : IInvoiceTemplateMapper
     {
-        public Dictionary<string, string> Map(InvoiceData data)
+        public Dictionary<string, string> Map(InvoiceData data, string year)
         {
             return new Dictionary<string, string>
             {
@@ -15,7 +15,7 @@ namespace Reservo.Services.TemplateMapper
                 ["{{Straße}}"] = data.Entry.Street,
                 ["{{Ort}}"] = data.Entry.Location,
                 ["{{Nummer}}"] = data.Entry.InvoiceNumber.ToString(),
-                ["{{Jahr}}"] = string.Format("{0:yy}", data.InvoiceDate),
+                ["{{Jahr}}"] = year,
                 ["{{Datum}}"] = string.Format("{0:d.MM.yyyy}", data.InvoiceDate),
                 ["{{Nächte}}"] = data.Entry.NightCount.ToString(),
                 ["{{Anreise}}"] = string.Format("{0:d.MM.yyyy}", data.Entry.Arrival),
