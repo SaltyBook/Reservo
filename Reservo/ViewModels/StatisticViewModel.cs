@@ -60,9 +60,28 @@ namespace Reservo.ViewModels
             }
         }
 
-        public ObservableCollection<EmployeeHours> Employees { get; set; } = new ObservableCollection<EmployeeHours>();
+        public ObservableCollection<EmployeeYear> EmployeeYears { get; set; } = new();
 
-        public EmployeeHours HoursSummary { get; set; } = null;
+        private EmployeeYear _selectedEmployeeYear;
+
+        public EmployeeYear SelectedEmployeeYear
+        {
+            get => _selectedEmployeeYear;
+            set
+            {
+                _selectedEmployeeYear = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentEmployees));
+            }
+        }
+
+        public ObservableCollection<EmployeeHours> CurrentEmployees
+        {
+            get
+            {
+                return SelectedEmployeeYear?.Employees ?? new ObservableCollection<EmployeeHours>();
+            }
+        }
 
         private EmployeeHours _selectedEmployee;
         public EmployeeHours SelectedEmployee
@@ -89,8 +108,6 @@ namespace Reservo.ViewModels
             var calendar = new GermanPublicHoliday { State = GermanPublicHoliday.States.HE };
             PublicHolidaysThisYear = calendar.PublicHolidayNames(DateTime.Now.Year);
             PublicHolidaysNextYear = calendar.PublicHolidayNames(DateTime.Now.Year + 1);
-
-            Employees.CollectionChanged += Employees_CollectionChanged;
 
             AddEmployeeCommand = new RelayCommand(AddEmployee, null);
             RemoveEmployeeCommand = new RelayCommand(RemoveEmployee, null);
@@ -174,144 +191,184 @@ namespace Reservo.ViewModels
 
         public void AddEmployee(object? obj)
         {
-            Employees.Insert(Employees.Count - 1, new EmployeeHours()
+            if (SelectedEmployeeYear == null)
+                return;
+
+            var employee = new EmployeeHours
             {
                 Name = "Neuer Mitarbeiter"
-            });
+            };
+
+            employee.PropertyChanged += Employee_PropertyChanged;
+
+            SelectedEmployeeYear.Employees.Insert(
+                SelectedEmployeeYear.Employees.Count - 1,
+                employee);
+
+            RecalculateSummary(SelectedEmployeeYear);
+
+            SaveEmployeeHours();
         }
 
         public void RemoveEmployee(object? obj)
         {
-            if (SelectedEmployee != null)
-                Employees.Remove(SelectedEmployee);
-        }
+            if (SelectedEmployee == null ||
+                SelectedEmployeeYear == null ||
+                SelectedEmployee.IsSummaryRow)
+                return;
 
-        private void Employees_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-            {
-                foreach (EmployeeHours employee in e.NewItems)
-                {
-                    if(!employee.IsSummaryRow)
-                        employee.PropertyChanged += Employee_PropertyChanged;
-                }
-            }
+            SelectedEmployee.PropertyChanged -= Employee_PropertyChanged;
 
-            if (e.OldItems != null)
-            {
-                foreach (EmployeeHours employee in e.OldItems)
-                {
-                    employee.PropertyChanged -= Employee_PropertyChanged;
-                }
-            }
+            SelectedEmployeeYear.Employees.Remove(SelectedEmployee);
 
-            RecalculateSummary();
+            RecalculateSummary(SelectedEmployeeYear);
+
             SaveEmployeeHours();
         }
 
-        private void Employee_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void Employee_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            RecalculateSummary();
+            if (SelectedEmployeeYear != null)
+            {
+                RecalculateSummary(SelectedEmployeeYear);
+            }
+
             SaveEmployeeHours();
         }
 
-        private void RecalculateSummary()
+        private void RecalculateSummary(EmployeeYear year)
         {
-            HoursSummary = Employees.FirstOrDefault(x => x.IsSummaryRow);
-            if (HoursSummary is not null)
-            {
-                var normalEmployees = Employees.Where(x => !x.IsSummaryRow);
-
-                HoursSummary.January = normalEmployees.Sum(x => x.January);
-                HoursSummary.February = normalEmployees.Sum(x => x.February);
-                HoursSummary.March = normalEmployees.Sum(x => x.March);
-                HoursSummary.April = normalEmployees.Sum(x => x.April);
-                HoursSummary.May = normalEmployees.Sum(x => x.May);
-                HoursSummary.June = normalEmployees.Sum(x => x.June);
-                HoursSummary.July = normalEmployees.Sum(x => x.July);
-                HoursSummary.August = normalEmployees.Sum(x => x.August);
-                HoursSummary.September = normalEmployees.Sum(x => x.September);
-                HoursSummary.October = normalEmployees.Sum(x => x.October);
-                HoursSummary.November = normalEmployees.Sum(x => x.November);
-                HoursSummary.December = normalEmployees.Sum(x => x.December);
-                HoursSummary.TotalHours = normalEmployees.Sum(x => x.TotalHours);
-
-                OnPropertyChanged(nameof(HoursSummary));
-            }
-        }
-
-        private void UpdateSummary()
-        {
-            var summary = Employees.FirstOrDefault(x => x.IsSummaryRow);
+            var summary = year.Employees.FirstOrDefault(x => x.IsSummaryRow);
 
             if (summary == null)
                 return;
 
-            var normalEmployees = Employees.Where(x => !x.IsSummaryRow);
+            var employees = year.Employees.Where(x => !x.IsSummaryRow);
 
-            summary.January = normalEmployees.Sum(x => x.January);
-            summary.February = normalEmployees.Sum(x => x.February);
-            summary.March = normalEmployees.Sum(x => x.February);
-            summary.April = normalEmployees.Sum(x => x.February);
-            summary.May = normalEmployees.Sum(x => x.February);
-            summary.June = normalEmployees.Sum(x => x.February);
-            summary.July = normalEmployees.Sum(x => x.February);
-            summary.August = normalEmployees.Sum(x => x.February);
-            summary.September = normalEmployees.Sum(x => x.February);
-            summary.October = normalEmployees.Sum(x => x.February);
-            summary.November = normalEmployees.Sum(x => x.February);
-            summary.December = normalEmployees.Sum(x => x.December);
-
-            summary.TotalHours = normalEmployees.Sum(x => x.TotalHours);
+            summary.January = employees.Sum(x => x.January);
+            summary.February = employees.Sum(x => x.February);
+            summary.March = employees.Sum(x => x.March);
+            summary.April = employees.Sum(x => x.April);
+            summary.May = employees.Sum(x => x.May);
+            summary.June = employees.Sum(x => x.June);
+            summary.July = employees.Sum(x => x.July);
+            summary.August = employees.Sum(x => x.August);
+            summary.September = employees.Sum(x => x.September);
+            summary.October = employees.Sum(x => x.October);
+            summary.November = employees.Sum(x => x.November);
+            summary.December = employees.Sum(x => x.December);
         }
 
         private void SaveEmployeeHours()
         {
-            var json = JsonSerializer.Serialize(Employees,
-                new JsonSerializerOptions()
-                {
-                    WriteIndented = true
-                });
+            try
+            {
+                var json = JsonSerializer.Serialize(EmployeeYears,
+                    new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
 
-            File.WriteAllText(_employeeHoursPath, json);
+                File.WriteAllText(_employeeHoursPath, json);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Fehler beim Speichern der Mitarbeiterstunden");
+            }
         }
 
         private void LoadEmployeeHours()
         {
-            if (!File.Exists(_employeeHoursPath))
+            try
             {
-                Employees.Add(new EmployeeHours
+                if (!File.Exists(_employeeHoursPath))
+                {
+                    CreateYear(DateTime.Now.Year);
+
+                    SelectedEmployeeYear = EmployeeYears.First(x => x.Year == DateTime.Now.Year);
+
+                    SaveEmployeeHours();
+                    return;
+                }
+
+                var json = File.ReadAllText(_employeeHoursPath);
+
+                var years = JsonSerializer.Deserialize<ObservableCollection<EmployeeYear>>(json);
+
+                EmployeeYears.Clear();
+
+                if (years != null)
+                {
+                    foreach (var year in years)
+                    {
+                        EnsureSummaryRow(year);
+
+                        foreach (var employee in year.Employees)
+                        {
+                            if (!employee.IsSummaryRow)
+                            {
+                                employee.PropertyChanged += Employee_PropertyChanged;
+                            }
+                        }
+
+                        EmployeeYears.Add(year);
+
+                        RecalculateSummary(year);
+                    }
+                }
+
+                EnsureCurrentYearExists();
+
+                SelectedEmployeeYear = EmployeeYears.OrderByDescending(x => x.Year).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Fehler beim Laden der Mitarbeiterstunden");
+
+                CreateYear(DateTime.Now.Year);
+
+                SelectedEmployeeYear = EmployeeYears.First();
+            }
+        }
+
+        private void EnsureCurrentYearExists()
+        {
+            var currentYear = DateTime.Now.Year;
+
+            if (!EmployeeYears.Any(x => x.Year == currentYear))
+            {
+                CreateYear(currentYear);
+
+                SaveEmployeeHours();
+            }
+        }
+
+        private void CreateYear(int year)
+        {
+            var employeeYear = new EmployeeYear
+            {
+                Year = year
+            };
+
+            employeeYear.Employees.Add(new EmployeeHours
+            {
+                Name = "Gesamt",
+                IsSummaryRow = true
+            });
+
+            EmployeeYears.Add(employeeYear);
+        }
+
+        private void EnsureSummaryRow(EmployeeYear year)
+        {
+            if (!year.Employees.Any(x => x.IsSummaryRow))
+            {
+                year.Employees.Add(new EmployeeHours
                 {
                     Name = "Gesamt",
                     IsSummaryRow = true
                 });
-                return;
             }
-
-            var json = File.ReadAllText(_employeeHoursPath);
-
-            var employees = JsonSerializer.Deserialize<ObservableCollection<EmployeeHours>>(json);
-
-            if (employees == null)
-                return;
-
-            Employees.Clear();
-
-            foreach (var employee in employees)
-            {
-                Employees.Add(employee);
-            }
-
-            if (!Employees.Any(x => x.IsSummaryRow))
-            {
-                Employees.Add(new EmployeeHours
-                {
-                    Name = "Gesamt",
-                    IsSummaryRow = true
-                });
-            }
-
-            RecalculateSummary();
         }
     }
 }

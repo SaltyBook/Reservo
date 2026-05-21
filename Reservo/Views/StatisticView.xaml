@@ -374,12 +374,30 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="15" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="20" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
+                        <ComboBox Grid.Row="0"
+                                  Width="180"
+                                  HorizontalAlignment="Left"
+                                  Margin="10"
+                                  ItemsSource="{Binding EmployeeYears}"
+                                  SelectedItem="{Binding SelectedEmployeeYear}"
+                                  Style="{StaticResource ModernComboBoxStyle}">
+
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Year}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+
+                        </ComboBox>
+
                         <!-- HEADER -->
-                        <Grid Grid.Row="0">
+                        <Grid Grid.Row="2">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -420,8 +438,8 @@
                         </Grid>
 
                         <!-- TABELLE -->
-                        <DataGrid Grid.Row="2"
-                                  ItemsSource="{Binding Employees}"
+                        <DataGrid Grid.Row="4"
+                                  ItemsSource="{Binding CurrentEmployees}"
                                   SelectedItem="{Binding SelectedEmployee}"
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False"

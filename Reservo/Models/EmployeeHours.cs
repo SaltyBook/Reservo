@@ -1,18 +1,20 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace Reservo.Models
 {
     public class EmployeeHours : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private string _name;
+        private string _name = string.Empty;
+
         public string Name
         {
             get => _name;
@@ -25,118 +27,104 @@ namespace Reservo.Models
 
         public bool IsSummaryRow { get; set; }
 
-        public Dictionary<int, decimal> HoursPerMonth { get; set; } = new Dictionary<int, decimal>();
-
+        private decimal _january;
         public decimal January
         {
-            get => GetMonthHours(1);
-            set => SetMonthHours(1, value);
+            get => _january;
+            set => SetField(ref _january, value);
         }
 
+        private decimal _february;
         public decimal February
         {
-            get => GetMonthHours(2);
-            set => SetMonthHours(2, value);
+            get => _february;
+            set => SetField(ref _february, value);
         }
 
+        private decimal _march;
         public decimal March
         {
-            get => GetMonthHours(3);
-            set => SetMonthHours(3, value);
+            get => _march;
+            set => SetField(ref _march, value);
         }
 
+        private decimal _april;
         public decimal April
         {
-            get => GetMonthHours(4);
-            set => SetMonthHours(4, value);
+            get => _april;
+            set => SetField(ref _december, value);
         }
 
+        private decimal _may;
         public decimal May
         {
-            get => GetMonthHours(5);
-            set => SetMonthHours(5, value);
+            get => _may;
+            set => SetField(ref _may, value);
         }
 
+        private decimal _june;
         public decimal June
         {
-            get => GetMonthHours(6);
-            set => SetMonthHours(6, value);
+            get => _june;
+            set => SetField(ref _june, value);
         }
 
+        private decimal _july;
         public decimal July
         {
-            get => GetMonthHours(7);
-            set => SetMonthHours(7, value);
+            get => _july;
+            set => SetField(ref _july, value);
         }
+
+        private decimal _august;
         public decimal August
         {
-            get => GetMonthHours(8);
-            set => SetMonthHours(8, value);
+            get => _august;
+            set => SetField(ref _august, value);
         }
 
+        private decimal _september;
         public decimal September
         {
-            get => GetMonthHours(9);
-            set => SetMonthHours(9, value);
+            get => _september;
+            set => SetField(ref _september, value);
         }
 
+        private decimal _october;
         public decimal October
         {
-            get => GetMonthHours(10);
-            set => SetMonthHours(10, value);
+            get => _october;
+            set => SetField(ref _october, value);
         }
 
+        private decimal _november;
         public decimal November
         {
-            get => GetMonthHours(11);
-            set => SetMonthHours(11, value);
+            get => _november;
+            set => SetField(ref _november, value);
         }
 
+        private decimal _december;
         public decimal December
         {
-            get => GetMonthHours(12);
-            set => SetMonthHours(12, value);
+            get => _december;
+            set => SetField(ref _december, value);
         }
 
-        public decimal TotalHours
+        public decimal TotalHours =>
+            January + February + March + April +
+            May + June + July + August +
+            September + October + November + December;
+
+        private void SetField(ref decimal field, decimal value, [CallerMemberName] string? propertyName = null)
         {
-            get
-            {
-                return HoursPerMonth.Values.Sum();
-            }
-            set;
-        }
+            if (field == value)
+                return;
 
-        public decimal GetMonthHours(int month)
-        {
-            if (HoursPerMonth.ContainsKey(month))
-                return HoursPerMonth[month];
+            field = value;
 
-            return 0;
-        }
-
-        public void SetMonthHours(int month, decimal value)
-        {
-            if (HoursPerMonth.ContainsKey(month))
-                HoursPerMonth[month] = value;
-            else
-                HoursPerMonth.Add(month, value);
-
-            OnPropertyChanged(nameof(HoursPerMonth));
+            OnPropertyChanged(propertyName);
             OnPropertyChanged(nameof(TotalHours));
-
-            OnPropertyChanged(nameof(January));
-            OnPropertyChanged(nameof(February));
-            OnPropertyChanged(nameof(March));
-            OnPropertyChanged(nameof(April));
-            OnPropertyChanged(nameof(May));
-            OnPropertyChanged(nameof(June));
-            OnPropertyChanged(nameof(July));
-            OnPropertyChanged(nameof(August));
-            OnPropertyChanged(nameof(September));
-            OnPropertyChanged(nameof(October));
-            OnPropertyChanged(nameof(November));
-            OnPropertyChanged(nameof(December));
         }
     }
 }
