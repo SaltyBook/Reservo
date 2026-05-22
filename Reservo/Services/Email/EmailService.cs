@@ -6,6 +6,7 @@ using MimeKit;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using Reservo.Services.Credentials;
+using Reservo.Services.PathService;
 using System.Diagnostics;
 using System.IO;
 #endregion
@@ -18,7 +19,7 @@ namespace Reservo.Services.Email
         //The method connects to an IMAP mailbox, searches the inbox and send folder for the most recent email exchanged with the recipient,
         //and quotes the latest message in the new email body.
         //It builds an HTML email with a predefined signature, optional invoice or reservation attachment, and launches Thunderbird with the composed email ready to send.
-        public void CreateEmail(Entry entry, string year, bool invoice)
+        public void CreateEmail(Entry entry, string year, bool invoice, IPathService pathService)
         {
             string quoted = "";
             string subject = "";
@@ -63,7 +64,7 @@ namespace Reservo.Services.Email
             }
 
             string body = BuildEmailBody(entry, invoice, quoted);
-            string attachment = invoice ? entry.GetInvoicePath(year).Replace(".docx", ".pdf") : entry.GetReservationPath(year).Replace(".docx", ".pdf");
+            string attachment = invoice ? pathService.GetInvoicePath(entry, year).Replace(".docx", ".pdf") : pathService.GetReservationPath(entry, year).Replace(".docx", ".pdf");
 
             OpenThunderbird(entry.EMail, subject, body, attachment);
         }

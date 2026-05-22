@@ -3,6 +3,7 @@ using Reservo.Commands;
 using Reservo.Helpers;
 using Reservo.Models;
 using Reservo.Services.Invoice;
+using Reservo.Services.PathService;
 using Reservo.Services.TemplateMapper;
 using Reservo.Services.Window;
 using System.Collections.ObjectModel;
@@ -25,7 +26,7 @@ namespace Reservo.ViewModels
 
         public ICommand CreateInvoiceCommand { get; }
 
-        public InvoiceViewModel(Entry entry, string year) : this(entry, year, new InvoiceService(new InvoiceDataFactory(), new InvoiceTemplateMapper()), new WindowService()) { }
+        public InvoiceViewModel(Entry entry, string year) : this(entry, year, new InvoiceService(new InvoiceDataFactory(), new InvoiceTemplateMapper(), new PathService()), new WindowService()) { }
 
         public InvoiceViewModel(Entry entry, string year, IInvoiceService invoiceService, IWindowService windowService)
         {

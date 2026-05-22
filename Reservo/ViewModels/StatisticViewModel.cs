@@ -24,6 +24,7 @@ namespace Reservo.ViewModels
             set
             {
                 _statisticData = value;
+                OnPropertyChanged();
             }
         }
 
@@ -121,42 +122,43 @@ namespace Reservo.ViewModels
 
             foreach (WorkbookViewModel workbook in workbooks)
             {
-                StatisticData.Add(new StatisticData());
+                var current = new StatisticData { DisplayName = workbook.DisplayName };
+
+                StatisticData.Add(current);
 
                 var entries = workbook.Entries.Where(x => !x.Canceled);
 
-                StatisticData[StatisticData.Count - 1].DisplayName = workbook.DisplayName;
-                StatisticData[StatisticData.Count - 1].AllReservations = entries.Count();
-                StatisticData[StatisticData.Count - 1].AllNights = entries.Sum(x => x.NightCount);
-                StatisticData[StatisticData.Count - 1].AllGuestsNights = entries.Sum(x => x.NightCount * x.GuestCount);
-                StatisticData[StatisticData.Count - 1].AllGuests = entries.Sum(x => x.GuestCount);
-                StatisticData[StatisticData.Count - 1].AverageGroupSize = StatisticData[StatisticData.Count - 1].AllGuests / StatisticData[StatisticData.Count - 1].AllReservations;
-                StatisticData[StatisticData.Count - 1].AverageNightCount = StatisticData[StatisticData.Count - 1].AllNights / StatisticData[StatisticData.Count - 1].AllReservations;
-                StatisticData[StatisticData.Count - 1].TotalAmount = (decimal)entries.Sum(x => x.Total);
-                StatisticData[StatisticData.Count - 1].GroupCheckCount = entries.Where(x => x.AgeCheck).Count();
-                StatisticData[StatisticData.Count - 1].AllCanceled = workbook.Entries.Where(x => x.Canceled).Count();
+                current.AllReservations = entries.Count();
+                current.AllNights = entries.Sum(x => x.NightCount);
+                current.AllGuestsNights = entries.Sum(x => x.NightCount * x.GuestCount);
+                current.AllGuests = entries.Sum(x => x.GuestCount);
+                current.AverageGroupSize = current.AllGuests / current.AllReservations;
+                current.AverageNightCount = current.AllNights / current.AllReservations;
+                current.TotalAmount = (decimal)entries.Sum(x => x.Total);
+                current.GroupCheckCount = entries.Where(x => x.AgeCheck).Count();
+                current.AllCanceled = workbook.Entries.Where(x => x.Canceled).Count();
 
-                StatisticData[0].AllReservations += StatisticData[StatisticData.Count - 1].AllReservations;
-                StatisticData[0].AllNights += StatisticData[StatisticData.Count - 1].AllNights;
-                StatisticData[0].AllGuestsNights += StatisticData[StatisticData.Count - 1].AllGuestsNights;
-                StatisticData[0].AllGuests += StatisticData[StatisticData.Count - 1].AllGuests;
-                StatisticData[0].TotalAmount += StatisticData[StatisticData.Count - 1].TotalAmount;
-                StatisticData[0].GroupCheckCount += StatisticData[StatisticData.Count - 1].GroupCheckCount;
-                StatisticData[0].AllCanceled += StatisticData[StatisticData.Count - 1].AllCanceled;
+                StatisticData[0].AllReservations += current.AllReservations;
+                StatisticData[0].AllNights += current.AllNights;
+                StatisticData[0].AllGuestsNights += current.AllGuestsNights;
+                StatisticData[0].AllGuests += current.AllGuests;
+                StatisticData[0].TotalAmount += current.TotalAmount;
+                StatisticData[0].GroupCheckCount += current.GroupCheckCount;
+                StatisticData[0].AllCanceled += current.AllCanceled;
 
                 var pieSerie = new PieSeries { StrokeThickness = 1, OutsideLabelFormat = "{1}", InsideLabelFormat = "{2:0}%", InsideLabelPosition = 0.7 };
 
-                pieSerie.Slices.Add(new PieSlice("Belegungen", StatisticData[StatisticData.Count - 1].AllReservations)
+                pieSerie.Slices.Add(new PieSlice("Belegungen", current.AllReservations)
                 {
                     Fill = OxyColor.Parse("#008001")
                 });
 
-                pieSerie.Slices.Add(new PieSlice("Stornierungen", StatisticData[StatisticData.Count - 1].AllCanceled)
+                pieSerie.Slices.Add(new PieSlice("Stornierungen", current.AllCanceled)
                 {
                     Fill = OxyColor.Parse("#FE0000")
                 });
 
-                StatisticData[StatisticData.Count - 1].PieModel.Legends.Add(new Legend
+                current.PieModel.Legends.Add(new Legend
                 {
                     LegendPosition = LegendPosition.RightTop,
                     LegendPlacement = LegendPlacement.Outside,
@@ -164,7 +166,7 @@ namespace Reservo.ViewModels
                     FontSize = 12
                 });
 
-                StatisticData[StatisticData.Count - 1].PieModel.Series.Add(pieSerie);
+                current.PieModel.Series.Add(pieSerie);
             }
 
             StatisticData[0].AverageGroupSize += StatisticData[0].AllGuests / StatisticData[0].AllReservations;

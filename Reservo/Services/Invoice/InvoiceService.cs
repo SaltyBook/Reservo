@@ -3,6 +3,7 @@ using Reservo.Helpers;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using Reservo.Services.Invoice;
+using Reservo.Services.PathService;
 using Reservo.Services.TemplateMapper;
 using System.IO;
 using Xceed.Document.NET;
@@ -15,16 +16,18 @@ namespace Reservo
     {
         private readonly InvoiceDataFactory _factory;
         private readonly IInvoiceTemplateMapper _mapper;
+        private readonly IPathService _pathService;
 
-        public InvoiceService(InvoiceDataFactory factory, IInvoiceTemplateMapper mapper)
+        public InvoiceService(InvoiceDataFactory factory, IInvoiceTemplateMapper mapper, PathService pathService)
         {
             _factory = factory;
             _mapper = mapper;
+            _pathService = pathService;
         }
 
         public void CreateInvoice(Entry entry, List<TableEntry> entries, string year)
         {
-            entry.InvoiceNumber = entry.GetInvoiceCount(year);
+            entry.InvoiceNumber = _pathService.GetInvoiceCount(year);
 
             var data = _factory.Create(entry, entries);
 
@@ -40,7 +43,7 @@ namespace Reservo
         //conditionally removes optional rows(e.g.unused additional charges), saves the document, and updates the total amount in the associated data grid.
         private void ProcessDocument(InvoiceData data, Dictionary<string, string> replacements, string year)
         {
-            string outputPath = data.Entry.GetInvoicePath(year);
+            string outputPath = _pathService.GetInvoicePath(data.Entry ,year);
             string templatePath = Path.Combine(Paths.ResourcesPath, "Rechnung-Vorlage.docx");
             File.Copy(templatePath, outputPath, true);
             using (var doc = DocX.Load(outputPath))

@@ -7,6 +7,7 @@ using Reservo.Services.Dialog;
 using Reservo.Services.Document;
 using Reservo.Services.Email;
 using Reservo.Services.File;
+using Reservo.Services.PathService;
 using Serilog;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -22,6 +23,7 @@ namespace Reservo.ViewModels
         private readonly IDocumentService _documentService;
         private readonly IDialogService _dialogService;
         private readonly IEmailService _emailService;
+        private readonly IPathService _pathService;
 
         public string FilePath { get; }
         public string DisplayName { get; }
@@ -55,9 +57,9 @@ namespace Reservo.ViewModels
         public ICommand OpenNoteCommand { get; }
         #endregion
 
-        public WorkbookViewModel(string filePath) : this(filePath, new FileService(), new DocumentService(), new DialogService(), new EmailService()) { }
+        public WorkbookViewModel(string filePath) : this(filePath, new FileService(), new DocumentService(), new DialogService(), new EmailService(), new PathService()) { }
 
-        public WorkbookViewModel(string filePath, IFileService files, IDocumentService documents, IDialogService dialog, IEmailService email)
+        public WorkbookViewModel(string filePath, IFileService files, IDocumentService documents, IDialogService dialog, IEmailService email, IPathService path)
         {
             Log.Information("WorkbookViewModel initialisiert");
 
@@ -69,6 +71,7 @@ namespace Reservo.ViewModels
             _documentService = documents;
             _dialogService = dialog;
             _emailService = email;
+            _pathService = path;
 
             AddEntryCommand = new RelayCommand(_ => AddEntry());
             DeleteEntryCommand = new RelayCommand(_ => DeleteEntry(), _ => SelectedEntry is not null);
@@ -125,12 +128,12 @@ namespace Reservo.ViewModels
             try
             {
                 var entry = SelectedEntry;
-                var documentPath = entry.GetReservationPath(Year);
+                var documentPath = _pathService.GetReservationPath(entry, Year);
 
                 if (!_fileService.Exists(documentPath))
                 {
                     Log.Debug("Reservierung existiert nicht, wird erstellt");
-                    _documentService.CreateReservation(entry, Year);
+                    _documentService.CreateReservation(entry, Year, _pathService);
                 }
 
                 _fileService.OpenFile(documentPath);
@@ -155,7 +158,7 @@ namespace Reservo.ViewModels
             try
             {
                 var entry = SelectedEntry;
-                var documentPath = entry.GetInvoicePath(Year);
+                var documentPath = _pathService.GetInvoicePath(entry, Year);
 
                 if (!_fileService.Exists(documentPath))
                 {
@@ -193,12 +196,15 @@ namespace Reservo.ViewModels
                 return;
             }
 
-            var documentPath = entry.GetReservationPath(Year);
+            var documentPath = _pathService.GetReservationPath(entry, Year);
 
-            if (_fileService.Exists(documentPath))
+            if (!_fileService.Exists(documentPath))
             {
-                _documentService.CreateReservationMail(entry, Year, _emailService, _dialogService);
+                _dialogService.ShowInfo("Fehlende Reservierung", $"Die Reservierung konnte nicht gefunden werden!\r\n{documentPath}");
+                return;
             }
+
+            _documentService.CreateReservationMail(entry, Year, _emailService, _dialogService, _pathService);
         }
 
         //Creates an email for the invoice, provided that an email address is available and the corresponding document exists
@@ -219,16 +225,26 @@ namespace Reservo.ViewModels
                 return;
             }
 
-            var documentPath = entry.GetInvoicePath(Year);
+            var documentPath = _pathService.GetInvoicePath(entry, Year);
 
-            if (_fileService.Exists(documentPath))
+            if (!_fileService.Exists(documentPath))
             {
-                _documentService.CreateInvoiceMail(entry, Year, _emailService, _dialogService);
+                _dialogService.ShowInfo("Fehlende Rechnung", $"Die Rechnung konnte nicht gefunden werden!\r\n{documentPath}");
+                return;
             }
+
+            _documentService.CreateInvoiceMail(entry, Year, _emailService, _dialogService, _pathService);
         }
 
         private void CreateCalendarEntry()
         {
+            Log.Information("Erstelle Kalendereintrag Klick");
+
+            if (SelectedEntry is null)
+            {
+                return;
+            }
+
             string calendarId = InternCredentials.CalendarID;
 
             string name = $"{SelectedEntry.GroupName} - {SelectedEntry.LastName}";

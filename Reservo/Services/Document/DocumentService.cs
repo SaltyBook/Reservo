@@ -4,6 +4,7 @@ using Reservo.Models;
 using Reservo.Services.Dialog;
 using Reservo.Services.Document;
 using Reservo.Services.Email;
+using Reservo.Services.PathService;
 using Reservo.ViewModels;
 using Reservo.Views;
 using Spire.Doc;
@@ -20,9 +21,9 @@ namespace Reservo
         //Creates a reservation confirmation document based on a Word template.
         //The method copies the reservation template to a new file, replaces predefined placeholders with the booking
         //and customer data(such as group name, address, arrival and departure dates), and saves the completed document as a finalized reservation confirmation.
-        public void CreateReservation(Entry entry, string year)
+        public void CreateReservation(Entry entry, string year, IPathService pathService)
         {
-            string outputPath = entry.GetReservationPath(year);
+            string outputPath = pathService.GetReservationPath(entry,year);
             string templatePath = Path.Combine(Paths.ResourcesPath, "Reservierungsbestätigung-Vorlage.docx");
             File.Copy(templatePath, outputPath, true);
             using (var doc = DocX.Load(outputPath))
@@ -62,16 +63,16 @@ namespace Reservo
             return window;
         }
 
-        public void CreateReservationMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService)
+        public void CreateReservationMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService, IPathService pathService)
         {
-            if(ExportPdf(entry.GetReservationPath(year), dialogService))
-                emailService.CreateEmail(entry, year, false);
+            if(ExportPdf(pathService.GetReservationPath(entry, year), dialogService))
+                emailService.CreateEmail(entry, year, false, pathService);
         }
 
-        public void CreateInvoiceMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService)
+        public void CreateInvoiceMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService, IPathService pathService)
         {
-            if(ExportPdf(entry.GetInvoicePath(year), dialogService))
-                emailService.CreateEmail(entry, year, true);
+            if(ExportPdf(pathService.GetInvoicePath(entry, year), dialogService))
+                emailService.CreateEmail(entry, year, true, pathService);
         }
 
         private bool ExportPdf(string docxPath, IDialogService dialogService)

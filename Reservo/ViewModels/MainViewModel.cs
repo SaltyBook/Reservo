@@ -71,7 +71,7 @@ namespace Reservo.ViewModels
             Init();
         }
 
-        //init StartUp
+        //Init StartUp
         private async void Init()
         {
             var credentialResult = await StartupService.RunAsync();
