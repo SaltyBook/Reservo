@@ -12,6 +12,7 @@ using Serilog;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 #endregion
 
@@ -42,7 +43,17 @@ namespace Reservo.ViewModels
             get => _selectedEntry;
             set
             {
-                SetProperty(ref _selectedEntry, value);
+                SetProperty(ref _selectedEntry, value);            
+            }
+        }
+
+        private Visibility _visibility = Visibility.Visible;
+        public Visibility Visibility
+        {
+            get => _visibility;
+            set
+            {
+                SetProperty(ref _visibility, value);
             }
         }
 

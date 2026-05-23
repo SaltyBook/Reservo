@@ -1,13 +1,16 @@
 ﻿using Reservo.Infrastructure;
 using System.ComponentModel;
-using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Reservo.Models
 {
     public class Entry : INotifyPropertyChanged
     {
         private int id;
+
+        private bool offer;
+        private bool canceled;
+        private string note = string.Empty;
+
         private string groupName = string.Empty;
         private int guestCount;
         private string salutation = string.Empty;
@@ -31,9 +34,10 @@ namespace Reservo.Models
         private string mobile = string.Empty;
         private string homePhone = string.Empty;
         private string eMail = string.Empty;
-        private bool offer;
-        private bool canceled;
-        private string note = string.Empty;
+
+        public GuestInfo Guest { get; } = new();
+        public StayInfo Stay { get; } = new();
+        public BillingInfo Billing { get; } = new();
 
         public int Id
         {
@@ -408,6 +412,11 @@ namespace Reservo.Models
         public Entry(int id, string groupName, int guestCount, string salutation, string firstName, string lastName, string street, string location, DateTime arrival, DateTime departure, int nightCount, bool infoSheet, bool calendarEntry, int? invoiceNumber, double? total, bool ageCheck, bool tent, double? drinks, int? lastVisit, DateTime reserved, ContactValues.Contact contactVia, string mobile, string homePhone, string eMail, bool offer, bool canceled, string note)
         {
             this.id = id;
+            this.offer = offer;
+            this.canceled = canceled;
+            this.note = note;
+
+            //GuestInfo
             this.groupName = groupName;
             this.guestCount = guestCount;
             this.salutation = salutation;
@@ -415,25 +424,26 @@ namespace Reservo.Models
             this.lastName = lastName;
             this.street = street;
             this.location = location;
-            this.arrival = arrival;
-            this.departure = departure;
-            this.nightCount = nightCount;
-            this.infoSheet = infoSheet;
-            this.calendarEntry = calendarEntry;
-            this.invoiceNumber = invoiceNumber;
-            this.total = total;
-            this.ageCheck = ageCheck;
-            this.tent = tent;
-            this.drinks = drinks;
             this.lastVisit = lastVisit;
-            this.reserved = reserved;
-            this.contactVia = contactVia;
             this.mobile = mobile;
             this.homePhone = homePhone;
             this.eMail = eMail;
-            this.offer = offer;
-            this.canceled = canceled;
-            this.note = note;
+
+            //StayInfo
+            this.arrival = arrival;
+            this.departure = departure;
+            this.nightCount = nightCount;
+            this.tent = tent;
+            this.ageCheck = ageCheck;
+            this.infoSheet = infoSheet;
+            this.calendarEntry = calendarEntry;
+            this.reserved = reserved;
+            this.contactVia = contactVia;
+
+            //BillingInfo
+            this.invoiceNumber = invoiceNumber;
+            this.total = total;
+            this.drinks = drinks;
         }
 
         public Entry()

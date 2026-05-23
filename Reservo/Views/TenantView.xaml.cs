@@ -39,6 +39,14 @@ namespace Reservo.Views
 
                 e.Handled = true;
             }
+
+            if (e.Key == Key.F12)
+            {
+                if (DataContext is TenantViewModel vm)
+                    vm.TogglePanelCommand.Execute(null);
+
+                e.Handled = true;
+            }
         }
     }
 }

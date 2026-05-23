@@ -8,6 +8,7 @@ using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Input;
 #endregion
 
@@ -42,6 +43,7 @@ namespace Reservo.ViewModels
         public ICommand CopyCommand { get; }
         public ICommand PasteCommand { get; }
         public ICommand CutCommand { get; }
+        public ICommand TogglePanelCommand { get; }
 
         public TenantViewModel() : this(new DialogService()) { }
 
@@ -54,6 +56,7 @@ namespace Reservo.ViewModels
             CopyCommand = new RelayCommand(Copy, null);
             PasteCommand = new RelayCommand(Paste, null);
             CutCommand = new RelayCommand(Cut, null);
+            TogglePanelCommand = new RelayCommand(TogglePanel, null);
         }
 
         //Loads all Excel files from the database directory
@@ -188,6 +191,9 @@ namespace Reservo.ViewModels
 
         private void Copy(object? _)
         {
+            if (SelectedWorkbook is null)
+                return;
+
             var entry = SelectedWorkbook.SelectedEntry;
             if (entry is null)
                 return;
@@ -233,7 +239,10 @@ namespace Reservo.ViewModels
 
         private void Cut(object? _)
         {
-            var entry = SelectedWorkbook?.SelectedEntry;
+            if (SelectedWorkbook is null)
+                return;
+
+            var entry = SelectedWorkbook.SelectedEntry;
             if (entry is null)
                 return;
 
@@ -242,13 +251,25 @@ namespace Reservo.ViewModels
             Log.Information("Eintrag {Id} ausgeschnitten", entry.Id);
         }
 
+        private void TogglePanel(object? _)
+        {
+            if (SelectedWorkbook is null)
+                return;
+
+            if (SelectedWorkbook.Visibility == Visibility.Visible)
+            {
+                SelectedWorkbook.Visibility = Visibility.Collapsed;
+                return;
+            }
+
+            SelectedWorkbook.Visibility = Visibility.Visible;
+        }
+
         //Responds to property changes in individual entries
         private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (sender is not Entry entry)
-            {
-                return;
-            }
+            if (sender is not Entry entry)            
+                return;         
 
             if (e.PropertyName == nameof(Entry.Departure))
             {
