@@ -60,6 +60,18 @@ namespace Reservo.Models
             }
         }
 
+        public BillingInfo(int? invoiceNumber, double? total, double? drinks)
+        {
+            this.invoiceNumber = invoiceNumber;
+            this.total = total;
+            this.drinks = drinks;
+        }
+
+        public BillingInfo()
+        {
+
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged(string name)
         {

@@ -136,6 +136,40 @@ namespace Reservo.Models
             }
         }
 
+        public StayInfo(DateTime arrival, DateTime departure, int nightCount, bool tent, bool ageCheck, bool infoSheet, bool calendarEntry, DateTime reserved, ContactValues.Contact contactVia)
+        {
+            this.arrival = arrival;
+            this.departure = departure;
+            this.nightCount = nightCount;
+            this.tent = tent;
+            this.ageCheck = ageCheck;
+            this.infoSheet = infoSheet;
+            this.calendarEntry = calendarEntry;
+            this.reserved = reserved;
+            this.contactVia = contactVia;
+        }
+
+        public StayInfo(DateTime arrival, DateTime departure, int nightCount, ContactValues.Contact contactVia)
+        {
+            this.arrival = arrival;
+            this.departure = departure;
+            this.nightCount = nightCount;
+            this.contactVia = contactVia;
+        }
+
+        public StayInfo(DateTime arrival, DateTime departure, DateTime reserved)
+        {
+            this.arrival = arrival;
+            this.departure = departure;
+            this.reserved = reserved;
+            CalcNightCount();
+        }
+
+        public StayInfo()
+        {
+
+        }
+
         //Calculates the number of overnight stays based on arrival and departure dates.
         //If the departure date is later than the arrival date, the difference in days is assigned as the night count. Otherwise, the value is set to zero.
         private void CalcNightCount()

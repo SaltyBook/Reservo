@@ -52,7 +52,7 @@ namespace Reservo.Models
         public decimal April
         {
             get => _april;
-            set => SetField(ref _december, value);
+            set => SetField(ref _april, value);
         }
 
         private decimal _may;

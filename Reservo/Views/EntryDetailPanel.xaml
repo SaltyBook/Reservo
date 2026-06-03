@@ -1,0 +1,520 @@
+﻿<UserControl x:Class="Reservo.Views.EntryDetailPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:Reservo.Converters"
+             xmlns:local="clr-namespace:Reservo.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
+        <!-- Badge-Stil -->
+        <Style x:Key="Badge"
+               TargetType="Border">
+            <Setter Property="CornerRadius"
+                    Value="4" />
+            <Setter Property="Padding"
+                    Value="7,2" />
+            <Setter Property="Margin"
+                    Value="0,0,5,5" />
+        </Style>
+        <Style x:Key="BadgeText"
+               TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="11" />
+            <Setter Property="FontWeight"
+                    Value="Medium" />
+        </Style>
+
+        <!-- Trennlinie -->
+        <Style x:Key="Divider"
+               TargetType="Separator">
+            <Setter Property="Margin"
+                    Value="0,10,0,0" />
+            <Setter Property="Background"
+                    Value="#1A000000" />
+        </Style>
+
+        <!-- Zeilen-Label -->
+        <Style x:Key="RowLabel"
+               TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="13" />
+            <Setter Property="Foreground"
+                    Value="#888780" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="0,5" />
+        </Style>
+
+        <!-- Zeilen-Wert -->
+        <Style x:Key="RowValue"
+               TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="13" />
+            <Setter Property="TextAlignment"
+                    Value="Right" />
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
+            <Setter Property="VerticalAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="0,5" />
+        </Style>
+
+        <!-- Abschnitts-Label -->
+        <Style x:Key="SectionLabel"
+               TargetType="TextBlock">
+            <Setter Property="FontSize"
+                    Value="11" />
+            <Setter Property="Foreground"
+                    Value="#B4B2A9" />
+            <Setter Property="FontWeight"
+                    Value="Medium" />
+            <Setter Property="Margin"
+                    Value="0,14,0,6" />
+        </Style>
+
+        <!-- Footer-Button -->
+        <Style x:Key="FooterButton"
+               TargetType="Button">
+            <Setter Property="FontSize"
+                    Value="13" />
+            <Setter Property="Padding"
+                    Value="0,7" />
+            <Setter Property="BorderThickness"
+                    Value="0.5" />
+            <Setter Property="BorderBrush"
+                    Value="#33000000" />
+            <Setter Property="Background"
+                    Value="White" />
+            <Setter Property="Cursor"
+                    Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="6"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="#F1EFE8" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Footer-Button Primär -->
+        <Style x:Key="FooterButtonPrimary"
+               TargetType="Button"
+               BasedOn="{StaticResource FooterButton}">
+            <Setter Property="Background"
+                    Value="#2563EB" />
+            <Setter Property="BorderBrush"
+                    Value="#2563EB" />
+            <Setter Property="Foreground"
+                    Value="White" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter Property="Background"
+                            Value="#1d4ed8" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <Border BorderThickness="0.5,0,0,0"
+            BorderBrush="#1A000000"
+            Background="White"
+            CornerRadius="14"
+            Width="340">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <!-- Header -->
+                <RowDefinition Height="Auto" />
+                <!-- Badges -->
+                <RowDefinition Height="*" />
+                <!-- Body (scrollbar) -->
+                <RowDefinition Height="Auto" />
+                <!-- Footer -->
+            </Grid.RowDefinitions>
+
+            <!-- ── Header ── -->
+            <Grid Grid.Row="0"
+                  Margin="20,16,20,14">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Avatar -->
+                <Border Grid.Column="0"
+                        Width="36"
+                        Height="36"
+                        CornerRadius="18"
+                        Background="#E6F1FB"
+                        Margin="0,0,10,0">
+                    <TextBlock FontSize="13"
+                               FontWeight="Medium"
+                               Foreground="#0C447C"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Text="{Binding SelectedEntry.Initials}" />
+                </Border>
+
+                <!-- Name + Unterzeile -->
+                <StackPanel Grid.Column="1"
+                            VerticalAlignment="Center">
+                    <TextBlock FontSize="15"
+                               FontWeight="Medium"
+                               Text="{Binding SelectedEntry.FullName}" />
+                    <TextBlock FontSize="12"
+                               Foreground="#888780"
+                               Margin="0,2,0,0">
+                        <Run Text="{Binding SelectedEntry.GroupName, Mode=OneWay}" />
+                        <Run Text=" · ID " />
+                        <Run Text="{Binding SelectedEntry.Id, Mode=OneWay}" />
+                    </TextBlock>
+                </StackPanel>
+
+                <!-- Schließen-Button -->
+                <Button Grid.Column="2"
+                        Command="{Binding CloseDetailCommand}"
+                        ToolTip="Panel schließen"
+                        Width="28"
+                        Height="28"
+                        Cursor="Hand"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        VerticalAlignment="Top">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Background="{TemplateBinding Background}"
+                                    CornerRadius="6"
+                                    Width="28"
+                                    Height="28">
+                                <TextBlock Text="✕"
+                                           FontSize="13"
+                                           Foreground="#888780"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                         Value="True">
+                                    <Setter Property="Background"
+                                            Value="#F1EFE8" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </Grid>
+
+            <!-- ── Status-Badges ── -->
+            <WrapPanel Grid.Row="1"
+                       Margin="20,0,20,4"
+                       Orientation="Horizontal">
+
+                <Border Style="{StaticResource Badge}"
+                        Background="#FCEBEB"
+                        Visibility="{Binding SelectedEntry.Canceled, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Style="{StaticResource BadgeText}"
+                               Foreground="#791F1F"
+                               Text="Storniert" />
+                </Border>
+
+                <Border Style="{StaticResource Badge}"
+                        Background="#E6F1FB"
+                        Visibility="{Binding SelectedEntry.Offer, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Style="{StaticResource BadgeText}"
+                               Foreground="#0C447C"
+                               Text="Angebot" />
+                </Border>
+
+                <Border Style="{StaticResource Badge}"
+                        Background="#EAF3DE"
+                        Visibility="{Binding SelectedEntry.InfoSheet, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Style="{StaticResource BadgeText}"
+                               Foreground="#27500A"
+                               Text="Infoblatt" />
+                </Border>
+
+                <Border Style="{StaticResource Badge}"
+                        Background="#F1EFE8"
+                        Visibility="{Binding SelectedEntry.Tent, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Style="{StaticResource BadgeText}"
+                               Foreground="#444441"
+                               Text="Zelt" />
+                </Border>
+
+                <Border Style="{StaticResource Badge}"
+                        Background="#F1EFE8"
+                        Visibility="{Binding SelectedEntry.CalendarEntry, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Style="{StaticResource BadgeText}"
+                               Foreground="#444441"
+                               Text="Kalendereintrag" />
+                </Border>
+
+            </WrapPanel>
+
+            <!-- ── Body ── -->
+            <ScrollViewer Grid.Row="2"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="20,0,20,16">
+
+                    <!-- Gast -->
+                    <Separator Style="{StaticResource Divider}" />
+                    <TextBlock Style="{StaticResource SectionLabel}"
+                               Text="GAST" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Anrede" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Salutation}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Anzahl Gäste" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.GuestCount}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Straße" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Street}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Ort" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Location}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Letzter Besuch" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.LastVisit}" />
+                    </Grid>
+
+                    <!-- Aufenthalt -->
+                    <Separator Style="{StaticResource Divider}" />
+                    <TextBlock Style="{StaticResource SectionLabel}"
+                               Text="AUFENTHALT" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Anreise" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Arrival, StringFormat='ddd, dd MMM yyyy'}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Abreise" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Departure, StringFormat='ddd, dd MMM yyyy'}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Nächte" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.NightCount}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Reserviert am" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Reserved, StringFormat='dd MMM yyyy'}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Kontaktweg" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.ContactVia}" />
+                    </Grid>
+
+                    <!-- Kontakt -->
+                    <Separator Style="{StaticResource Divider}" />
+                    <TextBlock Style="{StaticResource SectionLabel}"
+                               Text="KONTAKT" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="E-Mail" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Foreground="#185FA5"
+                                   Text="{Binding SelectedEntry.EMail}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Mobil" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Mobile}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Festnetz" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.HomePhone}" />
+                    </Grid>
+
+                    <!-- Abrechnung -->
+                    <Separator Style="{StaticResource Divider}" />
+                    <TextBlock Style="{StaticResource SectionLabel}"
+                               Text="ABRECHNUNG" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Rechnungsnr." />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.InvoiceNumber}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Getränke" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   Text="{Binding SelectedEntry.Drinks, StringFormat='{}{0:N2} €'}" />
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource RowLabel}"
+                                   Text="Gesamt" />
+                        <TextBlock Style="{StaticResource RowValue}"
+                                   Grid.Column="1"
+                                   FontWeight="Medium"
+                                   Text="{Binding SelectedEntry.Total, StringFormat='{}{0:N2} €'}" />
+                    </Grid>
+
+                    <!-- Notiz -->
+                    <Separator Style="{StaticResource Divider}" />
+                    <TextBlock Style="{StaticResource SectionLabel}"
+                               Text="NOTIZ" />
+                    <TextBlock FontSize="13"
+                               Foreground="#888780"
+                               TextWrapping="Wrap"
+                               LineHeight="20"
+                               Text="{Binding SelectedEntry.Note}" />
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ── Footer ── -->
+            <Border Grid.Row="3"
+                    BorderThickness="0,0.5,0,0"
+                    BorderBrush="#1A000000"
+                    Padding="20,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="8" />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Content="Reservierung"
+                            Style="{StaticResource FooterButton}"
+                            Command="{Binding CreateReservationCommand}" />
+                    <Button Grid.Column="2"
+                            Content="Rechnung"
+                            Style="{StaticResource FooterButtonPrimary}"
+                            Command="{Binding CreateInvoiceCommand}" />
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</UserControl>

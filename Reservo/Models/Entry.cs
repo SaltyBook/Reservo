@@ -11,6 +11,10 @@ namespace Reservo.Models
         private bool canceled;
         private string note = string.Empty;
 
+        public string Initials => $"{FirstName.FirstOrDefault()}{LastName.FirstOrDefault()}".ToUpper();
+
+        public string FullName => $"{FirstName} {LastName}".Trim();
+
         private string groupName = string.Empty;
         private int guestCount;
         private string salutation = string.Empty;
@@ -35,9 +39,9 @@ namespace Reservo.Models
         private string homePhone = string.Empty;
         private string eMail = string.Empty;
 
-        public GuestInfo Guest { get; } = new();
-        public StayInfo Stay { get; } = new();
-        public BillingInfo Billing { get; } = new();
+        public GuestInfo GuestInfo { get; } = new();
+        public StayInfo StayInfo { get; } = new();
+        public BillingInfo BillingInfo { get; } = new();
 
         public int Id
         {
@@ -48,6 +52,45 @@ namespace Reservo.Models
                 {
                     id = value;
                     OnPropertyChanged(nameof(Id));
+                }
+            }
+        }
+
+        public bool Offer
+        {
+            get => offer;
+            set
+            {
+                if (offer != value)
+                {
+                    offer = value;
+                    OnPropertyChanged(nameof(Offer));
+                }
+            }
+        }
+
+        public bool Canceled
+        {
+            get => canceled;
+            set
+            {
+                if (canceled != value)
+                {
+                    canceled = value;
+                    OnPropertyChanged(nameof(Canceled));
+                }
+            }
+        }
+
+        public string Note
+        {
+            get => note;
+            set
+            {
+                if (note != value)
+                {
+                    note = value;
+                    OnPropertyChanged(nameof(Note));
                 }
             }
         }
@@ -356,45 +399,6 @@ namespace Reservo.Models
             }
         }
 
-        public bool Offer
-        {
-            get => offer;
-            set
-            {
-                if (offer != value)
-                {
-                    offer = value;
-                    OnPropertyChanged(nameof(Offer));
-                }
-            }
-        }
-
-        public bool Canceled
-        {
-            get => canceled;
-            set
-            {
-                if (canceled != value)
-                {
-                    canceled = value;
-                    OnPropertyChanged(nameof(Canceled));
-                }
-            }
-        }
-
-        public string Note
-        {
-            get => note;
-            set
-            {
-                if (note != value)
-                {
-                    note = value;
-                    OnPropertyChanged(nameof(Note));
-                }
-            }
-        }
-
         private bool isNoteOpen;
         public bool IsNoteOpen
         {
@@ -446,6 +450,31 @@ namespace Reservo.Models
             this.drinks = drinks;
         }
 
+        public Entry(int id, bool offer, bool canceled, string note, GuestInfo guestInfo, StayInfo stayInfo, BillingInfo billingInfo)
+        {
+            this.id = id;
+            this.offer = offer;
+            this.canceled = canceled;
+            this.note = note;
+            GuestInfo = guestInfo;
+            StayInfo = stayInfo;
+            BillingInfo = billingInfo;
+        }
+
+        public Entry(int id, GuestInfo guestInfo, StayInfo stayInfo)
+        {
+            this.id = id;
+            GuestInfo = guestInfo;
+            StayInfo = stayInfo;
+        }
+
+        public Entry(int id)
+        {
+            this.id = id;
+            StayInfo = new StayInfo(DateTime.Now.Date, DateTime.Now.Date.AddDays(2), DateTime.Now.Date);
+            CalcNightCount();
+        }
+
         public Entry()
         {
             arrival = DateTime.Now.Date;
@@ -469,6 +498,11 @@ namespace Reservo.Models
             return new Entry
             {
                 Id = nextId,
+                Offer = this.Offer,
+                Canceled = this.Canceled,
+                Note = this.Note,
+
+                //GuestInfo
                 GroupName = this.GroupName,
                 GuestCount = this.GuestCount,
                 Salutation = this.Salutation,
@@ -476,26 +510,41 @@ namespace Reservo.Models
                 LastName = this.LastName,
                 Street = this.Street,
                 Location = this.Location,
-                Arrival = this.Arrival,
-                Departure = this.Departure,
-                NightCount = this.NightCount,
-                infoSheet = this.InfoSheet,
-                CalendarEntry = this.CalendarEntry,
-                InvoiceNumber = this.InvoiceNumber,
-                Total = this.Total,
-                AgeCheck = this.AgeCheck,
-                Tent = this.Tent,
-                Drinks = this.Drinks,
                 LastVisit = this.LastVisit,
-                Reserved = this.Reserved,
-                ContactVia = this.ContactVia,
                 Mobile = this.Mobile,
                 HomePhone = this.HomePhone,
                 EMail = this.EMail,
+
+                //StayInfo
+                Arrival = this.Arrival,
+                Departure = this.Departure,
+                NightCount = this.NightCount,
+                Tent = this.Tent,
+                infoSheet = this.InfoSheet,
+                CalendarEntry = this.CalendarEntry,
+                Reserved = this.Reserved,
+                ContactVia = this.ContactVia,
+
+                //BillingInfo
+                InvoiceNumber = this.InvoiceNumber,
+                Total = this.Total,
+                AgeCheck = this.AgeCheck,
+                Drinks = this.Drinks
+            };
+        }
+
+        public Entry FullClone(int nextId, string test)
+        {
+            return new Entry
+            (
+                Id = nextId,
                 Offer = this.Offer,
                 Canceled = this.Canceled,
-                Note = this.Note
-            };
+                Note = this.Note,
+                new GuestInfo(this.GroupName, this.GuestCount, this.Salutation, this.FirstName, this.LastName, this.Street, this.Location, this.LastVisit, this.Mobile, this.HomePhone, this.EMail),
+                new StayInfo(this.Arrival, this.Departure, this.NightCount, this.Tent, this.AgeCheck, this.InfoSheet, this.CalendarEntry, this.Reserved, this.ContactVia),
+                new BillingInfo(this.InvoiceNumber, this.Total, this.Drinks)
+            );
         }
 
         public Entry PartialClone(int nextId)
@@ -503,6 +552,8 @@ namespace Reservo.Models
             return new Entry
             {
                 Id = nextId,
+
+                //GuestInfo
                 GroupName = this.GroupName,
                 GuestCount = this.GuestCount,
                 Salutation = this.Salutation,
@@ -510,14 +561,26 @@ namespace Reservo.Models
                 LastName = this.LastName,
                 Street = this.Street,
                 Location = this.Location,
+                Mobile = this.Mobile,
+                HomePhone = this.HomePhone,
+                EMail = this.EMail,
+
+                //StayInfo
                 Arrival = this.Arrival,
                 Departure = this.Departure,
                 NightCount = this.NightCount,
-                ContactVia = this.ContactVia,
-                Mobile = this.Mobile,
-                HomePhone = this.HomePhone,
-                EMail = this.EMail
+                ContactVia = this.ContactVia
             };
+        }
+
+        public Entry PartialClone(int nextId, string test)
+        {
+            return new Entry
+           (
+                Id = nextId,
+                new GuestInfo(this.GroupName, this.GuestCount, this.Salutation, this.FirstName, this.LastName, this.Street, this.Location, this.Departure.Month, this.Mobile, this.HomePhone, this.EMail),
+                new StayInfo(this.Arrival, this.Departure, this.NightCount, this.ContactVia)
+           );
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

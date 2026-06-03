@@ -155,6 +155,26 @@ namespace Reservo.Models
                     OnPropertyChanged(nameof(EMail));
                 }
             }
+        }    
+
+        public GuestInfo(string groupName, int guestCount, string salutation, string firstName, string lastName, string street, string location, int? lastVisit, string mobile, string homePhone, string eMail)
+        {
+            this.groupName = groupName;
+            this.guestCount = guestCount;
+            this.salutation = salutation;
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.street = street;
+            this.location = location;
+            this.lastVisit = lastVisit;
+            this.mobile = mobile;
+            this.homePhone = homePhone;
+            this.eMail = eMail;
+        }
+
+        public GuestInfo()
+        {
+
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
