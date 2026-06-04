@@ -5,6 +5,6 @@ namespace Reservo.Services.Email
 {
     public interface IEmailService
     {
-        void CreateEmail(Entry entry, string year, bool invoice, IPathService path);
+        void CreateEmail(Entry entry, bool invoice, IPathService path);
     }
 }

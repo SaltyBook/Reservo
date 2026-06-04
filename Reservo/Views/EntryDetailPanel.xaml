@@ -186,7 +186,7 @@
                     <TextBlock FontSize="12"
                                Foreground="#888780"
                                Margin="0,2,0,0">
-                        <Run Text="{Binding SelectedEntry.GroupName, Mode=OneWay}" />
+                        <Run Text="{Binding SelectedEntry.GuestInfo.GroupName, Mode=OneWay}" />
                         <Run Text=" · ID " />
                         <Run Text="{Binding SelectedEntry.Id, Mode=OneWay}" />
                     </TextBlock>
@@ -249,7 +249,7 @@
 
                 <Border Style="{StaticResource Badge}"
                         Background="#EAF3DE"
-                        Visibility="{Binding SelectedEntry.InfoSheet, Converter={StaticResource BoolToVisibility}}">
+                        Visibility="{Binding SelectedEntry.StayInfo.InfoSheet, Converter={StaticResource BoolToVisibility}}">
                     <TextBlock Style="{StaticResource BadgeText}"
                                Foreground="#27500A"
                                Text="Infoblatt" />
@@ -257,7 +257,7 @@
 
                 <Border Style="{StaticResource Badge}"
                         Background="#F1EFE8"
-                        Visibility="{Binding SelectedEntry.Tent, Converter={StaticResource BoolToVisibility}}">
+                        Visibility="{Binding SelectedEntry.StayInfo.Tent, Converter={StaticResource BoolToVisibility}}">
                     <TextBlock Style="{StaticResource BadgeText}"
                                Foreground="#444441"
                                Text="Zelt" />
@@ -265,7 +265,7 @@
 
                 <Border Style="{StaticResource Badge}"
                         Background="#F1EFE8"
-                        Visibility="{Binding SelectedEntry.CalendarEntry, Converter={StaticResource BoolToVisibility}}">
+                        Visibility="{Binding SelectedEntry.StayInfo.CalendarEntry, Converter={StaticResource BoolToVisibility}}">
                     <TextBlock Style="{StaticResource BadgeText}"
                                Foreground="#444441"
                                Text="Kalendereintrag" />
@@ -292,7 +292,7 @@
                                    Text="Anrede" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Salutation}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.Salutation}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -303,7 +303,7 @@
                                    Text="Anzahl Gäste" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.GuestCount}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.GuestCount}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -314,7 +314,7 @@
                                    Text="Straße" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Street}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.Street}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -325,7 +325,7 @@
                                    Text="Ort" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Location}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.Location}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -336,7 +336,7 @@
                                    Text="Letzter Besuch" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.LastVisit}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.LastVisit}" />
                     </Grid>
 
                     <!-- Aufenthalt -->
@@ -353,7 +353,7 @@
                                    Text="Anreise" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Arrival, StringFormat='ddd, dd MMM yyyy'}" />
+                                   Text="{Binding SelectedEntry.StayInfo.Arrival, StringFormat='ddd, dd MMM yyyy'}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -364,7 +364,7 @@
                                    Text="Abreise" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Departure, StringFormat='ddd, dd MMM yyyy'}" />
+                                   Text="{Binding SelectedEntry.StayInfo.Departure, StringFormat='ddd, dd MMM yyyy'}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -375,7 +375,7 @@
                                    Text="Nächte" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.NightCount}" />
+                                   Text="{Binding SelectedEntry.StayInfo.NightCount}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -386,7 +386,7 @@
                                    Text="Reserviert am" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Reserved, StringFormat='dd MMM yyyy'}" />
+                                   Text="{Binding SelectedEntry.StayInfo.Reserved, StringFormat='dd MMM yyyy'}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -397,7 +397,7 @@
                                    Text="Kontaktweg" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.ContactVia}" />
+                                   Text="{Binding SelectedEntry.StayInfo.ContactVia}" />
                     </Grid>
 
                     <!-- Kontakt -->
@@ -415,7 +415,7 @@
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
                                    Foreground="#185FA5"
-                                   Text="{Binding SelectedEntry.EMail}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.EMail}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -426,7 +426,7 @@
                                    Text="Mobil" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Mobile}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.Mobile}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -437,7 +437,7 @@
                                    Text="Festnetz" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.HomePhone}" />
+                                   Text="{Binding SelectedEntry.GuestInfo.HomePhone}" />
                     </Grid>
 
                     <!-- Abrechnung -->
@@ -454,7 +454,7 @@
                                    Text="Rechnungsnr." />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.InvoiceNumber}" />
+                                   Text="{Binding SelectedEntry.BillingInfo.InvoiceNumber}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -465,7 +465,7 @@
                                    Text="Getränke" />
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
-                                   Text="{Binding SelectedEntry.Drinks, StringFormat='{}{0:N2} €'}" />
+                                   Text="{Binding SelectedEntry.BillingInfo.Drinks, StringFormat='{}{0:N2} €'}" />
                     </Grid>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -477,7 +477,7 @@
                         <TextBlock Style="{StaticResource RowValue}"
                                    Grid.Column="1"
                                    FontWeight="Medium"
-                                   Text="{Binding SelectedEntry.Total, StringFormat='{}{0:N2} €'}" />
+                                   Text="{Binding SelectedEntry.BillingInfo.Total, StringFormat='{}{0:N2} €'}" />
                     </Grid>
 
                     <!-- Notiz -->
@@ -504,14 +504,14 @@
                         <ColumnDefinition Width="8" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0"
+                    <!--<Button Grid.Column="0"
                             Content="Reservierung"
                             Style="{StaticResource FooterButton}"
                             Command="{Binding CreateReservationCommand}" />
                     <Button Grid.Column="2"
                             Content="Rechnung"
                             Style="{StaticResource FooterButtonPrimary}"
-                            Command="{Binding CreateInvoiceCommand}" />
+                            Command="{Binding CreateInvoiceCommand}" />-->
                 </Grid>
             </Border>
 

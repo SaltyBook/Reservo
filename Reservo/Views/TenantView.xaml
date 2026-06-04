@@ -108,7 +108,7 @@
                                                             Value="{StaticResource Brush.RowOffer}" />
                                                 </DataTrigger>
 
-                                                <DataTrigger Binding="{Binding Departure, Converter={StaticResource IsPast}}"
+                                                <DataTrigger Binding="{Binding StayInfo.Departure, Converter={StaticResource IsPast}}"
                                                              Value="True">
                                                     <Setter Property="Background"
                                                             Value="{StaticResource Brush.RowPast}" />
@@ -178,7 +178,7 @@
                                             <behavior:OneClickDataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
                                                     <Grid>
-                                                        <TextBlock Text="{Binding GroupName}" />
+                                                        <TextBlock Text="{Binding GuestInfo.GroupName}" />
 
                                                         <ToggleButton x:Name="NoteButton"
                                                                       Width="10"
@@ -222,28 +222,28 @@
 
                                             <behavior:OneClickDataGridTemplateColumn.CellEditingTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <TextBox Text="{Binding GuestInfo.GroupName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 </DataTemplate>
                                             </behavior:OneClickDataGridTemplateColumn.CellEditingTemplate>
                                         </behavior:OneClickDataGridTemplateColumn>
 
                                         <DataGridTextColumn Header="Anzahl Gäste"
-                                                            Binding="{Binding GuestCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.GuestCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="SizeToHeader" />
                                         <DataGridTextColumn Header="Anrede"
-                                                            Binding="{Binding Salutation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.Salutation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="SizeToHeader" />
                                         <DataGridTextColumn Header="Vorname"
-                                                            Binding="{Binding FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.FirstName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="120" />
                                         <DataGridTextColumn Header="Nachname"
-                                                            Binding="{Binding LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.LastName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="120" />
                                         <DataGridTextColumn Header="Straße"
-                                                            Binding="{Binding Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.Street, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="Auto" />
                                         <DataGridTextColumn Header="Ort"
-                                                            Binding="{Binding Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="Auto" />
 
                                         <DataGridTemplateColumn Header="Anreise"
@@ -251,12 +251,12 @@
                                                                 SortMemberPath="Arrival">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Arrival, Converter={StaticResource LongDateFormat}}" />
+                                                    <TextBlock Text="{Binding StayInfo.Arrival, Converter={StaticResource LongDateFormat}}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                             <DataGridTemplateColumn.CellEditingTemplate>
                                                 <DataTemplate>
-                                                    <DatePicker SelectedDate="{Binding Arrival, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <DatePicker SelectedDate="{Binding StayInfo.Arrival, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellEditingTemplate>
                                         </DataGridTemplateColumn>
@@ -266,24 +266,24 @@
                                                                 SortMemberPath="Departure">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Departure, Converter={StaticResource LongDateFormat}}" />
+                                                    <TextBlock Text="{Binding StayInfo.Departure, Converter={StaticResource LongDateFormat}}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                             <DataGridTemplateColumn.CellEditingTemplate>
                                                 <DataTemplate>
-                                                    <DatePicker SelectedDate="{Binding Departure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <DatePicker SelectedDate="{Binding StayInfo.Departure, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellEditingTemplate>
                                         </DataGridTemplateColumn>
 
                                         <DataGridTextColumn Header="Nächte"
-                                                            Binding="{Binding NightCount, Mode=OneWay}"
+                                                            Binding="{Binding StayInfo.NightCount, Mode=OneWay}"
                                                             Width="SizeToHeader" />
                                         <DataGridTemplateColumn Header="Infoblatt"
                                                                 Width="SizeToHeader">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding InfoSheet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    <CheckBox IsChecked="{Binding StayInfo.InfoSheet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                               Style="{StaticResource ModernCheckBoxStyle}"
                                                               HorizontalAlignment="Center"
                                                               VerticalAlignment="Center"
@@ -295,7 +295,7 @@
                                                                 Width="SizeToHeader">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding CalendarEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    <CheckBox IsChecked="{Binding StayInfo.CalendarEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                               Style="{StaticResource ModernCheckBoxStyle}"
                                                               HorizontalAlignment="Center"
                                                               VerticalAlignment="Center"
@@ -304,16 +304,16 @@
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         <DataGridTextColumn Header="Rechnungsnr."
-                                                            Binding="{Binding InvoiceNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding BillingInfo.InvoiceNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="SizeToHeader" />
                                         <DataGridTextColumn Header="Gesamt"
-                                                            Binding="{Binding Total, Converter={StaticResource EuroFormat}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding BillingInfo.Total, Converter={StaticResource EuroFormat}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="Auto" />
                                         <DataGridTemplateColumn Header="Altersprüfung"
                                                                 Width="SizeToHeader">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding AgeCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    <CheckBox IsChecked="{Binding StayInfo.AgeCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                               Style="{StaticResource ModernCheckBoxStyle}"
                                                               HorizontalAlignment="Center"
                                                               VerticalAlignment="Center"
@@ -325,7 +325,7 @@
                                                                 Width="SizeToHeader">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <CheckBox IsChecked="{Binding Tent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    <CheckBox IsChecked="{Binding StayInfo.Tent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                               Style="{StaticResource ModernCheckBoxStyle}"
                                                               HorizontalAlignment="Center"
                                                               VerticalAlignment="Center"
@@ -334,22 +334,22 @@
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         <DataGridTextColumn Header="Getränke"
-                                                            Binding="{Binding Drinks, Converter={StaticResource EuroFormat}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding BillingInfo.Drinks, Converter={StaticResource EuroFormat}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="SizeToHeader" />
                                         <DataGridTextColumn Header="Letzter Besuch"
-                                                            Binding="{Binding LastVisit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.LastVisit, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="SizeToHeader" />
                                         <DataGridTemplateColumn Header="Reserviert"
                                                                 Width="SizeToHeader"
                                                                 SortMemberPath="Reserved">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Reserved, Converter={StaticResource ShortDateFormat}}" />
+                                                    <TextBlock Text="{Binding StayInfo.Reserved, Converter={StaticResource ShortDateFormat}}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                             <DataGridTemplateColumn.CellEditingTemplate>
                                                 <DataTemplate>
-                                                    <DatePicker SelectedDate="{Binding Reserved, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <DatePicker SelectedDate="{Binding StayInfo.Reserved, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellEditingTemplate>
                                         </DataGridTemplateColumn>
@@ -358,25 +358,25 @@
                                                                 Width="165">
                                             <DataGridTemplateColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding ContactVia}" />
+                                                    <TextBlock Text="{Binding StayInfo.ContactVia}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellTemplate>
                                             <DataGridTemplateColumn.CellEditingTemplate>
                                                 <DataTemplate>
                                                     <ComboBox ItemsSource="{Binding Source={x:Static inf:ContactValues.All}}"
-                                                              SelectedItem="{Binding ContactVia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                              SelectedItem="{Binding StayInfo.ContactVia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                               Style="{StaticResource GridComboBoxStyle}" />
                                                 </DataTemplate>
                                             </DataGridTemplateColumn.CellEditingTemplate>
                                         </DataGridTemplateColumn>
                                         <DataGridTextColumn Header="Mobil"
-                                                            Binding="{Binding Mobile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.Mobile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="Auto" />
                                         <DataGridTextColumn Header="Festnetz"
-                                                            Binding="{Binding HomePhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.HomePhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="Auto" />
                                         <DataGridTextColumn Header="E-Mail"
-                                                            Binding="{Binding EMail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            Binding="{Binding GuestInfo.EMail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             Width="Auto" />
                                         <DataGridTemplateColumn Header="Angebot"
                                                                 Width="SizeToHeader">
@@ -433,7 +433,7 @@
 
                 <Border Style="{StaticResource InfoChipBorderStyle}">
                     <TextBlock Style="{StaticResource InfoChipTextStyle}"
-                               Text="{Binding SelectedWorkbook.SelectedEntry.GroupName, StringFormat=Auswahl: {0}}" />
+                               Text="{Binding SelectedWorkbook.SelectedEntry.GuestInfo.GroupName, StringFormat=Auswahl: {0}}" />
                 </Border>
             </WrapPanel>
         </Grid>

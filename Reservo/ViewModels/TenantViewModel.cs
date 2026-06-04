@@ -34,7 +34,7 @@ namespace Reservo.ViewModels
         }
 
         public int EntryCount => SelectedWorkbook?.Entries?.Count ?? 0;
-        public int PastEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Departure < DateTime.Today && !e.Canceled) ?? 0;
+        public int PastEntryCount => SelectedWorkbook?.Entries?.Count(e => e.StayInfo.Departure < DateTime.Today && !e.Canceled) ?? 0;
         public int CanceledEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Canceled) ?? 0;
 
 
@@ -89,12 +89,13 @@ namespace Reservo.ViewModels
 
                 var workbookViewModel = new WorkbookViewModel(file)
                 {
-                    Entries = new ObservableCollection<Entry>(result.Entries.OrderBy(x => x.Arrival))
+                    Entries = new ObservableCollection<Entry>(result.Entries.OrderBy(x => x.StayInfo.Arrival))
                 };
 
                 foreach (var entry in workbookViewModel.Entries)
                 {
                     entry.PropertyChanged += Entry_PropertyChanged;
+                    entry.Year = workbookViewModel.Year;
                 }
 
                 Workbooks.Add(workbookViewModel);
@@ -104,7 +105,7 @@ namespace Reservo.ViewModels
                 warnings.AddRange(result.Warnings);
             }
 
-            SelectedWorkbook = Workbooks.FirstOrDefault(x => x.Year == DateTime.Now.Year.ToString());
+            SelectedWorkbook = Workbooks.FirstOrDefault(x => x.Year == DateTime.Now.Year);
 
             CheckAllEntryDates();
 
@@ -182,9 +183,9 @@ namespace Reservo.ViewModels
             Log.Warning("Datumsüberschneidungen in Tabelle {DisplayName} gefunden: {Count}", workbook.DisplayName, overlaps.Count);
             foreach (var (firstEntry, secondEntry) in overlaps)
             {
-                Log.Warning("Überschneidung: {IdA} ({FromA:d}-{ToA:d}) <-> {IdB} ({FromB:d}-{ToB:d})", firstEntry.Id, firstEntry.Arrival, firstEntry.Departure, secondEntry.Id, secondEntry.Arrival, secondEntry.Departure);
+                Log.Warning("Überschneidung: {IdA} ({FromA:d}-{ToA:d}) <-> {IdB} ({FromB:d}-{ToB:d})", firstEntry.Id, firstEntry.StayInfo.Arrival, firstEntry.StayInfo.Departure, secondEntry.Id, secondEntry.StayInfo.Arrival, secondEntry.StayInfo.Departure);
 
-                _dialogService.ShowInfo("Überschneidung", $"{firstEntry.Id} {firstEntry.GroupName} Abreise {firstEntry.Departure:d}\n{secondEntry.Id} {secondEntry.GroupName} Anreise {secondEntry.Arrival:d}");
+                _dialogService.ShowInfo("Überschneidung", $"{firstEntry.Id} {firstEntry.GuestInfo.GroupName} Abreise {firstEntry.StayInfo.Departure:d}\n{secondEntry.Id} {secondEntry.GuestInfo.GroupName} Anreise {secondEntry.StayInfo.Arrival:d}");
             }
         }
         #endregion
@@ -232,6 +233,7 @@ namespace Reservo.ViewModels
             copy.PropertyChanged += Entry_PropertyChanged;
 
             target.Entries.Add(copy);
+            copy.Year = target.Year;
             target.SelectedEntry = copy;
 
             Log.Information("Eintrag eingefügt in {Workbook}", target.DisplayName);
@@ -271,7 +273,7 @@ namespace Reservo.ViewModels
             if (sender is not Entry entry)            
                 return;         
 
-            if (e.PropertyName == nameof(Entry.Departure))
+            if (e.PropertyName == nameof(Entry.StayInfo.Departure))
             {
                 Log.Debug("Abreisedatum geändert (Id {Id})", entry.Id);
                 CheckChangedEntryDate(entry);

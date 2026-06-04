@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿#region Usings
+using OxyPlot;
 using OxyPlot.Legends;
 using OxyPlot.Series;
 using PublicHoliday;
@@ -10,6 +11,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Text.Json;
 using System.Windows.Input;
+#endregion
 
 namespace Reservo.ViewModels
 {
@@ -129,13 +131,13 @@ namespace Reservo.ViewModels
                 var entries = workbook.Entries.Where(x => !x.Canceled);
 
                 current.AllReservations = entries.Count();
-                current.AllNights = entries.Sum(x => x.NightCount);
-                current.AllGuestsNights = entries.Sum(x => x.NightCount * x.GuestCount);
-                current.AllGuests = entries.Sum(x => x.GuestCount);
+                current.AllNights = entries.Sum(x => x.StayInfo.NightCount);
+                current.AllGuestsNights = entries.Sum(x => x.StayInfo.NightCount * x.GuestInfo.GuestCount);
+                current.AllGuests = entries.Sum(x => x.GuestInfo.GuestCount);
                 current.AverageGroupSize = current.AllGuests / current.AllReservations;
                 current.AverageNightCount = current.AllNights / current.AllReservations;
-                current.TotalAmount = (decimal)entries.Sum(x => x.Total);
-                current.GroupCheckCount = entries.Where(x => x.AgeCheck).Count();
+                current.TotalAmount = (decimal)entries.Sum(x => x.BillingInfo.Total);
+                current.GroupCheckCount = entries.Where(x => x.StayInfo.AgeCheck).Count();
                 current.AllCanceled = workbook.Entries.Where(x => x.Canceled).Count();
 
                 StatisticData[0].AllReservations += current.AllReservations;

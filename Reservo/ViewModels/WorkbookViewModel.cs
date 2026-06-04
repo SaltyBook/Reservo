@@ -28,7 +28,7 @@ namespace Reservo.ViewModels
 
         public string FilePath { get; }
         public string DisplayName { get; }
-        public string Year { get; }
+        public short Year { get; }
 
         private ObservableCollection<Entry> _entries = new();
         public ObservableCollection<Entry> Entries
@@ -43,7 +43,7 @@ namespace Reservo.ViewModels
             get => _selectedEntry;
             set
             {
-                SetProperty(ref _selectedEntry, value);            
+                SetProperty(ref _selectedEntry, value);
             }
         }
 
@@ -74,15 +74,25 @@ namespace Reservo.ViewModels
         {
             Log.Information("WorkbookViewModel initialisiert");
 
-            FilePath = filePath;
-            DisplayName = Path.GetFileNameWithoutExtension(filePath);
-            Year = DisplayName.Substring(DisplayName.LastIndexOf('-') + 1);
-
             _fileService = files;
             _documentService = documents;
             _dialogService = dialog;
             _emailService = email;
             _pathService = path;
+
+            FilePath = filePath;
+            DisplayName = Path.GetFileNameWithoutExtension(filePath);
+
+            try
+            {
+                Year = Convert.ToInt16(DisplayName.Substring(DisplayName.LastIndexOf('-') + 1));
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Fehler beim Konvertieren des Jahres in der Datenbank: {Name}", DisplayName);
+                _dialogService.ShowError("Fehler", "Jahr konnte aus Datenbank nicht konvertiert werden!");
+                Year = 0;
+            }
 
             AddEntryCommand = new RelayCommand(_ => AddEntry());
             DeleteEntryCommand = new RelayCommand(_ => DeleteEntry(), _ => SelectedEntry is not null);
@@ -106,7 +116,8 @@ namespace Reservo.ViewModels
 
             Log.Information("Eintrag hinzufügen (Id {Id})", nextId);
 
-            var entry = new Entry { Id = nextId };
+            var entry = new Entry(nextId);
+            entry.Year = this.Year;
 
             Entries.Add(entry);
             SelectedEntry = entry;
@@ -139,12 +150,12 @@ namespace Reservo.ViewModels
             try
             {
                 var entry = SelectedEntry;
-                var documentPath = _pathService.GetReservationPath(entry, Year);
+                var documentPath = _pathService.GetReservationPath(entry);
 
                 if (!_fileService.Exists(documentPath))
                 {
                     Log.Debug("Reservierung existiert nicht, wird erstellt");
-                    _documentService.CreateReservation(entry, Year, _pathService);
+                    _documentService.CreateReservation(entry, _pathService);
                 }
 
                 _fileService.OpenFile(documentPath);
@@ -169,12 +180,12 @@ namespace Reservo.ViewModels
             try
             {
                 var entry = SelectedEntry;
-                var documentPath = _pathService.GetInvoicePath(entry, Year);
+                var documentPath = _pathService.GetInvoicePath(entry);
 
                 if (!_fileService.Exists(documentPath))
                 {
                     Log.Debug("Rechnung existiert nicht, wird erstellt");
-                    var window = _documentService.CreateInvoice(entry, Year);
+                    var window = _documentService.CreateInvoice(entry);
                     window.ShowDialog();
                 }
 
@@ -201,13 +212,13 @@ namespace Reservo.ViewModels
             }
             var entry = SelectedEntry;
 
-            if (String.IsNullOrEmpty(entry.EMail))
+            if (String.IsNullOrEmpty(entry.GuestInfo.EMail))
             {
                 _dialogService.ShowInfo("Fehlende E-Mail", "E-Mail konnte nicht gefunden werden!");
                 return;
             }
 
-            var documentPath = _pathService.GetReservationPath(entry, Year);
+            var documentPath = _pathService.GetReservationPath(entry);
 
             if (!_fileService.Exists(documentPath))
             {
@@ -215,7 +226,7 @@ namespace Reservo.ViewModels
                 return;
             }
 
-            _documentService.CreateReservationMail(entry, Year, _emailService, _dialogService, _pathService);
+            _documentService.CreateReservationMail(entry, _emailService, _dialogService, _pathService);
         }
 
         //Creates an email for the invoice, provided that an email address is available and the corresponding document exists
@@ -230,13 +241,13 @@ namespace Reservo.ViewModels
 
             var entry = SelectedEntry;
 
-            if (String.IsNullOrWhiteSpace(entry.EMail))
+            if (String.IsNullOrWhiteSpace(entry.GuestInfo.EMail))
             {
                 _dialogService.ShowInfo("Fehlende E-Mail", "E-Mail konnte nicht gefunden werden!");
                 return;
             }
 
-            var documentPath = _pathService.GetInvoicePath(entry, Year);
+            var documentPath = _pathService.GetInvoicePath(entry);
 
             if (!_fileService.Exists(documentPath))
             {
@@ -244,7 +255,7 @@ namespace Reservo.ViewModels
                 return;
             }
 
-            _documentService.CreateInvoiceMail(entry, Year, _emailService, _dialogService, _pathService);
+            _documentService.CreateInvoiceMail(entry, _emailService, _dialogService, _pathService);
         }
 
         private void CreateCalendarEntry()
@@ -258,12 +269,12 @@ namespace Reservo.ViewModels
 
             string calendarId = InternCredentials.CalendarID;
 
-            string name = $"{SelectedEntry.GroupName} - {SelectedEntry.LastName}";
+            string name = $"{SelectedEntry.GuestInfo.GroupName} - {SelectedEntry.GuestInfo.LastName}";
 
-            int guestCount = SelectedEntry.GuestCount;
+            int guestCount = SelectedEntry.GuestInfo.GuestCount;
 
-            string start = SelectedEntry.Arrival.ToString("yyyyMMddTHHmmss"); // YYYYMMDDTHHMMSS
-            string end = SelectedEntry.Departure.ToString("yyyyMMddTHHmmss");
+            string start = SelectedEntry.StayInfo.Arrival.ToString("yyyyMMddTHHmmss"); // YYYYMMDDTHHMMSS
+            string end = SelectedEntry.StayInfo.Departure.ToString("yyyyMMddTHHmmss");
 
             string url =
                 "https://calendar.google.com/calendar/render?action=TEMPLATE" +

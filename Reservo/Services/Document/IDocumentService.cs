@@ -8,9 +8,9 @@ namespace Reservo.Services.Document
 {
     public interface IDocumentService
     {
-        void CreateReservation(Entry entry, string year, IPathService path);
-        InvoiceWindow CreateInvoice(Entry entry, string year);
-        void CreateReservationMail(Entry entry, string year, IEmailService email, IDialogService dialog, IPathService path);
-        void CreateInvoiceMail(Entry entry, string year, IEmailService email, IDialogService dialog, IPathService path);
+        void CreateReservation(Entry entry, IPathService path);
+        InvoiceWindow CreateInvoice(Entry entry);
+        void CreateReservationMail(Entry entry, IEmailService email, IDialogService dialog, IPathService path);
+        void CreateInvoiceMail(Entry entry, IEmailService email, IDialogService dialog, IPathService path);
     }
 }

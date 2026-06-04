@@ -4,22 +4,22 @@ namespace Reservo.Services.TemplateMapper
 {
     public class InvoiceTemplateMapper : IInvoiceTemplateMapper
     {
-        public Dictionary<string, string> Map(InvoiceData data, string year)
+        public Dictionary<string, string> Map(InvoiceData data, short year)
         {
             return new Dictionary<string, string>
             {
-                ["{{Gruppe}}"] = data.Entry.GroupName,
-                ["{{Anrede}}"] = data.Entry.Salutation,
-                ["{{Vorname}}"] = data.Entry.FirstName,
-                ["{{Name}}"] = data.Entry.LastName,
-                ["{{Straße}}"] = data.Entry.Street,
-                ["{{Ort}}"] = data.Entry.Location,
-                ["{{Nummer}}"] = data.Entry.InvoiceNumber.ToString(),
-                ["{{Jahr}}"] = year,
+                ["{{Gruppe}}"] = data.Entry.GuestInfo.GroupName,
+                ["{{Anrede}}"] = data.Entry.GuestInfo.Salutation,
+                ["{{Vorname}}"] = data.Entry.GuestInfo.FirstName,
+                ["{{Name}}"] = data.Entry.GuestInfo.LastName,
+                ["{{Straße}}"] = data.Entry.GuestInfo.Street,
+                ["{{Ort}}"] = data.Entry.GuestInfo.Location,
+                ["{{Nummer}}"] = data.Entry.BillingInfo.InvoiceNumber.ToString(),
+                ["{{Jahr}}"] = year.ToString(),
                 ["{{Datum}}"] = string.Format("{0:d.MM.yyyy}", data.InvoiceDate),
-                ["{{Nächte}}"] = data.Entry.NightCount.ToString(),
-                ["{{Anreise}}"] = string.Format("{0:d.MM.yyyy}", data.Entry.Arrival),
-                ["{{Abreise}}"] = string.Format("{0:d.MM.yyyy}", data.Entry.Departure),
+                ["{{Nächte}}"] = data.Entry.StayInfo.NightCount.ToString(),
+                ["{{Anreise}}"] = string.Format("{0:d.MM.yyyy}", data.Entry.StayInfo.Arrival),
+                ["{{Abreise}}"] = string.Format("{0:d.MM.yyyy}", data.Entry.StayInfo.Departure),
                 ["{{Preis1}}"] = data.Price1,
                 ["{{Kinder}}"] = data.Children.ToString(),
                 ["{{Junge}}"] = data.Youth.ToString(),

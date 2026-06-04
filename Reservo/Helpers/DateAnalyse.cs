@@ -10,7 +10,7 @@ namespace Reservo.Helpers
         public static List<(Entry, Entry)> FindOverlaps(IEnumerable<Entry> entries)
         {
             var overlaps = new List<(Entry, Entry)>();
-            var sorted = entries.Where(x => x.Canceled == false).OrderBy(e => e.Arrival).ToList();
+            var sorted = entries.Where(x => x.Canceled == false).OrderBy(e => e.StayInfo.Arrival).ToList();
 
             for (int i = 0; i < sorted.Count - 1; i++)
             {
@@ -32,7 +32,7 @@ namespace Reservo.Helpers
         public static List<(Entry, Entry)> FindOverlapsForEntry(Entry entry, IEnumerable<Entry> entries)
         {
             var overlaps = new List<(Entry, Entry)>();
-            var sorted = entries.Where(x => x.Canceled == false).OrderBy(e => e.Arrival).ToList();
+            var sorted = entries.Where(x => x.Canceled == false).OrderBy(e => e.StayInfo.Arrival).ToList();
 
             foreach (var other in sorted)
             {
@@ -53,8 +53,8 @@ namespace Reservo.Helpers
         // and the departure of one is after or equal to the arrival of the other (with tolerance).
         private static bool IsOverlappingOrAdjacent(Entry a, Entry b, int toleranceDays = 2)
         {
-            return a.Arrival <= b.Departure.AddDays(toleranceDays)
-                && a.Departure >= b.Arrival.AddDays(-toleranceDays);
+            return a.StayInfo.Arrival <= b.StayInfo.Departure.AddDays(toleranceDays)
+                && a.StayInfo.Departure >= b.StayInfo.Arrival.AddDays(-toleranceDays);
         }
     }
 }

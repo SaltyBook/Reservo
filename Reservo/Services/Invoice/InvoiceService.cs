@@ -25,15 +25,15 @@ namespace Reservo
             _pathService = pathService;
         }
 
-        public void CreateInvoice(Entry entry, List<TableEntry> entries, string year)
+        public void CreateInvoice(Entry entry, List<TableEntry> entries)
         {
-            entry.InvoiceNumber = _pathService.GetInvoiceCount(year);
+            entry.BillingInfo.InvoiceNumber = _pathService.GetInvoiceCount(entry.Year);
 
             var data = _factory.Create(entry, entries);
 
-            var replacements = _mapper.Map(data, year);
+            var replacements = _mapper.Map(data, entry.Year);
 
-            ProcessDocument(data, replacements, year);
+            ProcessDocument(data, replacements);
 
             UpdateDatagrid(entry, entries);
         }
@@ -41,9 +41,9 @@ namespace Reservo
         //Generates an invoice document based on a Word template and the provided entry data.
         //The method copies the invoice template, replaces predefined placeholders with customer, booking, and pricing information,
         //conditionally removes optional rows(e.g.unused additional charges), saves the document, and updates the total amount in the associated data grid.
-        private void ProcessDocument(InvoiceData data, Dictionary<string, string> replacements, string year)
+        private void ProcessDocument(InvoiceData data, Dictionary<string, string> replacements)
         {
-            string outputPath = _pathService.GetInvoicePath(data.Entry ,year);
+            string outputPath = _pathService.GetInvoicePath(data.Entry);
             string templatePath = Path.Combine(Paths.ResourcesPath, "Rechnung-Vorlage.docx");
             File.Copy(templatePath, outputPath, true);
             using (var doc = DocX.Load(outputPath))
@@ -70,7 +70,7 @@ namespace Reservo
         //The method parses the formatted currency string, converts it to a numeric value, and assigns it to the entry’s total field for further processing or display.
         private static void UpdateDatagrid(Entry entry, List<TableEntry> entries)
         {
-            entry.Total = Convert.ToDouble(entries[16].Result.Replace("€", "").Replace(".", ""));
+            entry.BillingInfo.Total = Convert.ToDouble(entries[16].Result.Replace("€", "").Replace(".", ""));
         }
     }
 }

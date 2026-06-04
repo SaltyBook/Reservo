@@ -19,7 +19,7 @@ namespace Reservo.Services.Email
         //The method connects to an IMAP mailbox, searches the inbox and send folder for the most recent email exchanged with the recipient,
         //and quotes the latest message in the new email body.
         //It builds an HTML email with a predefined signature, optional invoice or reservation attachment, and launches Thunderbird with the composed email ready to send.
-        public void CreateEmail(Entry entry, string year, bool invoice, IPathService pathService)
+        public void CreateEmail(Entry entry, bool invoice, IPathService pathService)
         {
             string quoted = "";
             string subject = "";
@@ -28,8 +28,8 @@ namespace Reservo.Services.Email
             {
                 client.Connect(CredentialsService.creds.SmtpHost, CredentialsService.creds.Port);
                 client.Authenticate(CredentialsService.creds.Username, CryptoHelper.Decrypt(CredentialsService.creds.Password));
-                var inboxMessage = GetLatestMessage(client, client.Inbox, entry.EMail);
-                var sendMessage = GetLatestMessage(client, client.GetFolder(SpecialFolder.Sent), entry.EMail);
+                var inboxMessage = GetLatestMessage(client, client.Inbox, entry.GuestInfo.EMail);
+                var sendMessage = GetLatestMessage(client, client.GetFolder(SpecialFolder.Sent), entry.GuestInfo.EMail);
 
                 if (inboxMessage is not null)
                 {
@@ -64,9 +64,9 @@ namespace Reservo.Services.Email
             }
 
             string body = BuildEmailBody(entry, invoice, quoted);
-            string attachment = invoice ? pathService.GetInvoicePath(entry, year).Replace(".docx", ".pdf") : pathService.GetReservationPath(entry, year).Replace(".docx", ".pdf");
+            string attachment = invoice ? pathService.GetInvoicePath(entry).Replace(".docx", ".pdf") : pathService.GetReservationPath(entry).Replace(".docx", ".pdf");
 
-            OpenThunderbird(entry.EMail, subject, body, attachment);
+            OpenThunderbird(entry.GuestInfo.EMail, subject, body, attachment);
         }
 
         //Returns the latest email from the given folder send from the specified address.
@@ -141,7 +141,7 @@ namespace Reservo.Services.Email
             string imageLogo = $@"file://{Paths.ResourcesPath}/imageLogo.png";
 
             string textBody =
-            $"<p>Guten Tag {entry.Salutation} {entry.LastName},</p>";
+            $"<p>Guten Tag {entry.GuestInfo.Salutation} {entry.GuestInfo.LastName},</p>";
             if (invoice)
             {
                 textBody += "<p>wir hoffen, dass alle wieder gut Zuhause angekommen sind.<br>Im Anhang finden Sie die Rechnung für Ihren Aufenthalt bei uns.</p>";

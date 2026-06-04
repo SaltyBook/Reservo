@@ -26,9 +26,9 @@ namespace Reservo.ViewModels
 
         public ICommand CreateInvoiceCommand { get; }
 
-        public InvoiceViewModel(Entry entry, string year) : this(entry, year, new InvoiceService(new InvoiceDataFactory(), new InvoiceTemplateMapper(), new PathService()), new WindowService()) { }
+        public InvoiceViewModel(Entry entry) : this(entry, new InvoiceService(new InvoiceDataFactory(), new InvoiceTemplateMapper(), new PathService()), new WindowService()) { }
 
-        public InvoiceViewModel(Entry entry, string year, IInvoiceService invoiceService, IWindowService windowService)
+        public InvoiceViewModel(Entry entry, IInvoiceService invoiceService, IWindowService windowService)
         {
             if (InvoiceItem.allInvoiceItems.Count == 0)
             {
@@ -46,7 +46,7 @@ namespace Reservo.ViewModels
                 item.PropertyChanged += OnItemChanged;
             }
 
-            CreateInvoiceCommand = new RelayCommand(_ => CreateInvoice(year));
+            CreateInvoiceCommand = new RelayCommand(_ => CreateInvoice());
 
             RecalculateTotal();
         }
@@ -107,9 +107,9 @@ namespace Reservo.ViewModels
         }
 
         //Creates the invoice using InvoiceService and then closes the window
-        private void CreateInvoice(string year)
+        private void CreateInvoice()
         {
-            _invoiceService.CreateInvoice(Entry, Items.ToList(), year);
+            _invoiceService.CreateInvoice(Entry, Items.ToList());
             _windowService.Close(this);
         }
 

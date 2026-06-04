@@ -21,26 +21,26 @@ namespace Reservo
         //Creates a reservation confirmation document based on a Word template.
         //The method copies the reservation template to a new file, replaces predefined placeholders with the booking
         //and customer data(such as group name, address, arrival and departure dates), and saves the completed document as a finalized reservation confirmation.
-        public void CreateReservation(Entry entry, string year, IPathService pathService)
+        public void CreateReservation(Entry entry, IPathService pathService)
         {
-            string outputPath = pathService.GetReservationPath(entry,year);
+            string outputPath = pathService.GetReservationPath(entry);
             string templatePath = Path.Combine(Paths.ResourcesPath, "Reservierungsbestätigung-Vorlage.docx");
             File.Copy(templatePath, outputPath, true);
             using (var doc = DocX.Load(outputPath))
             {
                 var replacements = new (string Placeholder, string Value)[]
                 {
-                    ("{{Gruppe}}", entry.GroupName),
-                    ("{{Anrede}}", entry.Salutation),
-                    ("{{Vorname}}", entry.FirstName),
-                    ("{{Name}}", entry.LastName),
-                    ("{{Straße}}", entry.Street),
-                    ("{{Ort}}", entry.Location),
+                    ("{{Gruppe}}", entry.GuestInfo.GroupName),
+                    ("{{Anrede}}", entry.GuestInfo.Salutation),
+                    ("{{Vorname}}", entry.GuestInfo.FirstName),
+                    ("{{Name}}", entry.GuestInfo.LastName),
+                    ("{{Straße}}", entry.GuestInfo.Street),
+                    ("{{Ort}}", entry.GuestInfo.Location),
                     ("{{Nummer}}", entry.Id.ToString()),
-                    ("{{Jahr}}", year),
+                    ("{{Jahr}}", entry.Year.ToString()),
                     ("{{Datum}}", string.Format("{0:dddd, d. MMMM yyyy}", DateTime.Now)),
-                    ("{{Anreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Arrival)),
-                    ("{{Abreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.Departure))
+                    ("{{Anreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.StayInfo.Arrival)),
+                    ("{{Abreise}}", string.Format("{0:dddd, d. MMMM yyyy}", entry.StayInfo.Departure))
                 };
                 foreach (var kv in replacements)
                 {
@@ -56,23 +56,23 @@ namespace Reservo
             }
         }
 
-        public InvoiceWindow CreateInvoice(Entry entry, string year)
+        public InvoiceWindow CreateInvoice(Entry entry)
         {
-            var vm = new InvoiceViewModel(entry, year);
+            var vm = new InvoiceViewModel(entry);
             var window = new InvoiceWindow(vm);
             return window;
         }
 
-        public void CreateReservationMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService, IPathService pathService)
+        public void CreateReservationMail(Entry entry, IEmailService emailService, IDialogService dialogService, IPathService pathService)
         {
-            if(ExportPdf(pathService.GetReservationPath(entry, year), dialogService))
-                emailService.CreateEmail(entry, year, false, pathService);
+            if(ExportPdf(pathService.GetReservationPath(entry), dialogService))
+                emailService.CreateEmail(entry, false, pathService);
         }
 
-        public void CreateInvoiceMail(Entry entry, string year, IEmailService emailService, IDialogService dialogService, IPathService pathService)
+        public void CreateInvoiceMail(Entry entry, IEmailService emailService, IDialogService dialogService, IPathService pathService)
         {
-            if(ExportPdf(pathService.GetInvoicePath(entry, year), dialogService))
-                emailService.CreateEmail(entry, year, true, pathService);
+            if(ExportPdf(pathService.GetInvoicePath(entry), dialogService))
+                emailService.CreateEmail(entry, true, pathService);
         }
 
         private bool ExportPdf(string docxPath, IDialogService dialogService)

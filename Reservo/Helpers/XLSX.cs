@@ -213,34 +213,15 @@ namespace Reservo.Helpers
                 DateTime arrival = Convert.ToDateTime(reader.GetValue(Columns.Arrival));
                 DateTime departure = Convert.ToDateTime(reader.GetValue(Columns.Departure));
 
-                entry = new Entry(
+                entry = new Entry
+                (
                     id,
-                    reader.GetString(Columns.GroupName),
-                    guestCount,
-                    reader.GetString(Columns.Salutation),
-                    reader.GetString(Columns.FirstName),
-                    reader.GetString(Columns.LastName),
-                    reader.GetString(Columns.Street),
-                    reader.GetString(Columns.Location),
-                    arrival,
-                    departure,
-                    nightCount,
-                    GetBool(reader.GetValue(Columns.InfoSheet)),
-                    GetBool(reader.GetValue(Columns.CalendarEntry)),
-                    GetNullableInt(reader.GetValue(Columns.InvoiceNumber)),
-                    GetNullableDouble(reader.GetValue(Columns.Total)),
-                    GetBool(reader.GetValue(Columns.AgeCheck)),
-                    GetBool(reader.GetValue(Columns.Tent)),
-                    GetNullableDouble(reader.GetValue(Columns.Drinks)),
-                    GetNullableInt(reader.GetValue(Columns.LastVisit)),
-                    Convert.ToDateTime(reader.GetValue(Columns.Reserved)),
-                    GetContact(reader.GetValue(Columns.ContactVia)),
-                    reader.GetString(Columns.Mobile),
-                    reader.GetString(Columns.HomePhone),
-                    reader.GetString(Columns.EMail),
                     GetBool(reader.GetValue(Columns.Offer)),
                     GetBool(reader.GetValue(Columns.Canceled)),
-                    reader.GetString(Columns.Note)
+                    reader.GetString(Columns.Note),
+                    new GuestInfo(reader.GetString(Columns.GroupName), guestCount, reader.GetString(Columns.Salutation), reader.GetString(Columns.FirstName), reader.GetString(Columns.LastName), reader.GetString(Columns.Street), reader.GetString(Columns.Location), GetNullableInt(reader.GetValue(Columns.LastVisit)), reader.GetString(Columns.Mobile), reader.GetString(Columns.HomePhone), reader.GetString(Columns.EMail)),
+                    new StayInfo(arrival, departure, nightCount, GetBool(reader.GetValue(Columns.Tent)), GetBool(reader.GetValue(Columns.AgeCheck)), GetBool(reader.GetValue(Columns.InfoSheet)), GetBool(reader.GetValue(Columns.CalendarEntry)), Convert.ToDateTime(reader.GetValue(Columns.Reserved)), GetContact(reader.GetValue(Columns.ContactVia))),
+                    new BillingInfo(GetNullableInt(reader.GetValue(Columns.InvoiceNumber)), GetNullableDouble(reader.GetValue(Columns.Total)), GetNullableDouble(reader.GetValue(Columns.Drinks)))
                 );
 
                 return true;
@@ -252,37 +233,39 @@ namespace Reservo.Helpers
             }
         }
 
-
         // Writes all properties of an Entry object into a single Excel row
         private static void WriteRow(IXLWorksheet sheet, int row, Entry e)
         {
             sheet.Cell(row, XL(Columns.Id)).Value = e.Id;
-            sheet.Cell(row, XL(Columns.GroupName)).Value = e.GroupName;
-            sheet.Cell(row, XL(Columns.GuestCount)).Value = e.GuestCount;
-            sheet.Cell(row, XL(Columns.Salutation)).Value = e.Salutation;
-            sheet.Cell(row, XL(Columns.FirstName)).Value = e.FirstName;
-            sheet.Cell(row, XL(Columns.LastName)).Value = e.LastName;
-            sheet.Cell(row, XL(Columns.Street)).Value = e.Street;
-            sheet.Cell(row, XL(Columns.Location)).Value = e.Location;
-            sheet.Cell(row, XL(Columns.Arrival)).Value = e.Arrival;
-            sheet.Cell(row, XL(Columns.Departure)).Value = e.Departure;
-            sheet.Cell(row, XL(Columns.NightCount)).Value = e.NightCount;
-            sheet.Cell(row, XL(Columns.InfoSheet)).Value = e.InfoSheet;
-            sheet.Cell(row, XL(Columns.CalendarEntry)).Value = e.CalendarEntry;
-            sheet.Cell(row, XL(Columns.InvoiceNumber)).Value = e.InvoiceNumber;
-            sheet.Cell(row, XL(Columns.Total)).Value = e.Total;
-            sheet.Cell(row, XL(Columns.AgeCheck)).Value = e.AgeCheck;
-            sheet.Cell(row, XL(Columns.Tent)).Value = e.Tent;
-            sheet.Cell(row, XL(Columns.Drinks)).Value = e.Drinks;
-            sheet.Cell(row, XL(Columns.LastVisit)).Value = e.LastVisit;
-            sheet.Cell(row, XL(Columns.Reserved)).Value = e.Reserved;
-            sheet.Cell(row, XL(Columns.ContactVia)).Value = e.ContactVia.ToString();
-            sheet.Cell(row, XL(Columns.Mobile)).Value = e.Mobile;
-            sheet.Cell(row, XL(Columns.HomePhone)).Value = e.HomePhone;
-            sheet.Cell(row, XL(Columns.EMail)).Value = e.EMail;
             sheet.Cell(row, XL(Columns.Offer)).Value = e.Offer;
             sheet.Cell(row, XL(Columns.Canceled)).Value = e.Canceled;
             sheet.Cell(row, XL(Columns.Note)).Value = e.Note;
+            //GuestInfo
+            sheet.Cell(row, XL(Columns.GroupName)).Value = e.GuestInfo.GroupName;
+            sheet.Cell(row, XL(Columns.GuestCount)).Value = e.GuestInfo.GuestCount;
+            sheet.Cell(row, XL(Columns.Salutation)).Value = e.GuestInfo.Salutation;
+            sheet.Cell(row, XL(Columns.FirstName)).Value = e.GuestInfo.FirstName;
+            sheet.Cell(row, XL(Columns.LastName)).Value = e.GuestInfo.LastName;
+            sheet.Cell(row, XL(Columns.Street)).Value = e.GuestInfo.Street;
+            sheet.Cell(row, XL(Columns.Location)).Value = e.GuestInfo.Location;
+            sheet.Cell(row, XL(Columns.LastVisit)).Value = e.GuestInfo.LastVisit;
+            sheet.Cell(row, XL(Columns.Mobile)).Value = e.GuestInfo.Mobile;
+            sheet.Cell(row, XL(Columns.HomePhone)).Value = e.GuestInfo.HomePhone;
+            sheet.Cell(row, XL(Columns.EMail)).Value = e.GuestInfo.EMail;
+            //StayInfo
+            sheet.Cell(row, XL(Columns.Arrival)).Value = e.StayInfo.Arrival;
+            sheet.Cell(row, XL(Columns.Departure)).Value = e.StayInfo.Departure;
+            sheet.Cell(row, XL(Columns.NightCount)).Value = e.StayInfo.NightCount;
+            sheet.Cell(row, XL(Columns.Tent)).Value = e.StayInfo.Tent;
+            sheet.Cell(row, XL(Columns.AgeCheck)).Value = e.StayInfo.AgeCheck;
+            sheet.Cell(row, XL(Columns.InfoSheet)).Value = e.StayInfo.InfoSheet;
+            sheet.Cell(row, XL(Columns.CalendarEntry)).Value = e.StayInfo.CalendarEntry;
+            sheet.Cell(row, XL(Columns.Reserved)).Value = e.StayInfo.Reserved;
+            sheet.Cell(row, XL(Columns.ContactVia)).Value = e.StayInfo.ContactVia.ToString();
+            //BillingInfo
+            sheet.Cell(row, XL(Columns.InvoiceNumber)).Value = e.BillingInfo.InvoiceNumber;
+            sheet.Cell(row, XL(Columns.Total)).Value = e.BillingInfo.Total;
+            sheet.Cell(row, XL(Columns.Drinks)).Value = e.BillingInfo.Drinks;
         }
 
         // Removes all existing data rows from the worksheet (starting at row 2), while keeping the header row intact.
