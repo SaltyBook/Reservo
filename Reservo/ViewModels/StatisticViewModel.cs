@@ -4,6 +4,7 @@ using OxyPlot.Legends;
 using OxyPlot.Series;
 using PublicHoliday;
 using Reservo.Commands;
+using Reservo.Infrastructure;
 using Reservo.Models;
 using Serilog;
 using System.Collections.ObjectModel;
@@ -17,7 +18,7 @@ namespace Reservo.ViewModels
 {
     class StatisticViewModel : BaseViewModel
     {
-        private readonly string _employeeHoursPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "employeehours.json");
+        private readonly string _employeeHoursPath = Path.Combine(Paths.ResourcesPath, "employeehours.json");
 
         private ObservableCollection<StatisticData> _statisticData;
         public ObservableCollection<StatisticData> StatisticData

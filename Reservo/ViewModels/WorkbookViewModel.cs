@@ -6,7 +6,7 @@ using Reservo.Services.Credentials;
 using Reservo.Services.Dialog;
 using Reservo.Services.Document;
 using Reservo.Services.Email;
-using Reservo.Services.File;
+using Reservo.Services.FileService;
 using Reservo.Services.PathService;
 using Serilog;
 using System.Collections.ObjectModel;

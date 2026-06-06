@@ -1,4 +1,4 @@
-﻿namespace Reservo.Services.File
+﻿namespace Reservo.Services.FileService
 {
     public interface IFileService
     {

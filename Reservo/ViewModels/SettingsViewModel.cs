@@ -196,6 +196,7 @@ namespace Reservo.ViewModels
         //Checks whether the server configuration are set
         private bool CanSaveServer(object? obj)
         {
+            return true;
             return !string.IsNullOrWhiteSpace(ServerPath)
                && !string.IsNullOrWhiteSpace(TrelloApiKey)
                && !string.IsNullOrWhiteSpace(TrelloApiToken);

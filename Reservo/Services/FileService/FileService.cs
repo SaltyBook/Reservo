@@ -1,8 +1,7 @@
-﻿using Reservo.Services.File;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 
-namespace Reservo
+namespace Reservo.Services.FileService
 {
     public class FileService : IFileService
     {

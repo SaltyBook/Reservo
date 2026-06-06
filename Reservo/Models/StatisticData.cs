@@ -13,7 +13,7 @@ namespace Reservo.Models
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private string _displayName;
+        private string _displayName = String.Empty;
         public string DisplayName
         {
             get { return _displayName; }

@@ -8,15 +8,15 @@ namespace Reservo
 {
     public static class ColumnOrderService
     {
-        private static string FilePath => Path.Combine(Paths.ResourcesPath, "columnOrder.json");
+        private static string ColumnOrderPath => Path.Combine(Paths.ResourcesPath, "columnOrder.json");
 
         //Loads the column order for the datagrid
         public static List<ColumnOrderInfo>? Load()
         {
-            if (!File.Exists(FilePath))
+            if (!File.Exists(ColumnOrderPath))
                 return null;
 
-            var json = File.ReadAllText(FilePath);
+            var json = File.ReadAllText(ColumnOrderPath);
             return JsonSerializer.Deserialize<List<ColumnOrderInfo>>(json);
         }
 
@@ -36,7 +36,7 @@ namespace Reservo
                 WriteIndented = true
             });
 
-            File.WriteAllText(FilePath, json);
+            File.WriteAllText(ColumnOrderPath, json);
         }
 
         //Applies the column order to the datagrid
