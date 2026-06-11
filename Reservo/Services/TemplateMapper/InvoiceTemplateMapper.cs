@@ -34,7 +34,7 @@ namespace Reservo.Services.TemplateMapper
                 ["{{Preis5}}"] = data.Price5,
                 ["{{Heizm}}"] = data.Heater.ToString(),
                 ["{{Preis6}}"] = data.Price6,
-                ["{{Bett}}"] = data.Bed.ToString(),
+                ["{{Bett}}"] = data.Bedding.ToString(),
                 ["{{Preis7}}"] = data.Price7,
                 ["{{Wasch}}"] = data.Laundry.ToString(),
                 ["{{Preis8}}"] = data.Price8,

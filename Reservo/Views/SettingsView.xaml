@@ -260,6 +260,145 @@
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
+
+            <!-- Server -->
+            <TabItem Header="Rechnung">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel>
+
+                        <!-- Rechnungsfaktoren -->
+                        <Border Background="{StaticResource Brush.Surface}"
+                                BorderBrush="{StaticResource Brush.Border}"
+                                BorderThickness="1"
+                                CornerRadius="14"
+                                Padding="24"
+                                Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="16" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="24" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <StackPanel Grid.Row="0">
+                                    <TextBlock Text="Rechnunsfaktoren"
+                                               Style="{StaticResource SectionTitleStyle}" />
+                                    <TextBlock Text="Lege die Faktoren zur Erstellung von Rechnungen fest."
+                                               Style="{StaticResource SectionDescriptionStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="2">
+                                    <TextBlock Text="Übernachtungen (Grundpreis)"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.BasePrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="4">
+                                    <TextBlock Text="Übernachtungen Erwachsene ab 27 Jahre"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.FromTwentySevenPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="6">
+                                    <TextBlock Text="Übernachtungen Erwachsene bis 26 Jahre"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.UpToTwentySixPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="8">
+                                    <TextBlock Text="Übernachtungen Kinder und Jugendliche bis 17 Jahre"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.UpToSeventeenPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="10">
+                                    <TextBlock Text="Tagesgäste pro Tag"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.GuestPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="12">
+                                    <TextBlock Text="Tage Heizkosten vom 1.10. – 30.4 und bei Bedarf"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.HeaterPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="14">
+                                    <TextBlock Text="Bettwäsche (Leihgebühren)"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.BeddingPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="16">
+                                    <TextBlock Text="Maschinen Wäsche waschen"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.LaundryPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="18">
+                                    <TextBlock Text="Leihgebühr Faltzelt"
+                                           Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.TentPrice, UpdateSourceTrigger=PropertyChanged}"
+                                         Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <StackPanel Grid.Row="20">
+                                    <TextBlock Text="Kaminholz (kleine Kiste)"
+                                               Style="{StaticResource FormLabelStyle}" />
+                                    <TextBox Text="{Binding BillingFactorData.WoodPrice, UpdateSourceTrigger=PropertyChanged}"
+                                             Style="{StaticResource ModernTextBoxStyle}" />
+                                </StackPanel>
+
+                                <Grid Grid.Row="22">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="12"
+                                               Foreground="{StaticResource Brush.TextSecondary}"
+                                               Text="Änderungen werden erst nach dem Speichern übernommen." />
+
+                                    <Button Grid.Column="1"
+                                            Content="Speichern"
+                                            Style="{StaticResource PrimaryButtonStyle}"
+                                            Command="{Binding SaveBillingFactorCommand}" />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

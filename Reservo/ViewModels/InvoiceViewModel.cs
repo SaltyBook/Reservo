@@ -2,6 +2,7 @@
 using Reservo.Commands;
 using Reservo.Helpers;
 using Reservo.Models;
+using Reservo.Services.BillingFactor;
 using Reservo.Services.Invoice;
 using Reservo.Services.PathService;
 using Reservo.Services.TemplateMapper;
@@ -26,18 +27,15 @@ namespace Reservo.ViewModels
 
         public ICommand CreateInvoiceCommand { get; }
 
-        public InvoiceViewModel(Entry entry) : this(entry, new InvoiceService(new InvoiceDataFactory(), new InvoiceTemplateMapper(), new PathService()), new WindowService()) { }
+        public InvoiceViewModel(Entry entry) : this(entry, new InvoiceService(new InvoiceDataFactory(), new InvoiceTemplateMapper(), new PathService()), new WindowService(), App.BillingFactorService) { }
 
-        public InvoiceViewModel(Entry entry, IInvoiceService invoiceService, IWindowService windowService)
-        {
-            if (InvoiceItem.allInvoiceItems.Count == 0)
-            {
-                CreateInvoiceItems();
-            }
-
+        public InvoiceViewModel(Entry entry, IInvoiceService invoiceService, IWindowService windowService, IBillingFactorService billingFactorService)
+        {         
             Entry = entry;
             _invoiceService = invoiceService;
             _windowService = windowService;
+
+            CreateInvoiceItems(billingFactorService.GetBillingFactors());
 
             Items = BuildItems();
 
@@ -115,22 +113,23 @@ namespace Reservo.ViewModels
 
         //Initializes the default list of invoice items with predefined descriptions and base prices.
         //These items represent the standard pricing structure used for invoice calculation, such as overnight stays, age-based pricing, additional services, and optional extras.
-        private void CreateInvoiceItems()
+        private void CreateInvoiceItems(BillingFactorModel billingFactorModel)
         {
-            _ = new InvoiceItem("Übernachtungen (Grundpreis bis 19 Personen)", "235,00");
+            InvoiceItem.allInvoiceItems.Clear();
+            _ = new InvoiceItem("Übernachtungen (Grundpreis bis 19 Personen)", billingFactorModel.BasePrice.ToString("N2"));
             _ = new InvoiceItem("Kinder und Jugendliche bis 17 Jahre", "0");
             _ = new InvoiceItem("Junge Erwachsene bis 26 Jahre", "0");
             _ = new InvoiceItem("Erwachsene", "0");
-            _ = new InvoiceItem("Übernachtungen Erwachsene ab 27 Jahre", "16,00");
-            _ = new InvoiceItem("Übernachtungen Erwachsene bis 26 Jahre", "15,00");
-            _ = new InvoiceItem("Übernachtungen Kinder und Jugendliche bis 17 Jahre", "11,00");
-            _ = new InvoiceItem("Tagesgäste pro Tag", "7,00");
-            _ = new InvoiceItem("Tage Heizkosten vom 1.10. – 30.4 und bei Bedarf", "40,00");
-            _ = new InvoiceItem("Bettwäsche (Leihgebühren) ", "10,00");
-            _ = new InvoiceItem("Maschinen Wäsche waschen", "4,00");
-            _ = new InvoiceItem("Leihgebühr Faltzelt", "25,00");
-            _ = new InvoiceItem("Kaminholz (kleine Kiste)", "5,00");
-            _ = new InvoiceItem("Endreinigung (90 – 170 Euro) ", "0");
+            _ = new InvoiceItem("Übernachtungen Erwachsene ab 27 Jahre", billingFactorModel.FromTwentySevenPrice.ToString("N2"));
+            _ = new InvoiceItem("Übernachtungen Erwachsene bis 26 Jahre", billingFactorModel.UpToTwentySixPrice.ToString("N2"));
+            _ = new InvoiceItem("Übernachtungen Kinder und Jugendliche bis 17 Jahre", billingFactorModel.UpToSeventeenPrice.ToString("N2"));
+            _ = new InvoiceItem("Tagesgäste pro Tag", billingFactorModel.GuestPrice.ToString("N2"));
+            _ = new InvoiceItem("Tage Heizkosten vom 1.10. – 30.4 und bei Bedarf", billingFactorModel.HeaterPrice.ToString("N2"));
+            _ = new InvoiceItem("Bettwäsche (Leihgebühren)", billingFactorModel.BeddingPrice.ToString("N2"));
+            _ = new InvoiceItem("Maschinen Wäsche waschen", billingFactorModel.LaundryPrice.ToString("N2"));
+            _ = new InvoiceItem("Leihgebühr Faltzelt", billingFactorModel.TentPrice.ToString("N2"));
+            _ = new InvoiceItem("Kaminholz (kleine Kiste)", billingFactorModel.WoodPrice.ToString("N2"));
+            _ = new InvoiceItem("Endreinigung (90 – 175 Euro) ", "0");
             _ = new InvoiceItem("Getränke laut beigefügter Rechnung (+20 € Lieferung) ", "0");
             _ = new InvoiceItem("Zusatz", "0");
         }

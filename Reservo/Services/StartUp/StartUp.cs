@@ -15,15 +15,13 @@ namespace Reservo
             }
         }
 
-        public static void CreateFolderStructure()
+        public static void CreateStructure()
         {
             if (!Directory.Exists(Paths.ManagementPath))
             {
                 Directory.CreateDirectory(Paths.ManagementPath);
-                Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{DateTime.Now.Year}-Rechnung"));
-                Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{DateTime.Now.Year}-Reservierung"));
                 Directory.CreateDirectory(Paths.DatabasePath);
-                CreateDatabase(Path.Combine(Paths.DatabasePath, $"Mieterliste-{DateTime.Now.Year}.xlsx"));
+                CreateFolderPerYear(DateTime.Now.Year);               
             }
             else
             {
@@ -37,16 +35,27 @@ namespace Reservo
             {
                 CreateDatabase(Path.Combine(Paths.DatabasePath, $"Mieterliste-{DateTime.Now.Year}.xlsx"));
             }
+            if (!File.Exists(Path.Combine(Paths.DatabasePath, $"Mieterliste-{DateTime.Now.Year + 1}.xlsx")))
+            {
+                CreateDatabase(Path.Combine(Paths.DatabasePath, $"Mieterliste-{DateTime.Now.Year + 1}.xlsx"));
+            }
+        }
+
+        private static void CreateFolderPerYear(int year)
+        {
+            Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{year}-Rechnung"));
+            Directory.CreateDirectory(Path.Combine(Paths.ManagementPath, $"{year}-Reservierung"));
+            CreateDatabase(Path.Combine(Paths.DatabasePath, $"Mieterliste-{year}.xlsx"));
         }
 
         private static void CreateDatabase(string database)
         {
             using (var workbook = new XLWorkbook())
             {
-                var worksheet = workbook.Worksheets.Add("Gäste");
+                var worksheet = workbook.Worksheets.Add("Mieterliste");
                 worksheet.Cell(1, 1).Value = "Nr";
-                worksheet.Cell(1, 2).Value = "Gäste";
-                worksheet.Cell(1, 3).Value = "Gruppe";
+                worksheet.Cell(1, 2).Value = "Gruppe";
+                worksheet.Cell(1, 3).Value = "Gäste";
                 worksheet.Cell(1, 4).Value = "Anrede";
                 worksheet.Cell(1, 5).Value = "Vorname";
                 worksheet.Cell(1, 6).Value = "Name";
@@ -68,8 +77,8 @@ namespace Reservo
                 worksheet.Cell(1, 22).Value = "Mobil";
                 worksheet.Cell(1, 23).Value = "Festnetz";
                 worksheet.Cell(1, 24).Value = "Email";
-                worksheet.Cell(1, 25).Value = "Storniert?";
-                worksheet.Cell(1, 26).Value = "Angebot?";
+                worksheet.Cell(1, 25).Value = "Angebot?";
+                worksheet.Cell(1, 26).Value = "Storniert?";
                 worksheet.Cell(1, 27).Value = "Notizen";
                 worksheet.Row(1).Style.Font.Bold = true;
                 worksheet.Columns().AdjustToContents();

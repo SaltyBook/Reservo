@@ -1,4 +1,5 @@
 ﻿using Reservo.Infrastructure;
+using Reservo.Services.BillingFactor;
 using Serilog;
 using System.Globalization;
 using System.Windows;
@@ -11,6 +12,8 @@ namespace Reservo
     /// </summary>
     public partial class App : Application
     {
+        public static IBillingFactorService BillingFactorService { get; } = new BillingFactorService();
+
         protected override void OnStartup(StartupEventArgs e)
         {
             Logging.Init();

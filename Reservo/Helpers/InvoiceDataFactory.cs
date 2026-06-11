@@ -26,7 +26,7 @@ namespace Reservo.Helpers
                 Price5 = entries[7].Result,
                 Heater = entries[8].Quantity,
                 Price6 = entries[8].Result,
-                Bed = entries[9].Quantity,
+                Bedding = entries[9].Quantity,
                 Price7 = entries[9].Result,
                 Laundry = entries[10].Quantity,
                 Price8 = entries[10].Result,

@@ -9,7 +9,7 @@ namespace Reservo
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             StartUp.CheckDatabasePath();
-            StartUp.CreateFolderStructure();
+            StartUp.CreateStructure();
             CredentialsService.Load();
             return await CredentialsService.ReadCredentials();
         }

@@ -193,7 +193,7 @@
                 </StackPanel>
 
                 <!-- Schließen-Button -->
-                <Button Grid.Column="2"
+                <!--<Button Grid.Column="2"
                         Command="{Binding CloseDetailCommand}"
                         ToolTip="Panel schließen"
                         Width="28"
@@ -223,7 +223,7 @@
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Button.Template>
-                </Button>
+                </Button>-->
             </Grid>
 
             <!-- ── Status-Badges ── -->

@@ -1,12 +1,21 @@
 ﻿using Reservo.Commands;
+using Reservo.Infrastructure;
+using Reservo.Models;
+using Reservo.Services.BillingFactor;
 using Reservo.Services.Credentials;
 using Reservo.Services.Dialog;
+using Serilog;
+using System.IO;
+using System.Text.Json;
 
 namespace Reservo.ViewModels
 {
     class SettingsViewModel : BaseViewModel
     {
         private readonly IDialogService _dialogService;
+        private readonly IBillingFactorService _billingFactorService;
+
+        private static readonly string _billingFactorPath = Path.Combine(Paths.ResourcesPath, "billingFactor.json");
 
         //General
 
@@ -112,18 +121,29 @@ namespace Reservo.ViewModels
             }
         }
 
+        private BillingFactorModel _billingFactorData = new();
+        public BillingFactorModel BillingFactorData
+        {
+            get => _billingFactorData;
+            set => SetProperty(ref _billingFactorData, value);
+        }
+       
         public RelayCommand SaveGeneralCommand { get; }
         public AsyncRelayCommand SaveCredentialsCommand { get; }
         public RelayCommand SaveServerCommand { get; }
+        public RelayCommand SaveBillingFactorCommand { get; }
 
-        public SettingsViewModel() : this(new DialogService()) { }
+        public SettingsViewModel() : this(new DialogService(), App.BillingFactorService) { }
 
-        public SettingsViewModel(IDialogService dialog)
+        public SettingsViewModel(IDialogService dialog, IBillingFactorService billingFactorService)
         {
             _dialogService = dialog;
+            _billingFactorService = billingFactorService;
+
             SaveGeneralCommand = new RelayCommand(SaveGeneral, CanSaveGeneral);
             SaveCredentialsCommand = new AsyncRelayCommand(SaveCredentialsAsync, CanSaveCredentials);
             SaveServerCommand = new RelayCommand(SaveServer, CanSaveServer);
+            SaveBillingFactorCommand = new RelayCommand(SaveBillingFactor, CanSaveBillingFactor);
 
             if (!String.IsNullOrEmpty(InternCredentials.DatabasePath))
             {
@@ -134,6 +154,8 @@ namespace Reservo.ViewModels
             {
                 CalendarID = InternCredentials.CalendarID;
             }
+
+            LoadBillingFactor();
         }
 
         //Saves database path
@@ -210,6 +232,58 @@ namespace Reservo.ViewModels
             ServerPath = string.Empty;
             TrelloApiKey = string.Empty;
             TrelloApiToken = string.Empty;
+        }
+
+        private void LoadBillingFactor()
+        {
+            try
+            {
+                if (!File.Exists(_billingFactorPath))
+                {
+                    BillingFactorData = new BillingFactorModel();
+                    return;
+                }
+
+                string json = File.ReadAllText(_billingFactorPath);
+
+                BillingFactorData = JsonSerializer.Deserialize<BillingFactorModel>(json)
+                        ?? new BillingFactorModel();
+
+                _billingFactorService.SaveBillingFactors(BillingFactorData);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Fehler beim Laden der internen Konfiguration.");
+                BillingFactorData = new BillingFactorModel();
+                _billingFactorService.SaveBillingFactors(BillingFactorData);
+            }
+        }
+
+        public void SaveBillingFactor(object? obj)
+        {
+            Log.Information("Speichere interne Konfiguration.");
+
+            try
+            {
+                string json = JsonSerializer.Serialize(BillingFactorData,
+                    new JsonSerializerOptions
+                    {
+                        WriteIndented = true
+                    });
+
+                File.WriteAllText(_billingFactorPath, json);
+
+                Log.Information("Interne Konfiguration erfolgreich gespeichert.");
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Fehler beim Speichern der internen Konfiguration.");
+            }
+        }
+
+        private bool CanSaveBillingFactor(object? obj)
+        {
+            return true;
         }
     }
 }

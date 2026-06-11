@@ -20,7 +20,7 @@
         public string Price5 { get; set; }
         public int Heater { get; set; }
         public string Price6 { get; set; }
-        public int Bed { get; set; }
+        public int Bedding { get; set; }
         public string Price7 { get; set; }
         public int Laundry { get; set; }
         public string Price8 { get; set; }
