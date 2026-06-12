@@ -95,11 +95,11 @@ namespace Reservo.ViewModels
         //Calculates and updates the total value of all invoice items.
         private void RecalculateTotal()
         {
-            double sum = Items
+            decimal sum = Items
                 .Where(x => !x.IsTotalRow)
                 .Sum(items => items.IsEditableTotal
                     ? items.TotalValue ?? 0
-                    : items.Quantity * double.Parse(items.Factor));
+                    : items.Quantity * decimal.Parse(items.Factor));
 
             Items.Last().TotalValue = sum;
         }

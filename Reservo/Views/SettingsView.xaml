@@ -83,7 +83,12 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-
+                            
+                            <TextBlock VerticalAlignment="Center"
+                                       FontSize="12"
+                                       Foreground="{StaticResource Brush.TextSecondary}"
+                                       Text="Die Zugangsdaten werden auf dem Server gespeichert." />
+                            
                             <Button Grid.Column="1"
                                     Content="Speichern"
                                     Style="{StaticResource PrimaryButtonStyle}"

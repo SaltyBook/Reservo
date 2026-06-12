@@ -352,7 +352,7 @@
                             CornerRadius="10"
                             Background="{StaticResource Brush.SurfaceSecondary}">
 
-                        <TextBlock Text="Letzte Aktualisierung: 11.05.2026"
+                        <TextBlock Text="Letzte Aktualisierung: 12.06.2026"
                                    FontSize="12"
                                    Foreground="{StaticResource Brush.TextSecondary}" />
 
@@ -426,11 +426,13 @@
                                         Width="130"
                                         Height="38"
                                         Margin="0,0,10,0"
+                                        Style="{StaticResource PrimaryButtonStyle}"
                                         Command="{Binding AddEmployeeCommand}" />
 
                                 <Button Content="Löschen"
                                         Width="100"
                                         Height="38"
+                                        Style="{StaticResource PrimaryButtonStyle}"
                                         Command="{Binding RemoveEmployeeCommand}" />
 
                             </StackPanel>

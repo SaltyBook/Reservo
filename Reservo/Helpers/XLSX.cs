@@ -221,7 +221,7 @@ namespace Reservo.Helpers
                     reader.GetString(Columns.Note),
                     new GuestInfo(reader.GetString(Columns.GroupName), guestCount, reader.GetString(Columns.Salutation), reader.GetString(Columns.FirstName), reader.GetString(Columns.LastName), reader.GetString(Columns.Street), reader.GetString(Columns.Location), GetNullableInt(reader.GetValue(Columns.LastVisit)), reader.GetString(Columns.Mobile), reader.GetString(Columns.HomePhone), reader.GetString(Columns.EMail)),
                     new StayInfo(arrival, departure, nightCount, GetBool(reader.GetValue(Columns.Tent)), GetBool(reader.GetValue(Columns.AgeCheck)), GetBool(reader.GetValue(Columns.InfoSheet)), GetBool(reader.GetValue(Columns.CalendarEntry)), Convert.ToDateTime(reader.GetValue(Columns.Reserved)), GetContact(reader.GetValue(Columns.ContactVia))),
-                    new BillingInfo(GetNullableInt(reader.GetValue(Columns.InvoiceNumber)), GetNullableDouble(reader.GetValue(Columns.Total)), GetNullableDouble(reader.GetValue(Columns.Drinks)))
+                    new BillingInfo(GetNullableInt(reader.GetValue(Columns.InvoiceNumber)), GetNullableDecimal(reader.GetValue(Columns.Total)), GetNullableDecimal(reader.GetValue(Columns.Drinks)))
                 );
 
                 return true;
@@ -288,9 +288,9 @@ namespace Reservo.Helpers
             return value is null || value == DBNull.Value ? null : Convert.ToInt32(value);
         }
 
-        private static double? GetNullableDouble(object? value)
+        private static decimal? GetNullableDecimal(object? value)
         {
-            return value is null || value == DBNull.Value ? null : Convert.ToDouble(value);
+            return value is null || value == DBNull.Value ? null : Convert.ToDecimal(value);
         }
 
         private static ContactValues.Contact GetContact(object? value)

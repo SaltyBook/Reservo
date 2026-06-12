@@ -104,6 +104,11 @@ namespace Reservo.ViewModels
         {
             CurrentViewModel = viewModel;
             SelectedMenuItem = menuItem;
+
+            if(SelectedMenuItem == MenuItemType.Statistic)
+            {
+                _statisticViewModel.CheckForUpdates(_tenantViewModel.Workbooks);
+            }
         }
 
         //Opens Feedback View

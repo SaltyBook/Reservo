@@ -18,8 +18,8 @@ namespace Reservo.Models
             }
         }
 
-        private double? total;
-        public double? Total
+        private decimal? total;
+        public decimal? Total
         {
             get => total;
             set
@@ -32,22 +32,8 @@ namespace Reservo.Models
             }
         }
 
-        private bool ageCheck;
-        public bool AgeCheck
-        {
-            get => ageCheck;
-            set
-            {
-                if (ageCheck != value)
-                {
-                    ageCheck = value;
-                    OnPropertyChanged(nameof(AgeCheck));
-                }
-            }
-        }
-
-        private double? drinks;
-        public double? Drinks
+        private decimal? drinks;
+        public decimal? Drinks
         {
             get => drinks;
             set
@@ -60,7 +46,7 @@ namespace Reservo.Models
             }
         }
 
-        public BillingInfo(int? invoiceNumber, double? total, double? drinks)
+        public BillingInfo(int? invoiceNumber, decimal? total, decimal? drinks)
         {
             this.invoiceNumber = invoiceNumber;
             this.total = total;

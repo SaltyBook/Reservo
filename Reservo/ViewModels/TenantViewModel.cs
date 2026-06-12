@@ -37,7 +37,6 @@ namespace Reservo.ViewModels
         public int PastEntryCount => SelectedWorkbook?.Entries?.Count(e => e.StayInfo.Departure < DateTime.Today && !e.Canceled) ?? 0;
         public int CanceledEntryCount => SelectedWorkbook?.Entries?.Count(e => e.Canceled) ?? 0;
 
-
         private CopyToParameter? _copiedEntry;
 
         public ICommand CopyCommand { get; }
@@ -108,8 +107,6 @@ namespace Reservo.ViewModels
             SelectedWorkbook = Workbooks.FirstOrDefault(x => x.Year == DateTime.Now.Year);
 
             CheckAllEntryDates();
-
-            statisticViewModel.FillStatisticData(Workbooks);
 
             watch.Stop();
 
@@ -279,11 +276,16 @@ namespace Reservo.ViewModels
                 CheckChangedEntryDate(entry);
             }
 
-            if (e.PropertyName == nameof(Entry.Canceled))
+            if (e.PropertyName == nameof(Entry.Canceled) || e.PropertyName == nameof(Entry.GuestInfo.GuestCount) || e.PropertyName == nameof(Entry.StayInfo.NightCount) || e.PropertyName == nameof(Entry.StayInfo.AgeCheck) || e.PropertyName == nameof(Entry.BillingInfo.Total))
             {
-                Log.Information("Eintrag storniert geändert (Id {Id}, Canceled={Value})", entry.Id, entry.Canceled);
-                RaiseCountProperties();
-            }
+                SelectedWorkbook.IsUpdated = true;
+
+                if (e.PropertyName == nameof(Entry.Canceled))
+                {
+                    Log.Information("Eintrag storniert geändert (Id {Id}, Canceled={Value})", entry.Id, entry.Canceled);
+                    RaiseCountProperties();
+                }
+            }        
         }
 
         //Updates all count properties that depend on the selection

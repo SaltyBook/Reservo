@@ -70,7 +70,7 @@ namespace Reservo
         //The method parses the formatted currency string, converts it to a numeric value, and assigns it to the entry’s total field for further processing or display.
         private static void UpdateDatagrid(Entry entry, List<TableEntry> entries)
         {
-            entry.BillingInfo.Total = Convert.ToDouble(entries[16].Result.Replace("€", "").Replace(".", ""));
+            entry.BillingInfo.Total = Convert.ToDecimal(entries[16].Result.Replace("€", "").Replace(".", ""));
         }
     }
 }

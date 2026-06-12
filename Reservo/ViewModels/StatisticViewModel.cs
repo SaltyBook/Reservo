@@ -20,7 +20,7 @@ namespace Reservo.ViewModels
     {
         private readonly string _employeeHoursPath = Path.Combine(Paths.ResourcesPath, "employeehours.json");
 
-        private ObservableCollection<StatisticData> _statisticData;
+        private ObservableCollection<StatisticData> _statisticData = new ObservableCollection<StatisticData>();
         public ObservableCollection<StatisticData> StatisticData
         {
             get { return _statisticData; }
@@ -105,10 +105,6 @@ namespace Reservo.ViewModels
         {
             Log.Information("StatisticViewModel initialisiert");
 
-            StatisticData = new ObservableCollection<StatisticData>();
-            StatisticData.Add(new StatisticData());
-            StatisticData[0].DisplayName = "Alle Jahre";
-
             var calendar = new GermanPublicHoliday { State = GermanPublicHoliday.States.HE };
             PublicHolidaysThisYear = calendar.PublicHolidayNames(DateTime.Now.Year);
             PublicHolidaysNextYear = calendar.PublicHolidayNames(DateTime.Now.Year + 1);
@@ -119,12 +115,28 @@ namespace Reservo.ViewModels
             LoadEmployeeHours();
         }
 
-        public void FillStatisticData(ObservableCollection<WorkbookViewModel> workbooks)
+        public void CheckForUpdates(ObservableCollection<WorkbookViewModel> workbooks)
+        {
+            if (workbooks.Any(x => x.IsUpdated))
+            {
+                CreateStatisticData(workbooks);           
+            }
+        }
+
+        private void CreateStatisticData(ObservableCollection<WorkbookViewModel> workbooks)
         {
             Log.Information("Lade Statistiken");
 
+            StatisticData.Clear();
+            StatisticData.Add(new StatisticData());
+            StatisticData[0].DisplayName = "Alle Jahre";
+
             foreach (WorkbookViewModel workbook in workbooks)
             {
+                workbook.IsUpdated = false;
+
+                if (workbook.Entries.Count == 0) continue;
+
                 var current = new StatisticData { DisplayName = workbook.DisplayName };
 
                 StatisticData.Add(current);
@@ -193,7 +205,7 @@ namespace Reservo.ViewModels
 
             Log.Information("Laden für Statistiken abgeschlossen.");
         }
-
+     
         public void AddEmployee(object? obj)
         {
             if (SelectedEmployeeYear == null)
@@ -284,6 +296,8 @@ namespace Reservo.ViewModels
 
         private void LoadEmployeeHours()
         {
+            Log.Information("Lade Mitarbeiterstunden");
+
             try
             {
                 if (!File.Exists(_employeeHoursPath))

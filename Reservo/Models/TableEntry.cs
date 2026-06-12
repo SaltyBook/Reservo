@@ -63,7 +63,7 @@ namespace Reservo.Models
                 if (IsTotalRow || IsEditableTotal)
                     return TotalValue?.ToString("N2", culture) + " €";
 
-                if (double.TryParse(Factor, NumberStyles.Any, culture, out double multiplier))
+                if (decimal.TryParse(Factor, NumberStyles.Any, culture, out decimal multiplier))
                     return (Quantity * multiplier).ToString("N2", culture) + " €";
 
                 return "Fehler";
@@ -76,7 +76,7 @@ namespace Reservo.Models
 
                     var cleaned = value?.Replace("€", "").Trim();
 
-                    if (double.TryParse(cleaned, NumberStyles.Any, culture, out double parsed))
+                    if (decimal.TryParse(cleaned, NumberStyles.Any, culture, out decimal parsed))
                     {
                         TotalValue = parsed;
                     }
@@ -84,8 +84,8 @@ namespace Reservo.Models
             }
         }
 
-        private double? _totalValue = 0;
-        public double? TotalValue
+        private decimal? _totalValue = 0;
+        public decimal? TotalValue
         {
             get => _totalValue;
             set
