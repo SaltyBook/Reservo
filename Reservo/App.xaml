@@ -33,6 +33,10 @@
                 <views:StatisticView />
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewModels:CalendarViewModel}">
+                <views:CalendarView />
+            </DataTemplate>
+
             <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
                 <views:SettingsView />
             </DataTemplate>

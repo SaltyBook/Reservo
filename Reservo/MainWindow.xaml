@@ -93,6 +93,26 @@
                         </Button.Style>
                     </Button>
 
+                    <Button Content="Kalendar"
+                            Command="{Binding ShowCalendarCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button"
+                                   BasedOn="{StaticResource SidebarNavButtonStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding SelectedMenuItem}"
+                                                 Value="{x:Static enums:MenuItemType.Calendar}">
+                                        <Setter Property="Background"
+                                                Value="{StaticResource Brush.SidebarSelected}" />
+                                        <Setter Property="Foreground"
+                                                Value="White" />
+                                        <Setter Property="FontWeight"
+                                                Value="SemiBold" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
                     <Button Content="Einstellungen"
                             Command="{Binding ShowSettingsCommand}">
                         <Button.Style>

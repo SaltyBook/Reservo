@@ -35,10 +35,12 @@ namespace Reservo.ViewModels
 
         private readonly TenantViewModel _tenantViewModel;
         private readonly StatisticViewModel _statisticViewModel;
+        private readonly CalendarViewModel _calendarViewModel;
         private readonly SettingsViewModel _settingsViewModel;
 
         public RelayCommand ShowTenantCommand { get; }
         public RelayCommand ShowStatisticCommand { get; }
+        public RelayCommand ShowCalendarCommand { get; }
         public RelayCommand ShowSettingsCommand { get; }
         public RelayCommand FeedBackCommand { get; }
 
@@ -57,6 +59,7 @@ namespace Reservo.ViewModels
 
             _tenantViewModel = new TenantViewModel();
             _statisticViewModel = new StatisticViewModel();
+            _calendarViewModel = new CalendarViewModel();
             _settingsViewModel = new SettingsViewModel();
 
             _currentViewModel = _tenantViewModel;
@@ -64,6 +67,7 @@ namespace Reservo.ViewModels
 
             ShowTenantCommand = new RelayCommand(_ => ShowView(_tenantViewModel, MenuItemType.Tenant));
             ShowStatisticCommand = new RelayCommand(_ => ShowView(_statisticViewModel, MenuItemType.Statistic));
+            ShowCalendarCommand = new RelayCommand(_ => ShowView(_calendarViewModel, MenuItemType.Calendar));
             ShowSettingsCommand = new RelayCommand(_ => ShowView(_settingsViewModel, MenuItemType.Settings));
 
             FeedBackCommand = new RelayCommand(OpenFeedbackDialog);
@@ -108,6 +112,10 @@ namespace Reservo.ViewModels
             if(SelectedMenuItem == MenuItemType.Statistic)
             {
                 _statisticViewModel.CheckForUpdates(_tenantViewModel.Workbooks);
+            }
+            else if (SelectedMenuItem == MenuItemType.Calendar)
+            {
+                _calendarViewModel.Refresh(_tenantViewModel.Workbooks);
             }
         }
 

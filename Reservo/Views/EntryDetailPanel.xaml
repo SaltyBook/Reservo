@@ -232,7 +232,7 @@
                        Orientation="Horizontal">
 
                 <Border Style="{StaticResource Badge}"
-                        Background="#FCEBEB"
+                        Background="{StaticResource Brush.RowCanceled}"
                         Visibility="{Binding SelectedEntry.Canceled, Converter={StaticResource BoolToVisibility}}">
                     <TextBlock Style="{StaticResource BadgeText}"
                                Foreground="#791F1F"
@@ -240,10 +240,10 @@
                 </Border>
 
                 <Border Style="{StaticResource Badge}"
-                        Background="#E6F1FB"
+                        Background="{StaticResource Brush.RowOffer}"
                         Visibility="{Binding SelectedEntry.Offer, Converter={StaticResource BoolToVisibility}}">
                     <TextBlock Style="{StaticResource BadgeText}"
-                               Foreground="#0C447C"
+                               Foreground="#8B8000"
                                Text="Angebot" />
                 </Border>
 
@@ -264,10 +264,10 @@
                 </Border>
 
                 <Border Style="{StaticResource Badge}"
-                        Background="#F1EFE8"
+                        Background="#E6F1FB"
                         Visibility="{Binding SelectedEntry.StayInfo.CalendarEntry, Converter={StaticResource BoolToVisibility}}">
                     <TextBlock Style="{StaticResource BadgeText}"
-                               Foreground="#444441"
+                               Foreground="#0C447C"
                                Text="Kalendereintrag" />
                 </Border>
 

@@ -4,6 +4,7 @@
     {
         Tenant,
         Statistic,
+        Calendar,
         Settings
     }
 }
