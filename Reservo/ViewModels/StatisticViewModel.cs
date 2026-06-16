@@ -98,6 +98,8 @@ namespace Reservo.ViewModels
             }
         }
 
+        private JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
+
         public ICommand AddEmployeeCommand { get; }
         public ICommand RemoveEmployeeCommand { get; }
 
@@ -115,11 +117,11 @@ namespace Reservo.ViewModels
             LoadEmployeeHours();
         }
 
-        public void CheckForUpdates(ObservableCollection<WorkbookViewModel> workbooks)
+        public void Refresh(ObservableCollection<WorkbookViewModel> workbooks)
         {
             if (workbooks.Any(x => x.IsUpdated))
             {
-                CreateStatisticData(workbooks);           
+                CreateStatisticData(workbooks);
             }
         }
 
@@ -205,7 +207,7 @@ namespace Reservo.ViewModels
 
             Log.Information("Laden für Statistiken abgeschlossen.");
         }
-     
+
         public void AddEmployee(object? obj)
         {
             if (SelectedEmployeeYear == null)
@@ -280,11 +282,7 @@ namespace Reservo.ViewModels
         {
             try
             {
-                var json = JsonSerializer.Serialize(EmployeeYears,
-                    new JsonSerializerOptions
-                    {
-                        WriteIndented = true
-                    });
+                var json = JsonSerializer.Serialize(EmployeeYears, jsonSerializerOptions);
 
                 File.WriteAllText(_employeeHoursPath, json);
             }

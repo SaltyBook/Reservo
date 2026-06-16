@@ -3,14 +3,13 @@ using Reservo.Commands;
 using Reservo.Enums;
 using Reservo.Services.Dialog;
 using Reservo.Views;
-using System.Drawing;
 #endregion
 
 namespace Reservo.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private readonly IDialogService _dialogService;
+        private readonly DialogService _dialogService;
 
         private BaseViewModel _currentViewModel;
         public BaseViewModel CurrentViewModel
@@ -88,7 +87,7 @@ namespace Reservo.ViewModels
             else
             {
                 ServerReachable = "#00FF00";
-            }           
+            }
         }
 
         // Load Workbooks (.xslx files)
@@ -109,9 +108,9 @@ namespace Reservo.ViewModels
             CurrentViewModel = viewModel;
             SelectedMenuItem = menuItem;
 
-            if(SelectedMenuItem == MenuItemType.Statistic)
+            if (SelectedMenuItem == MenuItemType.Statistic)
             {
-                _statisticViewModel.CheckForUpdates(_tenantViewModel.Workbooks);
+                _statisticViewModel.Refresh(_tenantViewModel.Workbooks);
             }
             else if (SelectedMenuItem == MenuItemType.Calendar)
             {

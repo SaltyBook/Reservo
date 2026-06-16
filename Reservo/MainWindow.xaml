@@ -93,7 +93,7 @@
                         </Button.Style>
                     </Button>
 
-                    <Button Content="Kalendar"
+                    <Button Content="Kalender"
                             Command="{Binding ShowCalendarCommand}">
                         <Button.Style>
                             <Style TargetType="Button"

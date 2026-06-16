@@ -1,21 +1,16 @@
 ﻿using PublicHoliday;
 using Reservo.Commands;
 using Serilog;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Reservo.ViewModels
 {
     public class CalendarViewModel : BaseViewModel
     {
-        private readonly IDictionary<DateTime, string> _publicHolidays;
+        private readonly Dictionary<DateTime, string> _publicHolidays;
 
-        // ── Monat-Navigation ─────────────────────────────────────────
+        // ── Month-Navigation ─────────────────────────────────────────
         private DateTime _currentMonth;
         public DateTime CurrentMonth
         {
@@ -34,10 +29,10 @@ namespace Reservo.ViewModels
         public ICommand PreviousMonthCommand { get; }
         public ICommand NextMonthCommand { get; }
 
-        // ── Kalendertage ─────────────────────────────────────────────
+        // ── CalendarDay ─────────────────────────────────────────────
         public ObservableCollection<CalendarDay> Days { get; } = new();
 
-        // ── Monats-Statistik ─────────────────────────────────────────
+        // ── Month-Statistic ─────────────────────────────────────────
         private int _bookingCount;
         public int BookingCount
         {
@@ -66,7 +61,7 @@ namespace Reservo.ViewModels
             private set => SetProperty(ref _freeWeeks, value);
         }
 
-        // ── Datenquelle ───────────────────────────────────────────────
+        // ── Data source ───────────────────────────────────────────────
         private ObservableCollection<WorkbookViewModel> _workbooks = new();
 
         public CalendarViewModel()
@@ -82,33 +77,35 @@ namespace Reservo.ViewModels
             NextMonthCommand = new RelayCommand(_ => CurrentMonth = CurrentMonth.AddMonths(1));
         }
 
-        /// <summary>Wird vom MainViewModel aufgerufen wenn Workbooks geladen sind oder IsDirty.</summary>
+        /// Called by MainViewModel when workbooks are loaded or when IsDirty is true.
         public void Refresh(ObservableCollection<WorkbookViewModel> workbooks)
         {
-            _workbooks = workbooks;
-            Rebuild();
-            Log.Information("Kalender aktualisiert für {Month}", MonthTitle);
+            if (workbooks.Any(x => x.IsUpdated))
+            {
+                _workbooks = workbooks;
+                Rebuild();
+                Log.Information("Kalender aktualisiert für {Month}", MonthTitle);
+            }
         }
 
-        // ── Aufbau der Kalendertage ───────────────────────────────────
+        // ── Structure of calendar days ───────────────────────────────────
         private void Rebuild()
         {
-            WorkbookViewModel workbook = _workbooks.First(x => x.Year == DateTime.Now.Year);
-
             Days.Clear();
 
             var firstDay = _currentMonth;
             var lastDay = firstDay.AddMonths(1).AddDays(-1);
             var daysInMonth = lastDay.Day;
 
-            // Vortage (Montag = 0 ... Sonntag = 6)
+            // Days of the week (Monday = 0 ... Sunday = 6)
             int leadingBlanks = ((int)firstDay.DayOfWeek + 6) % 7;
 
-            var allEntries = workbook.Entries
+            var allEntries = _workbooks
+                .SelectMany(x => x.Entries)
                 .Where(e => !e.Canceled)
                 .ToList();
 
-            // Farben pro Eintrag zuweisen (zyklisch)
+            // Assign colors per entry (cyclically)
             var colorKeys = new[] { "blue", "teal", "purple", "coral", "green", "amber" };
             var colorMap = new Dictionary<int, string>();
             int colorIdx = 0;
@@ -118,13 +115,13 @@ namespace Reservo.ViewModels
                     colorMap[e.Id] = colorKeys[colorIdx++ % colorKeys.Length];
             }
 
-            // Lückentage vom Vormonat
+            // Missing days from the previous month
             var prevMonth = firstDay.AddMonths(-1);
             int prevDays = DateTime.DaysInMonth(prevMonth.Year, prevMonth.Month);
             for (int i = leadingBlanks - 1; i >= 0; i--)
                 Days.Add(new CalendarDay(new DateTime(prevMonth.Year, prevMonth.Month, prevDays - i), isOtherMonth: true));
 
-            // Tage des aktuellen Monats
+            // Days of the current month
             var occupiedSet = new HashSet<DateTime>();
 
             for (int d = 1; d <= daysInMonth; d++)
@@ -136,7 +133,7 @@ namespace Reservo.ViewModels
                 bool isHoliday = _publicHolidays.ContainsKey(date);
                 string? holidayName = isHoliday ? _publicHolidays[date] : null;
 
-                // Einträge die diesen Tag berühren (Anreise inkl., Abreise exkl.)
+                // Entries that include this date (arrival included, departure excluded)
                 var bars = allEntries
                     .Where(e => e.StayInfo.Arrival.Date <= date && e.StayInfo.Departure.Date > date)
                     .Select(e => new EntryBar
@@ -161,13 +158,13 @@ namespace Reservo.ViewModels
                 });
             }
 
-            // Folgetage bis Zeile voll (Grid braucht Vielfaches von 7)
+            // Subsequent days until the row is full (the grid requires multiples of 7)
             int trailing = (7 - Days.Count % 7) % 7;
             var nextMonth = firstDay.AddMonths(1);
             for (int i = 1; i <= trailing; i++)
                 Days.Add(new CalendarDay(new DateTime(nextMonth.Year, nextMonth.Month, i), isOtherMonth: true));
 
-            // Statistik
+            // Statistic
             BookingCount = allEntries.Count(e => e.StayInfo.Arrival.Month == firstDay.Month &&
                                                       e.StayInfo.Arrival.Year == firstDay.Year);
             OccupiedDays = occupiedSet.Count;
@@ -193,7 +190,7 @@ namespace Reservo.ViewModels
         }
     }
 
-    // ── Hilfsklassen ─────────────────────────────────────────────────
+    // ── Helperclasses ─────────────────────────────────────────────────
 
     public class CalendarDay
     {

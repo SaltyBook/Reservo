@@ -4,6 +4,7 @@ using Reservo.Helpers;
 using Reservo.Infrastructure;
 using Reservo.Models;
 using Reservo.Services.Dialog;
+using Reservo.Services.Notification;
 using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -84,7 +85,7 @@ namespace Reservo.ViewModels
                 {
                     errors.AddRange(result.Errors);
                     continue;
-                }                
+                }
 
                 var workbookViewModel = new WorkbookViewModel(file)
                 {
@@ -107,6 +108,8 @@ namespace Reservo.ViewModels
             SelectedWorkbook = Workbooks.FirstOrDefault(x => x.Year == DateTime.Now.Year);
 
             CheckAllEntryDates();
+
+            NotificationService.ShowUpcomingArrivals(SelectedWorkbook);
 
             watch.Stop();
 
@@ -267,8 +270,8 @@ namespace Reservo.ViewModels
         //Responds to property changes in individual entries
         private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (sender is not Entry entry)            
-                return;         
+            if (sender is not Entry entry)
+                return;
 
             if (e.PropertyName == nameof(Entry.StayInfo.Departure))
             {
@@ -285,7 +288,7 @@ namespace Reservo.ViewModels
                     Log.Information("Eintrag storniert geändert (Id {Id}, Canceled={Value})", entry.Id, entry.Canceled);
                     RaiseCountProperties();
                 }
-            }        
+            }
         }
 
         //Updates all count properties that depend on the selection
