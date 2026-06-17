@@ -67,6 +67,8 @@ namespace Reservo.Services.Credentials
                     return ServiceResult.Fail("Die Zugangsdaten konnten nicht gelesen werden.");
                 }
 
+                string test = CryptoHelper.Decrypt(creds.Password);
+
                 Log.Information("SMTP-Credentials erfolgreich gelesen für Benutzer {Username}", creds.Username);
 
                 return ServiceResult.Ok("Zugangsdaten wurden erfolgreich geladen.");

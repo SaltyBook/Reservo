@@ -143,14 +143,14 @@
                             Content="Feedback senden" />
                 </Border>
 
-                <Border Grid.Row="4"
+                <!--<Border Grid.Row="4"
                         Height="8"
                         Width="8"
                         CornerRadius="4"
                         Background="{Binding ServerReachable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         BorderBrush="#1D2128"
                         HorizontalAlignment="Left">
-                </Border>
+                </Border>-->
             </Grid>
         </Border>
 

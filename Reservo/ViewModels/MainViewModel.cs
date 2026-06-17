@@ -3,6 +3,7 @@ using Reservo.Commands;
 using Reservo.Enums;
 using Reservo.Services.Dialog;
 using Reservo.Views;
+using System.Text;
 #endregion
 
 namespace Reservo.ViewModels
@@ -75,19 +76,23 @@ namespace Reservo.ViewModels
         }
 
         //Init StartUp
-        private async void Init()
+        private void Init()
         {
-            var credentialResult = await StartupService.RunAsync();
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            StartUp.CheckDatabasePath();
+            StartUp.CreateStructure();
 
-            if (!credentialResult.Success)
-            {
-                // Fehler
-                _dialogService.ShowError("Fehler", credentialResult.Message);
-            }
-            else
-            {
-                ServerReachable = "#00FF00";
-            }
+            //var credentialResult = await StartupService.RunAsync();
+
+            //if (!credentialResult.Success)
+            //{
+            //    // Fehler
+            //    _dialogService.ShowError("Fehler", credentialResult.Message);
+            //}
+            //else
+            //{
+            //    ServerReachable = "#00FF00";
+            //}
         }
 
         // Load Workbooks (.xslx files)

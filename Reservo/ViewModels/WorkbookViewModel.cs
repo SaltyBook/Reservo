@@ -311,7 +311,8 @@ namespace Reservo.ViewModels
         //Checks whether email access data is available
         private bool CanCreateEmail(object? _)
         {
-            return CredentialsService.creds is not null;
+            return !String.IsNullOrEmpty(InternCredentials.Username) && !String.IsNullOrEmpty(InternCredentials.Password);
+            //return CredentialsService.creds is not null;
         }
 
         private bool CanCreateCalendarEntry(object? obj)

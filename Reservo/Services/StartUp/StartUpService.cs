@@ -5,13 +5,14 @@ namespace Reservo
 {
     public static class StartupService
     {
-        public static async Task<ServiceResult> RunAsync()
+        public static async Task<ServiceResult?> RunAsync()
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             StartUp.CheckDatabasePath();
             StartUp.CreateStructure();
-            CredentialsService.Load();
-            return await CredentialsService.ReadCredentials();
+            //CredentialsService.Load();
+            //return await CredentialsService.ReadCredentials();
+            return null;
         }
     }
 }

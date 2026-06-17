@@ -73,12 +73,20 @@ namespace Reservo.ViewModels
             }
         }
 
-        private bool _useServer = false;
-        public bool UseServer
+        private int _port = 993;
+        public int Port
         {
-            get => _useServer;
-            set => SetProperty(ref _useServer, value);
+            get => _port;
+            set => SetProperty(ref _port, value);
         }
+
+        private string _smtpHost = string.Empty;
+        public string SmtpHost
+        {
+            get => _smtpHost;
+            set => SetProperty(ref _smtpHost, value);
+        }
+
 
         private string _serverPath = string.Empty;
         public string ServerPath
@@ -129,7 +137,7 @@ namespace Reservo.ViewModels
         }
        
         public RelayCommand SaveGeneralCommand { get; }
-        public AsyncRelayCommand SaveCredentialsCommand { get; }
+        public RelayCommand SaveCredentialsCommand { get; }
         public RelayCommand SaveServerCommand { get; }
         public RelayCommand SaveBillingFactorCommand { get; }
 
@@ -141,7 +149,7 @@ namespace Reservo.ViewModels
             _billingFactorService = billingFactorService;
 
             SaveGeneralCommand = new RelayCommand(SaveGeneral, CanSaveGeneral);
-            SaveCredentialsCommand = new AsyncRelayCommand(SaveCredentialsAsync, CanSaveCredentials);
+            SaveCredentialsCommand = new RelayCommand(SaveEmail, CanSaveCredentials);
             SaveServerCommand = new RelayCommand(SaveServer, CanSaveServer);
             SaveBillingFactorCommand = new RelayCommand(SaveBillingFactor, CanSaveBillingFactor);
 
@@ -178,25 +186,36 @@ namespace Reservo.ViewModels
         }
 
         //Stores username and encrypted password
-        private async Task SaveCredentialsAsync()
+        private void SaveEmail(object? obj)
         {
-            var credentialResult = await CredentialsService.WriteCredentials(Username, CryptoHelper.Encrypt(Password));
+            InternCredentials.WriteEmailCredentials(Username, Password, SmtpHost, Port);
+            var credentialResult = InternCredentials.Save();
             if (!credentialResult.Success)
             {
                 // Fehler
                 _dialogService.ShowError("Fehler", credentialResult.Message);
             }
-            var credentialResult2 = await CredentialsService.ReadCredentials();
-            if (!credentialResult2.Success)
-            {
-                // Fehler
-                _dialogService.ShowError("Fehler", credentialResult2.Message);
-            }
-            ClearAll();
         }
 
+        //private async Task SaveCredentialsAsync()
+        //{
+        //    var credentialResult = await CredentialsService.WriteCredentials(Username, CryptoHelper.Encrypt(Password));
+        //    if (!credentialResult.Success)
+        //    {
+        //        // Fehler
+        //        _dialogService.ShowError("Fehler", credentialResult.Message);
+        //    }
+        //    var credentialResult2 = await CredentialsService.ReadCredentials();
+        //    if (!credentialResult2.Success)
+        //    {
+        //        // Fehler
+        //        _dialogService.ShowError("Fehler", credentialResult2.Message);
+        //    }
+        //    ClearAll();
+        //}
+
         //Check whether the user name and password are set
-        private bool CanSaveCredentials()
+        private bool CanSaveCredentials(object? obj)
         {
             return !string.IsNullOrWhiteSpace(Username)
                 && !string.IsNullOrWhiteSpace(Password);

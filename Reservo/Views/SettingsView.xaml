@@ -113,6 +113,10 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="16" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="16" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="16" />
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="24" />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
@@ -140,7 +144,21 @@
                                          Style="{StaticResource ModernPasswordBoxStyle}" />
                         </StackPanel>
 
-                        <Grid Grid.Row="6">
+                        <StackPanel Grid.Row="6">
+                            <TextBlock Text="SMTP-Server"
+                                       Style="{StaticResource FormLabelStyle}" />
+                            <TextBox Text="{Binding SmtpHost, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource ModernTextBoxStyle}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="8">
+                            <TextBlock Text="Port"
+                                       Style="{StaticResource FormLabelStyle}" />
+                            <TextBox Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource ModernTextBoxStyle}" />
+                        </StackPanel>
+
+                        <Grid Grid.Row="10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />

@@ -26,8 +26,8 @@ namespace Reservo.Services.Email
 
             using (var client = new ImapClient())
             {
-                client.Connect(CredentialsService.creds.SmtpHost, CredentialsService.creds.Port);
-                client.Authenticate(CredentialsService.creds.Username, CryptoHelper.Decrypt(CredentialsService.creds.Password));
+                client.Connect(InternCredentials.SmtpHost, InternCredentials.Port);
+                client.Authenticate(InternCredentials.Username, CryptoHelper.Decrypt(InternCredentials.Password));
                 var inboxMessage = GetLatestMessage(client, client.Inbox, entry.GuestInfo.EMail);
                 var sendMessage = GetLatestMessage(client, client.GetFolder(SpecialFolder.Sent), entry.GuestInfo.EMail);
 

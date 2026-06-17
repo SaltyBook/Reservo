@@ -48,6 +48,33 @@ namespace Reservo.Services.Credentials
             }
         }
 
+        public static string Username
+        {
+            get => _data.Username;
+            set => _data.Username = value;
+        }
+
+        public static string Password
+        {
+            get => _data.Password;
+            set => _data.Password =
+                string.IsNullOrWhiteSpace(value)
+                        ? string.Empty
+                        : CryptoHelper.Encrypt(value);
+        }
+
+        public static string SmtpHost
+        {
+            get => _data.SmtpHost;
+            set => _data.SmtpHost = value;
+        }
+
+        public static int Port
+        {
+            get => _data.Port;
+            set => _data.Port = value;
+        }      
+
         static InternCredentials()
         {
             Load();
@@ -81,7 +108,6 @@ namespace Reservo.Services.Credentials
 
             try
             {
-
                 string json = JsonSerializer.Serialize(_data,
                     new JsonSerializerOptions
                     {
@@ -116,6 +142,14 @@ namespace Reservo.Services.Credentials
             ServerPath = serverPath;
             TrelloApiKey = trelloApiKey;
             TrelloApiToken = trelloApiToken;
+        }
+
+        public static void WriteEmailCredentials(string username, string password, string smtpHost, int port)
+        {
+            Username = username;
+            Password = password;
+            SmtpHost = smtpHost;
+            Port = port;
         }
     }
 }

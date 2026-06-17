@@ -1,4 +1,5 @@
-﻿using Notifications.Wpf;
+﻿using Notification.Core;
+using Notification.Wpf;
 using Reservo.Models;
 using Reservo.ViewModels;
 using Serilog;
