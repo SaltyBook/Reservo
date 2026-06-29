@@ -7,11 +7,10 @@ using Reservo.Services.Email;
 using Reservo.Services.PathService;
 using Reservo.ViewModels;
 using Reservo.Views;
-using Spire.Doc;
+using Microsoft.Office.Interop.Word;
 using System.IO;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
-using Document = Spire.Doc.Document;
 #endregion
 
 namespace Reservo
@@ -94,13 +93,19 @@ namespace Reservo
             if (File.Exists(pdfPath))
                 File.Delete(pdfPath);
 
-
-            //Load Document
-            Document document = new Document();
-            document.LoadFromFile(docxPath);
-
-            //Convert Word to PDF
-            document.SaveToFile(pdfPath, FileFormat.PDF);
+            var appWord = new Application();
+            if (appWord.Documents != null)
+            {
+                //Load Document
+                var wordDocument = appWord.Documents.Open(docxPath);
+                if (wordDocument != null)
+                {
+                    //Convert Word to PDF
+                    wordDocument.ExportAsFixedFormat(pdfPath, WdExportFormat.wdExportFormatPDF);
+                    wordDocument.Close();
+                }
+                appWord.Quit();
+            }
 
             return true;
         }

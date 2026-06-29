@@ -133,9 +133,9 @@ namespace Reservo.ViewModels
                 bool isHoliday = _publicHolidays.ContainsKey(date);
                 string? holidayName = isHoliday ? _publicHolidays[date] : null;
 
-                // Entries that include this date (arrival included, departure excluded)
+                // Entries that include this date (arrival included, departure included)
                 var bars = allEntries
-                    .Where(e => e.StayInfo.Arrival.Date <= date && e.StayInfo.Departure.Date > date)
+                    .Where(e => e.StayInfo.Arrival.Date <= date && e.StayInfo.Departure.Date >= date)
                     .Select(e => new EntryBar
                     {
                         Label = e.GuestInfo.GroupName,

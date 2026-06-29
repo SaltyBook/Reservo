@@ -103,7 +103,10 @@ namespace Reservo.Models
         public Entry(int id)
         {
             this.id = id;
-            StayInfo = new StayInfo(DateTime.Now.Date, DateTime.Now.Date.AddDays(2), DateTime.Now.Date);
+            TimeSpan ts = new TimeSpan(12, 0, 0);
+            DateTime Today = DateTime.Now.Date;
+            Today = Today.Date + ts;
+            StayInfo = new StayInfo(Today, Today.AddDays(2), Today);
         }
 
         public Entry FullClone(int nextId)

@@ -14,6 +14,9 @@ namespace Reservo.Models
                 if (arrival == value)
                     return;
 
+                TimeSpan ts = new TimeSpan(12, 0, 0);
+                value = value + ts;
+
                 arrival = value;
                 OnPropertyChanged(nameof(Arrival));
 
