@@ -285,7 +285,7 @@ namespace Reservo.ViewModels
             string url =
                 "https://calendar.google.com/calendar/render?action=TEMPLATE" +
                 "&src=" + Uri.EscapeDataString(calendarId) +
-                $"&text=Reservierung {name}" +
+                $"&text={name}" +
                 $"&details=Anzahl der Teilnehmer: {guestCount}" +
                 $"&dates={start}/{end}";
 
