@@ -21,6 +21,10 @@ Reservo ist eine WPF-Desktopanwendung zur Verwaltung von Mieter- und Reservierun
 
 ![Hauptoberfläche](images/tenant.png)
 
+![Statistikoberfläche](images/statistic.png)
+
+![Kalenderoberfläche](images/calendar.png)
+
 ## Technologien
 
 | Bereich | Technologie |
