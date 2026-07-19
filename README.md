@@ -50,7 +50,7 @@ Reservo ist eine WPF-Desktopanwendung zur Verwaltung von Mieter- und Reservierun
 ## Installation & Start
 
 ```bash
-git clone https://github.com/<dein-benutzername>/Reservo.git
+git clone https://github.com/SaltyBook/Reservo.git
 cd Reservo
 dotnet restore
 dotnet build
