@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Reservo.Infrastructure;
+using System.ComponentModel;
 
 namespace Reservo.Models
 {
@@ -106,7 +107,7 @@ namespace Reservo.Models
             TimeSpan ts = new TimeSpan(12, 0, 0);
             DateTime Today = DateTime.Now.Date;
             Today = Today.Date + ts;
-            StayInfo = new StayInfo(Today, Today.AddDays(2), Today);
+            StayInfo = new StayInfo(Today, Today.AddDays(2), Today, ContactValues.Contact.Sonstiges);
         }
 
         public Entry FullClone(int nextId)

@@ -82,7 +82,7 @@ namespace Reservo.Models
                 }
             }
         }
-       
+
         private bool infoSheet;
         public bool InfoSheet
         {
@@ -160,11 +160,12 @@ namespace Reservo.Models
             this.contactVia = contactVia;
         }
 
-        public StayInfo(DateTime arrival, DateTime departure, DateTime reserved)
+        public StayInfo(DateTime arrival, DateTime departure, DateTime reserved, ContactValues.Contact contactVia)
         {
             this.arrival = arrival;
             this.departure = departure;
             this.reserved = reserved;
+            this.contactVia = contactVia;
             CalcNightCount();
         }
 

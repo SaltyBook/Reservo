@@ -44,6 +44,7 @@ namespace Reservo.ViewModels
         public ICommand PasteCommand { get; }
         public ICommand CutCommand { get; }
         public ICommand TogglePanelCommand { get; }
+        public ICommand DragDropTextCommand { get; }
 
         public TenantViewModel() : this(new DialogService()) { }
 
@@ -57,6 +58,7 @@ namespace Reservo.ViewModels
             PasteCommand = new RelayCommand(Paste, null);
             CutCommand = new RelayCommand(Cut, null);
             TogglePanelCommand = new RelayCommand(TogglePanel, null);
+            DragDropTextCommand = new RelayCommand(TextDropped, null);
         }
 
         //Loads all Excel files from the database directory
@@ -267,9 +269,33 @@ namespace Reservo.ViewModels
             SelectedWorkbook.Visibility = Visibility.Visible;
         }
 
+        private void TextDropped(object? obj)
+        {
+            if (SelectedWorkbook is null)
+                return;
+
+            if (obj is string text)
+            {
+                if (!BookingParser.TryParse(text, SelectedWorkbook, out Entry entry))
+                {
+                    Log.Information("Fehler beim erstellen eines Eintrages per Drag&Drop");
+                    return;
+                }
+
+                Log.Information("Eintrage erfolgreich erstellt per Drag&Drop");
+
+                SelectedWorkbook.Entries.Add(entry);
+                entry.Year = SelectedWorkbook.Year;
+                SelectedWorkbook.SelectedEntry = entry;
+            }
+        }
+
         //Responds to property changes in individual entries
         private void Entry_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (SelectedWorkbook is null)
+                return;
+
             if (sender is not Entry entry)
                 return;
 

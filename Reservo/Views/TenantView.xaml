@@ -18,6 +18,7 @@
         <converters:EuroFormatConverter x:Key="EuroFormat" />
         <converters:IsPastConverter x:Key="IsPast" />
         <converters:NullVisibilityMultiConverter x:Key="NullMultiVisibility" />
+        <converters:BoolVisibilityConverter x:Key="BoolVisibility" />
     </UserControl.Resources>
 
     <Grid Margin="20">
@@ -73,11 +74,14 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <DataGrid behavior:DataGridColumnOrderBehavior.Enable="True"
+                                <!-- DataGrid -->
+                                <DataGrid x:Name="ReservationsGrid"
+                                          behavior:DataGridColumnOrderBehavior.Enable="True"
                                           AutoGenerateColumns="False"
                                           CanUserAddRows="False"
                                           ItemsSource="{Binding Entries}"
                                           SelectedItem="{Binding SelectedEntry}"
+                                          behavior:DropBehavior.Command="{Binding DataContext.DragDropTextCommand, RelativeSource={RelativeSource AncestorType=TabControl}}"
                                           Margin="0"
                                           HeadersVisibility="Column"
                                           EnableRowVirtualization="True"
@@ -404,11 +408,53 @@
                                         </DataGridTemplateColumn>
                                     </DataGrid.Columns>
                                 </DataGrid>
-
+                               
                                 <views:EntryDetailPanel Grid.Column="1"
                                                         DataContext="{Binding}"
                                                         Visibility="{Binding Visibility}" />
 
+                                <!-- Drop Overlay -->
+                                <Border Background="#80000000"
+                                        CornerRadius="14"
+                                        Visibility="{Binding
+                                        ElementName=ReservationsGrid,
+                                        Path=(behavior:DropBehavior.IsDragging),
+                                        Converter={StaticResource BoolVisibility}}"
+                                        IsHitTestVisible="False">
+
+                                    <Border Width="340"
+                                            Height="150"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="{StaticResource Brush.Surface}"
+                                            BorderBrush="{StaticResource Brush.Accent}"
+                                            BorderThickness="2"
+                                            CornerRadius="14">
+
+                                        <StackPanel VerticalAlignment="Center"
+                                                    HorizontalAlignment="Center">
+
+                                            <TextBlock Text="📥"
+                                                       FontSize="42"
+                                                       HorizontalAlignment="Center" />
+
+                                            <TextBlock Margin="0,8,0,0"
+                                                       FontSize="18"
+                                                       FontWeight="SemiBold"
+                                                       Text="Reservierung hierher ziehen"
+                                                       HorizontalAlignment="Center" />
+
+                                            <TextBlock Margin="0,6,0,0"
+                                                       FontSize="13"
+                                                       Foreground="{StaticResource Brush.TextSecondary}"
+                                                       Text="Ein neuer Eintrag wird automatisch erstellt."
+                                                       HorizontalAlignment="Center" />
+
+                                        </StackPanel>
+
+                                    </Border>
+
+                                </Border>
                             </Grid>
                         </Border>
                     </DataTemplate>
@@ -436,6 +482,18 @@
                                Text="{Binding SelectedWorkbook.SelectedEntry.GuestInfo.GroupName, StringFormat=Auswahl: {0}}" />
                 </Border>
             </WrapPanel>
+            <!--<Border 
+                Style="{StaticResource InfoChipBorderStyle}"
+                Grid.Row="4"
+                HorizontalAlignment="Center"
+                Margin="50,0"
+                AllowDrop="True"
+                behavior:DropBehavior.Command="{Binding DragDropTextCommand}">
+
+                <TextBlock Style="{StaticResource InfoChipTextStyle}"
+                           VerticalAlignment="Center"
+                           Text="Mieterdaten hierher ziehen" />
+            </Border>-->
         </Grid>
     </Grid>
 </UserControl>
