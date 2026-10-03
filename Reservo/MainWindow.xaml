@@ -134,14 +134,27 @@
                     </Button>
                 </StackPanel>
 
-                <Border Grid.Row="3"
-                        Padding="8"
-                        CornerRadius="10"
-                        Background="#1D2128">
-                    <Button Command="{Binding FeedBackCommand}"
-                            Style="{StaticResource SidebarGhostButtonStyle}"
-                            Content="Feedback senden" />
-                </Border>
+                <StackPanel Grid.Row="3" >
+                    <Border Padding="8"
+                            Margin="5"
+                            CornerRadius="10"
+                            Background="#1D2128">
+
+                        <Button Content="Hilfe"
+                                Command="{Binding HelpCommand}"
+                                Style="{StaticResource SidebarGhostButtonStyle}"/>
+                    </Border>
+
+                    <Border Padding="8"
+                            Margin="5"
+                            CornerRadius="10"
+                            Background="#1D2128">
+                    
+                        <Button Command="{Binding FeedBackCommand}"
+                                Style="{StaticResource SidebarGhostButtonStyle}"
+                                Content="Feedback senden" />
+                    </Border>
+                </StackPanel>
 
                 <!--<Border Grid.Row="4"
                         Height="8"

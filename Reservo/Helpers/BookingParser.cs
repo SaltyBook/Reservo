@@ -112,7 +112,7 @@ namespace Reservo.Helpers
             if (!TryGetDate(fields, "Anreise", out var anreise))
                 anreise = DateTime.Now;
             if (!TryGetDate(fields, "Abreise", out var abreise))
-                anreise = DateTime.Now;
+                abreise = DateTime.Now;
 
             TimeSpan ts = new TimeSpan(12, 0, 0);
 

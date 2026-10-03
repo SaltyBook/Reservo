@@ -34,7 +34,14 @@ namespace Reservo.Models
                 if (departure == value)
                     return;
 
+                if(value.Hour == 0)
+                {
+                    TimeSpan ts = new TimeSpan(12, 0, 0);
+                    value = value + ts;
+                }
+
                 departure = value;
+
                 OnPropertyChanged(nameof(Departure));
 
                 CalcNightCount();

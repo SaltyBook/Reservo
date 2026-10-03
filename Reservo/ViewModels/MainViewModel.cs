@@ -4,6 +4,7 @@ using Reservo.Enums;
 using Reservo.Services.Dialog;
 using Reservo.Views;
 using System.Text;
+using System.Windows;
 #endregion
 
 namespace Reservo.ViewModels
@@ -42,6 +43,7 @@ namespace Reservo.ViewModels
         public RelayCommand ShowStatisticCommand { get; }
         public RelayCommand ShowCalendarCommand { get; }
         public RelayCommand ShowSettingsCommand { get; }
+        public RelayCommand HelpCommand { get; }
         public RelayCommand FeedBackCommand { get; }
 
         #region Test
@@ -70,6 +72,7 @@ namespace Reservo.ViewModels
             ShowCalendarCommand = new RelayCommand(_ => ShowView(_calendarViewModel, MenuItemType.Calendar));
             ShowSettingsCommand = new RelayCommand(_ => ShowView(_settingsViewModel, MenuItemType.Settings));
 
+            HelpCommand = new RelayCommand(OpenHelpWindow);
             FeedBackCommand = new RelayCommand(OpenFeedbackDialog);
 
             Init();
@@ -123,10 +126,19 @@ namespace Reservo.ViewModels
             }
         }
 
+        //Opens Help View
+        private void OpenHelpWindow(object? obj)
+        {
+            HelpWindow helpWindow = new HelpWindow();
+            helpWindow.Owner = Application.Current.MainWindow;
+            helpWindow.ShowDialog();
+        }
+
         //Opens Feedback View
         private void OpenFeedbackDialog(object? obj)
         {
             FeedBackWindow feedbackWindow = new FeedBackWindow(new FeedBackViewModel());
+            feedbackWindow.Owner = Application.Current.MainWindow;
             feedbackWindow.ShowDialog();
         }
     }

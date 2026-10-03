@@ -10,7 +10,7 @@ namespace Reservo.Helpers
         public static List<(Entry, Entry)> FindOverlaps(IEnumerable<Entry> entries)
         {
             var overlaps = new List<(Entry, Entry)>();
-            var sorted = entries.Where(x => x.Canceled == false).OrderBy(e => e.StayInfo.Arrival).ToList();
+            var sorted = entries.Where(x => x.Canceled == false && x.StayInfo.Departure >= DateTime.Now).OrderBy(e => e.StayInfo.Arrival).ToList();
 
             for (int i = 0; i < sorted.Count - 1; i++)
             {
@@ -32,7 +32,7 @@ namespace Reservo.Helpers
         public static List<(Entry, Entry)> FindOverlapsForEntry(Entry entry, IEnumerable<Entry> entries)
         {
             var overlaps = new List<(Entry, Entry)>();
-            var sorted = entries.Where(x => x.Canceled == false).OrderBy(e => e.StayInfo.Arrival).ToList();
+            var sorted = entries.Where(x => x.Canceled == false && x.StayInfo.Departure >= DateTime.Now).OrderBy(e => e.StayInfo.Arrival).ToList();
 
             foreach (var other in sorted)
             {
@@ -41,7 +41,14 @@ namespace Reservo.Helpers
 
                 if (IsOverlappingOrAdjacent(other, entry))
                 {
-                    overlaps.Add((other, entry));
+                    if(other.StayInfo.Arrival < entry.StayInfo.Arrival)
+                    {
+                        overlaps.Add((other, entry));
+                    }
+                    else
+                    {
+                        overlaps.Add((entry, other));
+                    }
                 }
             }
 

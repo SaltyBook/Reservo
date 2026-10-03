@@ -92,6 +92,10 @@ namespace Reservo.Models
             GuestInfo = guestInfo;
             StayInfo = stayInfo;
             BillingInfo = billingInfo;
+
+            GuestInfo.PropertyChanged += Info_PropertyChanged;
+            StayInfo.PropertyChanged += Info_PropertyChanged;
+            BillingInfo.PropertyChanged += Info_PropertyChanged;
         }
 
         public Entry(int id, GuestInfo guestInfo, StayInfo stayInfo)
@@ -99,6 +103,10 @@ namespace Reservo.Models
             this.id = id;
             GuestInfo = guestInfo;
             StayInfo = stayInfo;
+
+            GuestInfo.PropertyChanged += Info_PropertyChanged;
+            StayInfo.PropertyChanged += Info_PropertyChanged;
+            BillingInfo.PropertyChanged += Info_PropertyChanged;
         }
 
         public Entry(int id)
@@ -108,6 +116,10 @@ namespace Reservo.Models
             DateTime Today = DateTime.Now.Date;
             Today = Today.Date + ts;
             StayInfo = new StayInfo(Today, Today.AddDays(2), Today, ContactValues.Contact.Sonstiges);
+
+            GuestInfo.PropertyChanged += Info_PropertyChanged;
+            StayInfo.PropertyChanged += Info_PropertyChanged;
+            BillingInfo.PropertyChanged += Info_PropertyChanged;
         }
 
         public Entry FullClone(int nextId)
@@ -138,6 +150,11 @@ namespace Reservo.Models
         public void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private void Info_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs($"{e.PropertyName}"));
         }
     }
 }

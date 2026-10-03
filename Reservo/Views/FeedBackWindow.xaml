@@ -7,7 +7,7 @@
         Title="Feedback"
         Height="445"
         Width="560"
-        WindowStartupLocation="CenterScreen"
+        WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
         Style="{StaticResource DialogWindowStyle}">
 
