@@ -119,10 +119,7 @@ namespace Reservo.ViewModels
 
         public void Refresh(ObservableCollection<WorkbookViewModel> workbooks)
         {
-            if (workbooks.Any(x => x.IsUpdated))
-            {
-                CreateStatisticData(workbooks);
-            }
+            CreateStatisticData(workbooks);
         }
 
         private void CreateStatisticData(ObservableCollection<WorkbookViewModel> workbooks)
@@ -135,8 +132,6 @@ namespace Reservo.ViewModels
 
             foreach (WorkbookViewModel workbook in workbooks)
             {
-                workbook.IsUpdated = false;
-
                 if (workbook.Entries.Count == 0) continue;
 
                 var current = new StatisticData { DisplayName = workbook.DisplayName };
@@ -149,8 +144,11 @@ namespace Reservo.ViewModels
                 current.AllNights = entries.Sum(x => x.StayInfo.NightCount);
                 current.AllGuestsNights = entries.Sum(x => x.StayInfo.NightCount * x.GuestInfo.GuestCount);
                 current.AllGuests = entries.Sum(x => x.GuestInfo.GuestCount);
-                current.AverageGroupSize = current.AllGuests / current.AllReservations;
-                current.AverageNightCount = current.AllNights / current.AllReservations;
+                if (current.AllReservations > 0)
+                {
+                    current.AverageGroupSize = current.AllGuests / current.AllReservations;
+                    current.AverageNightCount = current.AllNights / current.AllReservations;
+                }
                 current.TotalAmount = (decimal)entries.Sum(x => x.BillingInfo.Total);
                 current.GroupCheckCount = entries.Where(x => x.StayInfo.AgeCheck).Count();
                 current.AllCanceled = workbook.Entries.Where(x => x.Canceled).Count();
@@ -186,8 +184,11 @@ namespace Reservo.ViewModels
                 current.PieModel.Series.Add(pieSerie);
             }
 
-            StatisticData[0].AverageGroupSize += StatisticData[0].AllGuests / StatisticData[0].AllReservations;
-            StatisticData[0].AverageNightCount += StatisticData[0].AllNights / StatisticData[0].AllReservations;
+            if (StatisticData[0].AllReservations > 0)
+            {
+                StatisticData[0].AverageGroupSize = StatisticData[0].AllGuests / StatisticData[0].AllReservations;
+                StatisticData[0].AverageNightCount = StatisticData[0].AllNights / StatisticData[0].AllReservations;
+            }
 
             var pieSeries = new PieSeries { StrokeThickness = 1, OutsideLabelFormat = "{1}", InsideLabelFormat = "{2:0}%", InsideLabelPosition = 0.7 };
 
@@ -203,7 +204,8 @@ namespace Reservo.ViewModels
 
             StatisticData[0].PieModel.Series.Add(pieSeries);
 
-            SelectedStatisticData = StatisticData.First(x => x.DisplayName.EndsWith(DateTime.Now.Year.ToString()));
+            SelectedStatisticData = SelectedStatisticData = StatisticData.FirstOrDefault(x => x.DisplayName.EndsWith(DateTime.Now.Year.ToString())) 
+                ?? StatisticData[0];
 
             Log.Information("Laden für Statistiken abgeschlossen.");
         }

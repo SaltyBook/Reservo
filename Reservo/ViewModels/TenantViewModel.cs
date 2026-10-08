@@ -318,8 +318,6 @@ namespace Reservo.ViewModels
 
             if (e.PropertyName == nameof(Entry.Canceled) || e.PropertyName == nameof(Entry.GuestInfo.GuestCount) || e.PropertyName == nameof(Entry.StayInfo.NightCount) || e.PropertyName == nameof(Entry.StayInfo.AgeCheck) || e.PropertyName == nameof(Entry.BillingInfo.Total))
             {
-                SelectedWorkbook.IsUpdated = true;
-
                 if (e.PropertyName == nameof(Entry.Canceled))
                 {
                     Log.Information("Eintrag storniert geändert (Id {Id}, Canceled={Value})", entry.Id, entry.Canceled);

@@ -80,12 +80,9 @@ namespace Reservo.ViewModels
         /// Called by MainViewModel when workbooks are loaded or when IsDirty is true.
         public void Refresh(ObservableCollection<WorkbookViewModel> workbooks)
         {
-            if (workbooks.Any(x => x.IsUpdated))
-            {
-                _workbooks = workbooks;
-                Rebuild();
-                Log.Information("Kalender aktualisiert für {Month}", MonthTitle);
-            }
+            _workbooks = workbooks;
+            Rebuild();
+            Log.Information("Kalender aktualisiert für {Month}", MonthTitle);
         }
 
         // ── Structure of calendar days ───────────────────────────────────

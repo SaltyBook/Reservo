@@ -30,8 +30,6 @@ namespace Reservo.ViewModels
         public string DisplayName { get; }
         public short Year { get; }
 
-        public bool IsUpdated { get; set; } = true;
-
         private ObservableCollection<Entry> _entries = new();
         public ObservableCollection<Entry> Entries
         {
@@ -123,8 +121,6 @@ namespace Reservo.ViewModels
 
             Entries.Add(entry);
             SelectedEntry = entry;
-
-            IsUpdated = true;
         }
 
         //Deletes the currently selected entry
@@ -139,8 +135,6 @@ namespace Reservo.ViewModels
 
             Entries.Remove(SelectedEntry);
             SelectedEntry = null;
-
-            IsUpdated = true;
         }
 
         //Creates a reservation document if necessary and then opens it
