@@ -99,15 +99,15 @@ namespace Reservo.ViewModels
         }
 
         // Load Workbooks (.xslx files)
-        public void LoadWorkbooks()
+        public Task LoadWorkbooksAsync()
         {
-            _ = _tenantViewModel.LoadWorkbooks(_statisticViewModel);
+            return _tenantViewModel.LoadWorkbooksAsync();
         }
 
         // Save Workbooks (.xslx files)
-        public void SaveWorkbooks()
+        public Task SaveWorkbooksAsync()
         {
-            _tenantViewModel.SaveWorkbooks();
+            return _tenantViewModel.SaveWorkbooksAsync();
         }
 
         //Sets the active view and synchronizes the selected menu item

@@ -62,7 +62,7 @@ namespace Reservo.ViewModels
         }
 
         //Loads all Excel files from the database directory
-        public async Task LoadWorkbooks(StatisticViewModel statisticViewModel)
+        public async Task LoadWorkbooksAsync()
         {
             var watch = System.Diagnostics.Stopwatch.StartNew();
 
@@ -111,7 +111,9 @@ namespace Reservo.ViewModels
 
             CheckAllEntryDates();
 
-            NotificationService.ShowUpcomingArrivals(SelectedWorkbook);
+            if (SelectedWorkbook is not null)
+                NotificationService.ShowUpcomingArrivals(SelectedWorkbook);
+
 
             watch.Stop();
 
@@ -119,7 +121,7 @@ namespace Reservo.ViewModels
         }
 
         //Saves all loaded workbooks
-        public void SaveWorkbooks()
+        public async Task SaveWorkbooksAsync()
         {
             Log.Information("Speichere Excel-Dateien in {Dir}", Paths.DatabasePath);
 
@@ -129,19 +131,28 @@ namespace Reservo.ViewModels
                 return;
             }
 
-            foreach (var workbook in Workbooks)
+            var snapshots = Workbooks
+                .Select(workbook => (
+                    workbook.FilePath,
+                    Entries: workbook.Entries.OrderBy(x => x.Id).ToArray()))
+                .ToArray();
+
+            await Task.Run(() =>
             {
-                try
+                foreach (var (filePath, entries) in snapshots)
                 {
-                    Log.Information("Speichere Workbook {File}", workbook.FilePath);
-                    XLSX.SaveXLSX(workbook.FilePath, workbook.Entries.OrderBy(x => x.Id));
+                    try
+                    {
+                        Log.Information("Speichere Workbook {File}", filePath);
+                        XLSX.SaveXLSX(filePath, entries);
+                    }
+                    catch (Exception ex)
+                    {
+                        var fileName = Path.GetFileName(filePath);
+                        Log.Error(ex, "Fehler beim Speichern von Workbook {File}", fileName);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    var fileName = Path.GetFileName(workbook.FilePath);
-                    Log.Error(ex, "Fehler beim Speichern von Workbook {File}", fileName);
-                }
-            }
+            });
         }
 
         #region Date

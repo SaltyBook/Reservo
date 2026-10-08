@@ -12,14 +12,21 @@ namespace Reservo.Helpers
             var overlaps = new List<(Entry, Entry)>();
             var sorted = entries.Where(x => x.Canceled == false && x.StayInfo.Departure >= DateTime.Now).OrderBy(e => e.StayInfo.Arrival).ToList();
 
-            for (int i = 0; i < sorted.Count - 1; i++)
+            const int toleranceDays = 2;
+
+            for (int i = 0; i < sorted.Count; i++)
             {
                 var current = sorted[i];
-                var next = sorted[i + 1];
+                var latestRelevantArrival = current.StayInfo.Departure.AddDays(toleranceDays);
 
-                if (IsOverlappingOrAdjacent(current, next))
+                for (int j = i + 1; j < sorted.Count; j++)
                 {
-                    overlaps.Add((current, next));
+                    var candidate = sorted[j];
+                    if (candidate.StayInfo.Arrival > latestRelevantArrival)
+                        break;
+
+                    if (IsOverlappingOrAdjacent(current, candidate, toleranceDays))
+                        overlaps.Add((current, candidate));
                 }
             }
 
