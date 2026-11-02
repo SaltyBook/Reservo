@@ -84,18 +84,6 @@ namespace Reservo.ViewModels
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             StartUp.CheckDatabasePath();
             StartUp.CreateStructure();
-
-            //var credentialResult = await StartupService.RunAsync();
-
-            //if (!credentialResult.Success)
-            //{
-            //    // Fehler
-            //    _dialogService.ShowError("Fehler", credentialResult.Message);
-            //}
-            //else
-            //{
-            //    ServerReachable = "#00FF00";
-            //}
         }
 
         // Load Workbooks (.xslx files)
