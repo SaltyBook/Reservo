@@ -1,79 +1,94 @@
 # Reservo
 
-Reservo ist eine WPF-Desktopanwendung zur Verwaltung von Mieter- und Reservierungsdaten für den Ferienbetrieb. Sie ermöglicht das Laden, Bearbeiten und Speichern von Reservierungsdaten aus Excel-Dateien sowie die automatische Erstellung von Reservierungsbestätigungen und Rechnungen als Word- und PDF-Dokumente.
+Reservo ist eine Windows-WPF-Anwendung zur Verwaltung von Reservierungen. Sie lädt und speichert Buchungen in jahresbezogenen Excel-Dateien und unterstützt Dokumente, Statistiken, Kalenderansichten und Benachrichtigungen.
 
-> **Hinweis:** Reservo ist als internes Tool für die eigene Verwaltung entstanden und richtet sich nicht an ein allgemeines Publikum. Pfade, Vorlagen und externe Dienste (Trello, Kalender, E-Mail) sind auf den eigenen Anwendungsfall zugeschnitten.
+Reservo ist ein internes Werkzeug. Vorlagen, Speicherorte und Integrationen sind auf den Einsatz des Projekts zugeschnitten.
 
-## Features
+## Funktionen
 
-- 📊 **Datenverwaltung** – Laden, Bearbeiten und Speichern von Mieter- und Reservierungsdaten aus jahrgangsweise organisierten Excel-Dateien (`.xlsx`), inklusive automatischer Backups vor jedem Speichervorgang
-- 🧾 **Reservierungen & Rechnungen** – automatische Erstellung von Reservierungsbestätigungen (Word) und Rechnungen (Word/PDF) aus Vorlagen, mit direktem Versand per E-Mail
-- 📅 **Kalender-Integration** – Erkennung von Datumsüberschneidungen zwischen Buchungen sowie Anlage von Terminen im Google Kalender
-- 📈 **Statistiken** – Auswertung von Gästezahlen, vergangenen und stornierten Buchungen sowie grafische Aufbereitung mit OxyPlot
-- 🕒 **Feiertagsberechnung** – Berücksichtigung gesetzlicher Feiertage bei Auswertungen (über die PublicHoliday-Bibliothek)
-- 📬 **Feedback-System** – Übermittlung von Feedback direkt als Trello-Karte
-- 🔔 **Benachrichtigungen** – Hinweise auf anstehende Anreisen als In-App-Toast
-- 🔐 **Zugangsdaten-Verwaltung** – lokale Speicherung (verschlüsselt) sowie optionaler Abgleich mit einem externen Credential-Server
-- 🧩 **MVVM-Architektur** – klare Trennung von Views, ViewModels, Models und Services
-- 📝 **Logging** – strukturiertes Logging mit Serilog (Datei- und Debug-Sink)
-
-## Screenshots
-
-![Hauptoberfläche](images/tenant.png)
-
-![Statistikoberfläche](images/statistic.png)
-
-![Kalenderoberfläche](images/calendar.png)
+- Reservierungen aus `.xlsx`-Dateien laden, bearbeiten und speichern; beim Speichern werden bis zu fünf Backups pro Datei verwaltet.
+- Reservierungsbestätigungen und Rechnungen mit den lokalen Dokumentvorlagen erzeugen.
+- Eine E-Mail als vorausgefüllten Entwurf in Mozilla Thunderbird öffnen. Der Versand wird vom Nutzer in Thunderbird ausgelöst.
+- Buchungsüberschneidungen anzeigen und Termine als Google-Kalender-Vorlage öffnen.
+- Buchungsstatistiken und Kalenderbelegung darstellen.
+- Kommende Anreisen als In-App-Benachrichtigungen anzeigen.
+- Feedback als Trello-Karte übermitteln.
 
 ## Technologien
 
 | Bereich | Technologie |
 |---|---|
-| UI-Framework | WPF (.NET 8, `net8.0-windows`) |
-| Sprache | C# |
-| Architektur | MVVM |
-| Excel-Zugriff | ClosedXML, ExcelDataReader |
-| Word-/PDF-Erstellung | DocX (Xceed), DocumentFormat.OpenXml, Microsoft Word Interop |
-| E-Mail-Versand | MailKit |
-| Diagramme | OxyPlot.Wpf |
-| Feiertage | PublicHoliday |
-| Benachrichtigungen | Notification.Wpf |
-| Logging | Serilog |
-| Feedback | Trello REST API |
+| Oberfläche | WPF, .NET 8 (`net8.0-windows`) |
+| Sprache und Architektur | C#, MVVM |
+| Excel | ClosedXML, ExcelDataReader |
+| Word und PDF | DocX, Open XML, Microsoft Word Interop |
+| E-Mail | MailKit für IMAP; Thunderbird für den E-Mail-Entwurf |
+| Diagramme und Feiertage | OxyPlot.Wpf, PublicHoliday |
+| Benachrichtigungen und Logging | Notification.Wpf, Serilog |
+| Tests | xUnit v3 |
 
 ## Voraussetzungen
 
-- Windows 10/11
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- Microsoft Word (für die PDF-Erzeugung über die Word-Interop-Schnittstelle)
+- Windows 10 oder Windows 11
+- .NET 8 SDK und Windows Desktop Runtime
+- Visual Studio 2022 oder Visual Studio Build Tools mit .NET-Desktop-Buildkomponenten. Das Projekt enthält Office-COM-Referenzen; zum Bauen wird daher das Visual-Studio-MSBuild für .NET Framework benötigt.
+- Microsoft Word für Funktionen, die Word-Interop zur PDF-Erzeugung verwenden
+- Mozilla Thunderbird für das Öffnen vorausgefüllter E-Mail-Entwürfe
 
-## Installation & Start
+## Bauen und Starten
 
-```bash
-git clone https://github.com/SaltyBook/Reservo.git
-cd Reservo
-dotnet restore
-dotnet build
-dotnet run
+Öffne eine **Developer PowerShell for Visual Studio 2022** im Projektordner:
+
+```powershell
+msbuild Reservo.sln /restore /t:Build /p:Configuration=Debug
 ```
 
-Beim ersten Start legt Reservo automatisch die benötigte Ordnerstruktur sowie leere Excel-Datenbanken für das aktuelle und das folgende Jahr im Dokumente-Verzeichnis (`Dokumente\Verwaltung`) an.
+Danach kann die Anwendung aus `Reservo\bin\Debug\net8.0-windows\Reservo.exe` gestartet werden. Ein normaler `dotnet build`-Aufruf kann bei den Office-COM-Referenzen mit `ResolveComReference` scheitern; verwende dafür Visual-Studio-MSBuild.
 
-## Konfiguration
+Beim Start verwendet Reservo standardmäßig `Dokumente\Verwaltung` mit den Unterordnern `Datenbank` und `Resources`. Es legt bei Bedarf Excel-Dateien für das aktuelle und das nächste Jahr an. Ein abweichender Datenbankpfad kann in den Anwendungseinstellungen konfiguriert werden.
 
-Zugangsdaten und interne Einstellungen (Datenbankpfad, Kalender-ID, SMTP- und Trello-Zugangsdaten) werden über die **Einstellungen**-Ansicht der Anwendung gepflegt und lokal verschlüsselt unter `Dokumente\Verwaltung\Resources\internCredentials.json` abgelegt. Für den optionalen Abgleich mit einem externen Credential-Server wird die Umgebungsvariable `CREDENTIAL_API_KEY` benötigt.
+## Tests
+
+Die Tests zielen auf Windows (`net8.0-windows`). Der Test-Build muss wegen der COM-Referenzen ebenfalls mit Visual-Studio-MSBuild erfolgen. In der Developer PowerShell:
+
+```powershell
+msbuild ReservoTest\ReservoTest.csproj /restore /t:Build /p:Configuration=Release
+vstest.console.exe ReservoTest\bin\Release\net8.0-windows\ReservoTest.dll
+```
+
+Aktuell sichern die Unit-Tests verschachtelte Buchungen, die Zwei-Tage-Toleranz und stornierte Einträge in der Überschneidungsanalyse, die Nullbehandlung bei Statistikdurchschnitten sowie `INotifyPropertyChanged` in `BaseViewModel`. Ein Excel-Speicher-/Lade-Rundlauftest prüft die wichtigsten Buchungsfelder und das Backup in einem temporären Verzeichnis.
+
+Weitere sinnvolle Tests sind Parser-Beispiele aus echten, anonymisierten Buchungstexten, zusätzliche Grenzfälle für Stornierungen und die Zwei-Tage-Toleranz sowie Fehlerpfade beim Speichern. Tests für Word/PDF und externe Dienste sollten als separate Windows-Integrationstests mit kontrollierten Vorlagen beziehungsweise Testkonten laufen; sie sollten keine echten E-Mails oder Trello-Karten versenden.
+
+## Konfiguration und Daten
+
+Die Einstellungen werden in `Dokumente\Verwaltung\Resources\internCredentials.json` gespeichert. Passwörter und Trello-Token werden vor dem Speichern mit AES verschlüsselt. Das Schlüsselmaterial wird aus `CREDENTIAL_API_KEY` abgeleitet; für reproduzierbares Entschlüsseln muss derselbe Wert bei jedem Start gesetzt sein. Der im Quellcode enthaltene Ersatzwert ist nur für lokale Entwicklung gedacht.
+
+Die Excel-Dateien enthalten personenbezogene Daten. Verwende für Tests ausschließlich synthetische oder anonymisierte Daten. Der XLSX-Integrationstest erstellt Dateien in einem temporären Verzeichnis und löscht dieses anschließend.
 
 ## Projektstruktur
 
 ```
 Reservo/
-├── Models/          # Datenmodelle (Entry, GuestInfo, StayInfo, BillingInfo, …)
-├── ViewModels/       # MVVM-ViewModels je View
-├── Views/            # WPF-Views (XAML)
-├── Services/         # Fachliche Dienste (Dokumente, E-Mail, Dialoge, Zugangsdaten, …)
-├── Helpers/          # Hilfsklassen (u. a. Excel-Zugriff, Datumsanalyse)
-├── Converters/        # WPF Value-Converter
-├── Commands/          # ICommand-Implementierungen (RelayCommand, AsyncRelayCommand)
-├── Infrastructure/    # Pfade, Logging-Konfiguration, statische Konfigurationswerte
-└── Themes/            # Styles und Ressourcen-Dictionaries
+├── Models/          # Buchungs-, Gäste-, Abrechnungs- und Statistikmodelle
+├── ViewModels/      # MVVM-Logik und Zustandsverwaltung je Ansicht
+├── Views/           # WPF-Views und XAML
+├── Services/        # Dokumente, E-Mail, Zugangsdaten, Dateien und Dialoge
+├── Helpers/         # Excel-Zugriff, Import und Datumsanalyse
+├── Commands/        # ICommand-Implementierungen
+├── Converters/      # WPF-Binding-Converter
+├── Behavior/        # Wiederverwendbare WPF-Verhaltensweisen
+├── Infrastructure/  # Pfade, Logging und gemeinsame Konfiguration
+└── Themes/          # Styles und Ressourcen
+
+ReservoTest/         # xUnit-Unit- und Integrationstests
+images/              # README-Screenshots
 ```
+
+## Screenshots
+
+![Reservierungsverwaltung](images/tenant.png)
+
+![Statistik](images/statistic.png)
+
+![Kalender](images/calendar.png)
