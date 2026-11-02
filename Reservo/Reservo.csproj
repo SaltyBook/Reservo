@@ -16,27 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>8</VersionMinor>
-      <VersionMajor>2</VersionMajor>
-      <Guid>2df8d04c-5bfa-101b-bde5-00aa0044de52</Guid>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Word">
-      <WrapperTool>tlbimp</WrapperTool>
-      <VersionMinor>7</VersionMinor>
-      <VersionMajor>8</VersionMajor>
-      <Guid>00020905-0000-0000-c000-000000000046</Guid>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-      <EmbedInteropTypes>true</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Resources\document_file_organize_icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -49,18 +28,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ClosedXML" Version="0.105.0" />
+    <PackageReference Include="ClosedXML" Version="0.105.1" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
-    <PackageReference Include="DocX" Version="5.0.0" />
-    <PackageReference Include="ExcelDataReader" Version="3.8.0" />
-    <PackageReference Include="ExcelDataReader.DataSet" Version="3.8.0" />
-    <PackageReference Include="MailKit" Version="4.16.0" />
-    <PackageReference Include="Notification.Wpf" Version="10.1.0" />
+    <PackageReference Include="DocX" Version="5.2.0" />
+    <PackageReference Include="ExcelDataReader" Version="3.9.0" />
+    <PackageReference Include="ExcelDataReader.DataSet" Version="3.9.0" />
+    <PackageReference Include="Ipercube.Office.Interop.Core" Version="15.0.1" />
+    <PackageReference Include="MailKit" Version="4.18.2" />
+    <PackageReference Include="Microsoft.Office.Interop.Word" Version="15.0.4797.1004" />
+    <PackageReference Include="Notification.Wpf" Version="11.0.0" />
     <PackageReference Include="OxyPlot.Wpf" Version="2.2.0" />
-    <PackageReference Include="PublicHoliday" Version="3.13.0" />
-    <PackageReference Include="Serilog" Version="4.3.1" />
+    <PackageReference Include="PublicHoliday" Version="3.17.0" />
+    <PackageReference Include="Serilog" Version="4.4.0" />
     <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
   </ItemGroup>
 
   <ItemGroup>
