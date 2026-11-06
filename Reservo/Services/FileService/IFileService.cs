@@ -4,5 +4,6 @@
     {
         bool Exists(string path);
         void OpenFile(string path);
+        void DeleteFile(string path);
     }
 }

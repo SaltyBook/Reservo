@@ -152,12 +152,13 @@ namespace Reservo.ViewModels
                 var entry = SelectedEntry;
                 var documentPath = _pathService.GetReservationPath(entry);
 
-                if (!_fileService.Exists(documentPath))
+                if (_fileService.Exists(documentPath))
                 {
-                    Log.Debug("Reservierung existiert nicht, wird erstellt");
-                    _documentService.CreateReservation(entry, _pathService);
+                    _fileService.DeleteFile(documentPath);
+                    Log.Debug("Reservierung existiert bereits, wird neu erstellt");
                 }
 
+                _documentService.CreateReservation(entry, _pathService);
                 _fileService.OpenFile(documentPath);
             }
             catch (Exception ex)

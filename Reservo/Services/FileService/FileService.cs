@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Org.BouncyCastle.Bcpg.Sig;
+using System.Diagnostics;
 using System.IO;
 
 namespace Reservo.Services.FileService
@@ -17,6 +18,11 @@ namespace Reservo.Services.FileService
                 FileName = path,
                 UseShellExecute = true
             });
+        }
+
+        public void DeleteFile(string path)
+        {
+            File.Delete(path);
         }
     }
 }
